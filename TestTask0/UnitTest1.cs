@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using LogicLayer; // Ensure this namespace matches your logic layer
+using DataLayer;
 
 namespace TaskTests
 {
@@ -12,103 +13,132 @@ namespace TaskTests
         public void Setup()
         {
             _taskManager = new TaskLogic();
+            _dataContainer = new Numbers();
         }
 
         [Test]
         public void AddNumbers_ValidInput_ReturnsCorrectSum()
         {
-            int result = _taskManager.AddNumbers(5, 7);  
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 7;
+            int result = _taskManager.AddNumbers(num_1,num_2);  
             Assert.AreEqual(12, result);
         }
 
         [Test]
         public void AddNumbers_ZeroInput_ReturnsSameNumber()
         {
-            int result = _taskManager.AddNumbers(0, 10);  
-            Assert.AreEqual(10, result);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 0;
+            int result = _taskManager.AddNumbers(num_1, num_2);  
+            Assert.AreEqual(0, result);
         }
 
         [Test]
         public void AddNumbers_NegativeNumbers_ReturnsCorrectSum()
         {
-            int result = _taskManager.AddNumbers(-3, -7);  
-            Assert.AreEqual(-10, result);
+            Numbers.num_1 = -5;
+            Numbers.num_2 = -7;
+            int result = _taskManager.AddNumbers(num_1, num_2);  
+            Assert.AreEqual(-12, result);
         }
 
         [Test]
         public void SubstractNumbers_ValidInput_ReturnsCorrectSum()
         {
-            int result = _taskManager.SubstractNumbers(5, 2);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 2;
+            int result = _taskManager.SubstractNumbers(num_1, num_2);
             Assert.AreEqual(3, result);
         }
 
         [Test]
         public void SubstractNumbers_ZeroInput_ReturnsSameNumber()
         {
-            int result = _taskManager.SubstractNumbers(5, 0);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 0;
+            int result = _taskManager.SubstractNumbers(num_1, num_2);
             Assert.AreEqual(5, result);
         }
 
         [Test]
         public void SubstractNumbers_NegativeNumbers_ReturnsCorrectSum()
         {
-            int result = _taskManager.SubstractNumbers(-5, -3);
+            Numbers.num_1 = -5;
+            Numbers.num_2 = -3;
+            int result = _taskManager.SubstractNumbers(num_1, num_2);
             Assert.AreEqual(-2, result);
         }
 
         [Test]
         public void MultiplyNumbers_ValidInput_ReturnsCorrectvalue()
         {
-            int result = _taskManager.MultiplyNumbers(3, 2);
-            Assert.AreEqual(6, result);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 7;
+            int result = _taskManager.MultiplyNumbers(num_1, num_2);
+            Assert.AreEqual(35, result);
         }
 
         [Test]
         public void MultiplyNumbers_InputWithOne()
         {
-            int result = _taskManager.MultiplyNumbers(3, 1);
-            Assert.AreEqual(3, result);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 1;
+            int result = _taskManager.MultiplyNumbers(num_1, num_2);
+            Assert.AreEqual(5, result);
         }
 
         [Test]
         public void MultiplyNumbers_InputWithZero()
         {
-            int result = _taskManager.MultiplyNumbers(3, 0);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = 0;
+            int result = _taskManager.MultiplyNumbers(num_1, num_2);
             Assert.AreEqual(0, result);
         }
 
         [Test]
         public void MultiplyNumbers_OneNegativeNumber()
         {
-            int result = _taskManager.MultiplyNumbers(3, -1);
-            Assert.AreEqual(-3, result);
+            Numbers.num_1 = 5;
+            Numbers.num_2 = -1;
+            int result = _taskManager.MultiplyNumbers(num_1, num_2);
+            Assert.AreEqual(-5, result);
         }
 
         [Test]
         public void MultiplyNumbers_TwoNegativeNumbers()
         {
-            int result = _taskManager.MultiplyNumbers(-3, -1);
-            Assert.AreEqual(3, result);
+            Numbers.num_1 = -5;
+            Numbers.num_2 = -7;
+            int result = _taskManager.MultiplyNumbers(num_1, num_2);
+            Assert.AreEqual(35, result);
         }
 
         [Test]
         public void DivideNumbers_ValidInput()
         {
-            int result = _taskManager.DivideNumbers(15, 5);
+            Numbers.num_1 = 15;
+            Numbers.num_2 = 5;
+            int result = _taskManager.DivideNumbers(num_1, num_2);
             Assert.AreEqual(3, result);
         }
 
         [Test]
         public void DivideNumbers_InputWithOne()
         {
-            int result = _taskManager.DivideNumbers(15, 1);
+            Numbers.num_1 = 15;
+            Numbers.num_2 = 1;
+            int result = _taskManager.DivideNumbers(num_1, num_2);
             Assert.AreEqual(15, result);
         }
 
         [Test]
         public void DivideNumbers_InputWithZero()
         {
-            int result = _taskManager.DivideNumbers(15, 0);
+            Numbers.num_1 = 15;
+            Numbers.num_2 = 0;
+            int result = _taskManager.DivideNumbers(num_1, num_2);
             Assert.AreEqual(0, result);
         }
     }

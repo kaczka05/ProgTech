@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VIsualStudioProjects\\Task0\\Task0.csproj": {}
+    "D:\\VIsualStudioProjects\\ProgTech\\Task0\\Task0.csproj": {}
   },
   "projects": {
-    "D:\\VIsualStudioProjects\\Task0\\Task0.csproj": {
+    "D:\\VIsualStudioProjects\\ProgTech\\Task0\\Task0.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VIsualStudioProjects\\Task0\\Task0.csproj",
+        "projectUniqueName": "D:\\VIsualStudioProjects\\ProgTech\\Task0\\Task0.csproj",
         "projectName": "Task0",
-        "projectPath": "D:\\VIsualStudioProjects\\Task0\\Task0.csproj",
+        "projectPath": "D:\\VIsualStudioProjects\\ProgTech\\Task0\\Task0.csproj",
         "packagesPath": "C:\\Users\\HPOMEN\\.nuget\\packages\\",
-        "outputPath": "D:\\VIsualStudioProjects\\Task0\\obj\\",
+        "outputPath": "D:\\VIsualStudioProjects\\ProgTech\\Task0\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HPOMEN\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RWLmSY6axRz98g36ezWQzjSAZL0UC47ZWAztzei7mMTJHd/s0CSP8EIB5CwxC3wKzu2V1q1INpp4/TKPbVPb4g==",
+  "dgSpecHash": "zPhVBoUNkX8SQ8OxbkZGJgXS6KSXARKWA+Td1awTzxa7htE9u2cpyqR5onEDfJ42feA+DWWFUbCKdYI+5vX/yw==",
   "success": true,
-  "projectFilePath": "D:\\VIsualStudioProjects\\TestTask0\\TestTask0.csproj",
+  "projectFilePath": "D:\\VIsualStudioProjects\\ProgTech\\TestTask0\\TestTask0.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HPOMEN\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\HPOMEN\\.nuget\\packages\\microsoft.codecoverage\\17.6.0\\microsoft.codecoverage.17.6.0.nupkg.sha512",

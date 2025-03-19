@@ -1007,11 +1007,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\VIsualStudioProjects\\TestTask0\\TestTask0.csproj",
+      "projectUniqueName": "D:\\VIsualStudioProjects\\ProgTech\\TestTask0\\TestTask0.csproj",
       "projectName": "TestTask0",
-      "projectPath": "D:\\VIsualStudioProjects\\TestTask0\\TestTask0.csproj",
+      "projectPath": "D:\\VIsualStudioProjects\\ProgTech\\TestTask0\\TestTask0.csproj",
       "packagesPath": "C:\\Users\\HPOMEN\\.nuget\\packages\\",
-      "outputPath": "D:\\VIsualStudioProjects\\TestTask0\\obj\\",
+      "outputPath": "D:\\VIsualStudioProjects\\ProgTech\\TestTask0\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\HPOMEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1028,8 +1028,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\VIsualStudioProjects\\Task0\\Task0.csproj": {
-              "projectPath": "D:\\VIsualStudioProjects\\Task0\\Task0.csproj"
+            "D:\\VIsualStudioProjects\\ProgTech\\Task0\\Task0.csproj": {
+              "projectPath": "D:\\VIsualStudioProjects\\ProgTech\\Task0\\Task0.csproj"
             }
           }
         }

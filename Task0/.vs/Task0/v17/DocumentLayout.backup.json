@@ -1,0 +1,57 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\damia\\Desktop\\Programing Technologies\\ProgTech\\Task0\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C7F6BA8E-8451-4525-95B3-CD9F8F4386D3}|..\\TestTask0\\TestTask0.csproj|c:\\users\\damia\\desktop\\programing technologies\\progtech\\testtask0\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BC2C7B9F-C617-4EB9-91DE-B5E853B9107B}|Task0.csproj|c:\\users\\damia\\desktop\\programing technologies\\progtech\\task0\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BC2C7B9F-C617-4EB9-91DE-B5E853B9107B}|Task0.csproj|solutionrelative:class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "C:\\Users\\damia\\Desktop\\Programing Technologies\\ProgTech\\TestTask0\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "..\\TestTask0\\UnitTest1.cs",
+              "ToolTip": "C:\\Users\\damia\\Desktop\\Programing Technologies\\ProgTech\\TestTask0\\UnitTest1.cs",
+              "RelativeToolTip": "..\\TestTask0\\UnitTest1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-19T18:59:03.921Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\damia\\Desktop\\Programing Technologies\\ProgTech\\Task0\\Class1.cs",
+              "RelativeDocumentMoniker": "Class1.cs",
+              "ToolTip": "C:\\Users\\damia\\Desktop\\Programing Technologies\\ProgTech\\Task0\\Class1.cs",
+              "RelativeToolTip": "Class1.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAwwCEAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-19T18:59:03.941Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

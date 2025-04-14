@@ -16,7 +16,7 @@ namespace LibraryLogicLayerTests
         private State CreateState(int id = 1, int books = 5) =>
             new State { stateId = id, nrOfBooks = books, catalog = CreateCatalog() };
 
-        // -------------------- Catalog --------------------
+        //Catalog
         [TestMethod]
         public void CatalogRepository_Should_Add_And_Get_Catalog()
         {
@@ -40,7 +40,7 @@ namespace LibraryLogicLayerTests
             Assert.IsNull(result);
         }
 
-        // -------------------- User --------------------
+        //User
         [TestMethod]
         public void UserRepository_Should_Add_And_Get_User()
         {
@@ -63,7 +63,7 @@ namespace LibraryLogicLayerTests
             Assert.IsNull(result);
         }
 
-        // -------------------- State --------------------
+        //State
         [TestMethod]
         public void StateRepository_Should_Add_And_Get_State()
         {
@@ -88,7 +88,7 @@ namespace LibraryLogicLayerTests
             Assert.IsNull(state);
         }
 
-        // -------------------- Event --------------------
+        //Event
         [TestMethod]
         public void EventRepository_Should_Add_And_Get_DatabaseEvent()
         {

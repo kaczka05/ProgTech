@@ -13,7 +13,7 @@ namespace LibraryLogicLayer
 
         void RemoveCatalogById(int id);
 
-        Catalog GetCatalogById(int id);
+        LibraryCatalog GetCatalogById(int id);
 
     }
     public interface IUserRepository
@@ -27,19 +27,19 @@ namespace LibraryLogicLayer
     }
     public interface IEventRepository
     {
-        void AddDatabaseEvent(int eventId, User employee, State state, bool addition);
-        void AddUserEvent(int eventId, User employee, State state, User user, bool borrowing );
+        void AddDatabaseEvent(int eventId, User employee, LibraryState state, bool addition);
+        void AddUserEvent(int eventId, User employee, LibraryState state, User user, bool borrowing );
 
         void RemoveEventById(int id);
-        Event GetEventById(int id);
+        LibraryEvent GetEventById(int id);
 
     }
     public interface IStateRepository
     {
-        void AddState(int stateId, int nrOfBooks, Catalog catalog);
+        void AddState(int stateId, int nrOfBooks, LibraryCatalog catalog);
         void RemoveStateByID(int id);
 
-        State GetStateById(int id);
+        LibraryState GetStateById(int id);
 
     }
 }

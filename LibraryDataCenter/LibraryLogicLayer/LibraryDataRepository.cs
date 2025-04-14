@@ -7,11 +7,11 @@ namespace LibraryLogicLayer
 {
     public class CatalogRepository : ICatalogRepository
     {
-        private readonly List<Catalog> _catalogs = new List<Catalog>();
+        private readonly List<LibraryCatalog> _catalogs = new List<LibraryCatalog>();
 
         public void AddCatalog(int catalogId, string title, string author, int numberOfPages)
         {
-            var catalog = new Catalog
+            var catalog = new LibraryCatalog
             {
                 catalogId = catalogId,
                 title = title,
@@ -30,7 +30,7 @@ namespace LibraryLogicLayer
             }
         }
 
-        public Catalog GetCatalogById(int id)
+        public LibraryCatalog GetCatalogById(int id)
         {
             return _catalogs.FirstOrDefault(c => c.catalogId == id);
         }
@@ -68,11 +68,11 @@ namespace LibraryLogicLayer
 
     public class EventRepository : IEventRepository
     {
-        private readonly List<Event> _events = new List<Event>();
+        private readonly List<LibraryEvent> _events = new List<LibraryEvent>();
 
-        public void AddDatabaseEvent(int eventId, User employee, State state, bool addition)
+        public void AddDatabaseEvent(int eventId, User employee, LibraryState state, bool addition)
         {
-            var databaseEvent = new DatabaseEvent
+            var databaseEvent = new LibraryDatabaseEvent
             {
                 eventId = eventId,
                 employee = employee,
@@ -82,9 +82,9 @@ namespace LibraryLogicLayer
             _events.Add(databaseEvent);
         }
 
-        public void AddUserEvent(int eventId, User employee, State state, User user, bool borrowing)
+        public void AddUserEvent(int eventId, User employee, LibraryState state, User user, bool borrowing)
         {
-            var userEvent = new UserEvent
+            var userEvent = new LibraryUserEvent
             {
                 eventId = eventId,
                 employee = employee,
@@ -104,7 +104,7 @@ namespace LibraryLogicLayer
             }
         }
 
-        public Event GetEventById(int id)
+        public LibraryEvent GetEventById(int id)
         {
             return _events.FirstOrDefault(e => e.eventId == id);
         }
@@ -112,11 +112,11 @@ namespace LibraryLogicLayer
 
     public class StateRepository : IStateRepository
     {
-        private readonly List<State> _states = new List<State>();
+        private readonly List<LibraryState> _states = new List<LibraryState>();
 
-        public void AddState(int stateId, int nrOfBooks, Catalog catalog)
+        public void AddState(int stateId, int nrOfBooks, LibraryCatalog catalog)
         {
-            var state = new State
+            var state = new LibraryState
             {
                 stateId = stateId,
                 nrOfBooks = nrOfBooks,
@@ -134,7 +134,7 @@ namespace LibraryLogicLayer
             }
         }
 
-        public State GetStateById(int id)
+        public LibraryState GetStateById(int id)
         {
             return _states.FirstOrDefault(s => s.stateId == id);
         }

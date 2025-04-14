@@ -7,14 +7,14 @@ namespace LibraryLogicLayerTests
     [TestClass]
     public class RepositoryTests
     {
-        private Catalog CreateCatalog(int id = 1, string title = "Test Book", string author = "Author", int pages = 100) =>
-            new Catalog { catalogId = id, title = title, author = author, nrOfPages = pages };
+        private LibraryCatalog CreateCatalog(int id = 1, string title = "Test Book", string author = "Author", int pages = 100) =>
+            new LibraryCatalog { catalogId = id, title = title, author = author, nrOfPages = pages };
 
         private User CreateUser(int id = 1, string first = "John", string last = "Doe") =>
             new User { userId = id, firstName = first, lastName = last };
 
-        private State CreateState(int id = 1, int books = 5) =>
-            new State { stateId = id, nrOfBooks = books, catalog = CreateCatalog() };
+        private LibraryState CreateState(int id = 1, int books = 5) =>
+            new LibraryState { stateId = id, nrOfBooks = books, catalog = CreateCatalog() };
 
         //Catalog
         [TestMethod]
@@ -98,7 +98,7 @@ namespace LibraryLogicLayerTests
 
             repo.AddDatabaseEvent(1, employee, state, true);
 
-            var e = repo.GetEventById(1) as DatabaseEvent;
+            var e = repo.GetEventById(1) as LibraryDatabaseEvent;
             Assert.IsNotNull(e);
             Assert.IsTrue(e.addition);
         }
@@ -113,7 +113,7 @@ namespace LibraryLogicLayerTests
 
             repo.AddUserEvent(2, employee, state, user, false);
 
-            var e = repo.GetEventById(2) as UserEvent;
+            var e = repo.GetEventById(2) as LibraryUserEvent;
             Assert.IsNotNull(e);
             Assert.AreEqual("Alice", e.user.firstName);
             Assert.IsFalse(e.borrowing);
@@ -174,7 +174,7 @@ namespace LibraryLogicLayerTests
         [TestMethod]
         public void LibraryService_Should_Add_And_Get_State()
         {
-            var catalog = new Catalog { catalogId = 1, title = "C#", author = "MS", nrOfPages = 300 };
+            var catalog = new LibraryCatalog { catalogId = 1, title = "C#", author = "MS", nrOfPages = 300 };
             _service.AddState(1, 5, catalog);
 
             var state = _service.GetStateById(1);
@@ -186,10 +186,10 @@ namespace LibraryLogicLayerTests
         public void LibraryService_Should_Add_And_Get_DatabaseEvent()
         {
             var emp = new User { userId = 1, firstName = "Staff", lastName = "One" };
-            var state = new State { stateId = 1, nrOfBooks = 10, catalog = new Catalog() };
+            var state = new LibraryState { stateId = 1, nrOfBooks = 10, catalog = new LibraryCatalog() };
 
             _service.AddDatabaseEvent(1, emp, state, true);
-            var ev = _service.GetEventById(1) as DatabaseEvent;
+            var ev = _service.GetEventById(1) as LibraryDatabaseEvent;
 
             Assert.IsNotNull(ev);
             Assert.IsTrue(ev.addition);
@@ -200,10 +200,10 @@ namespace LibraryLogicLayerTests
         {
             var emp = new User { userId = 1, firstName = "Librarian", lastName = "Smith" };
             var user = new User { userId = 2, firstName = "Borrower", lastName = "Jones" };
-            var state = new State { stateId = 1, nrOfBooks = 8, catalog = new Catalog() };
+            var state = new LibraryState { stateId = 1, nrOfBooks = 8, catalog = new LibraryCatalog() };
 
             _service.AddUserEvent(1, emp, state, user, true);
-            var ev = _service.GetEventById(1) as UserEvent;
+            var ev = _service.GetEventById(1) as LibraryUserEvent;
 
             Assert.IsNotNull(ev);
             Assert.AreEqual("Borrower", ev.user.firstName);

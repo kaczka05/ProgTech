@@ -17,9 +17,9 @@ namespace LibraryDataLayerTests
             };
         }
 
-        private Catalog CreateTestCatalog(int id = 1, string title = "Book", string author = "Author", int pages = 100)
+        private LibraryCatalog CreateTestCatalog(int id = 1, string title = "Book", string author = "Author", int pages = 100)
         {
-            return new Catalog
+            return new LibraryCatalog
             {
                 catalogId = id,
                 title = title,
@@ -31,7 +31,7 @@ namespace LibraryDataLayerTests
         [TestMethod]
         public void Catalog_Should_Store_Data_Correctly()
         {
-            var catalog = new Catalog
+            var catalog = new LibraryCatalog
             {
                 catalogId = 1,
                 title = "1984",
@@ -59,7 +59,7 @@ namespace LibraryDataLayerTests
         public void State_Should_Link_To_Catalog_And_Store_Data()
         {
             var catalog = CreateTestCatalog();
-            var state = new State
+            var state = new LibraryState
             {
                 stateId = 10,
                 nrOfBooks = 5,
@@ -75,8 +75,8 @@ namespace LibraryDataLayerTests
         public void Event_Should_Store_Employee_And_State()
         {
             var user = CreateTestUser();
-            var state = new State { stateId = 1, nrOfBooks = 3 };
-            var ev = new Event
+            var state = new LibraryState { stateId = 1, nrOfBooks = 3 };
+            var ev = new LibraryEvent
             {
                 eventId = 7,
                 employee = user,
@@ -91,7 +91,7 @@ namespace LibraryDataLayerTests
         [TestMethod]
         public void DatabaseEvent_Should_Extend_Event_And_Add_Addition_Flag()
         {
-            var dbEvent = new DatabaseEvent
+            var dbEvent = new LibraryDatabaseEvent
             {
                 eventId = 99,
                 addition = true
@@ -105,7 +105,7 @@ namespace LibraryDataLayerTests
         public void UserEvent_Should_Extend_Event_And_Link_User()
         {
             var user = CreateTestUser();
-            var userEvent = new UserEvent
+            var userEvent = new LibraryUserEvent
             {
                 eventId = 23,
                 user = user,
@@ -120,7 +120,7 @@ namespace LibraryDataLayerTests
         [TestMethod]
         public void DataContext_Should_Initialize_All_Collections()
         {
-            var context = new DataContext();
+            var context = new LibraryDataContext();
 
             Assert.IsNotNull(context.Users);
             Assert.IsNotNull(context.Catalogs);
@@ -128,15 +128,15 @@ namespace LibraryDataLayerTests
             Assert.IsNotNull(context.States);
 
             Assert.IsInstanceOfType(context.Users, typeof(List<User>));
-            Assert.IsInstanceOfType(context.Catalogs, typeof(List<Catalog>));
-            Assert.IsInstanceOfType(context.Events, typeof(List<Event>));
-            Assert.IsInstanceOfType(context.States, typeof(List<State>));
+            Assert.IsInstanceOfType(context.Catalogs, typeof(List<LibraryCatalog>));
+            Assert.IsInstanceOfType(context.Events, typeof(List<LibraryEvent>));
+            Assert.IsInstanceOfType(context.States, typeof(List<LibraryState>));
         }
 
         
-        private State CreateTestState(int id = 1, int books = 10)
+        private LibraryState CreateTestState(int id = 1, int books = 10)
         {
-            return new State
+            return new LibraryState
             {
                 stateId = id,
                 nrOfBooks = books,

@@ -35,7 +35,7 @@ namespace LibraryLogicLayer
             _catalogRepository.RemoveCatalogById(catalogId);
         }
 
-        public Catalog GetCatalogById(int catalogId)
+        public LibraryCatalog GetCatalogById(int catalogId)
         {
             return _catalogRepository.GetCatalogById(catalogId);
         }
@@ -57,12 +57,12 @@ namespace LibraryLogicLayer
         }
 
         // Event methods
-        public void AddDatabaseEvent(int eventId, User employee, State state, bool addition)
+        public void AddDatabaseEvent(int eventId, User employee, LibraryState state, bool addition)
         {
             _eventRepository.AddDatabaseEvent(eventId, employee, state, addition);
         }
 
-        public void AddUserEvent(int eventId, User employee, State state, User user, bool borrowing)
+        public void AddUserEvent(int eventId, User employee, LibraryState state, User user, bool borrowing)
         {
             _eventRepository.AddUserEvent(eventId, employee, state, user, borrowing);
         }
@@ -72,13 +72,13 @@ namespace LibraryLogicLayer
             _eventRepository.RemoveEventById(eventId);
         }
 
-        public Event GetEventById(int eventId)
+        public LibraryEvent GetEventById(int eventId)
         {
             return _eventRepository.GetEventById(eventId);
         }
 
         // State methods
-        public void AddState(int stateId, int nrOfBooks, Catalog catalog)
+        public void AddState(int stateId, int nrOfBooks, LibraryCatalog catalog)
         {
             _stateRepository.AddState(stateId, nrOfBooks, catalog);
         }
@@ -88,7 +88,7 @@ namespace LibraryLogicLayer
             _stateRepository.RemoveStateByID(stateId);
         }
 
-        public State GetStateById(int stateId)
+        public LibraryState GetStateById(int stateId)
         {
             return _stateRepository.GetStateById(stateId);
         }

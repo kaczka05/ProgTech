@@ -1,83 +1,142 @@
 ﻿using LibraryDataLayer;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+
 namespace LibraryLogicLayer
 {
-    internal class DataRepository
+    public class CatalogRepository : ICatalogRepository
     {
-        DataContext dataContext = new DataContext();
-        Users currentEmployee = new Users();
-        void BorrowCatalog(State s, Users u)
-        {
+        private readonly List<Catalog> _catalogs = new List<Catalog>();
 
-            UserEvent userEvent = new UserEvent();
-            userEvent.eventId = dataContext.GetCatalogs()[dataContext.GetCatalogs().Count - 1].catalogId + 1;
-            userEvent.user = u;
-            userEvent.state = s;
-            userEvent.employee = currentEmployee;
-            userEvent.borrowing = true;
-            dataContext.AddEvent(userEvent);
+        public void AddCatalog(int catalogId, string title, string author, int numberOfPages)
+        {
+            var catalog = new Catalog
+            {
+                catalogId = catalogId,
+                title = title,
+                author = author,
+                nrOfPages = numberOfPages
+            };
+            _catalogs.Add(catalog);
         }
 
-        void ReturnCatalog(State s, Users u)
+        public void RemoveCatalogById(int id)
         {
-            UserEvent userEvent = new UserEvent();
-            userEvent.eventId = dataContext.GetCatalogs()[dataContext.GetCatalogs().Count - 1].catalogId + 1;
-            userEvent.user = u;
-            userEvent.state = s;
-            userEvent.borrowing = false;
-            dataContext.AddEvent(userEvent);
+            var catalog = _catalogs.FirstOrDefault(c => c.catalogId == id);
+            if (catalog != null)
+            {
+                _catalogs.Remove(catalog);
+            }
         }
 
-        void DestoryCatalog(State s)
+        public Catalog GetCatalogById(int id)
         {
-            DatabaseEvent databaseEvent = new DatabaseEvent();
-            databaseEvent.eventId = dataContext.GetCatalogs()[dataContext.GetCatalogs().Count - 1].catalogId + 1;
-            databaseEvent.state = s;
-            databaseEvent.addition = true;
-            dataContext.AddEvent(databaseEvent);
+            return _catalogs.FirstOrDefault(c => c.catalogId == id);
+        }
+    }
+
+    public class UserRepository : IUserRepository
+    {
+        private readonly List<User> _users = new List<User>();
+
+        public void AddUser(int userId, string firstName, string lastName)
+        {
+            var user = new User
+            {
+                userId = userId,
+                firstName = firstName,
+                lastName = lastName
+            };
+            _users.Add(user);
         }
 
-        void AddCatalog(State s)
+        public void RemoveUserById(int id)
         {
-            DatabaseEvent databaseEvent = new DatabaseEvent();
-            databaseEvent.eventId = dataContext.GetCatalogs()[dataContext.GetCatalogs().Count - 1].catalogId + 1;
-            databaseEvent.state = s;
-            databaseEvent.addition = false;
-            dataContext.AddEvent(databaseEvent);
+            var user = _users.FirstOrDefault(u => u.userId == id);
+            if (user != null)
+            {
+                _users.Remove(user);
+            }
         }
 
-        public Users GetUsersFromId(int id)
+        public User GetUserById(int id)
         {
-            var user = dataContext.GetUsers().FirstOrDefault(u => u.userId == id);
-            if (user == null)
-                throw new Exception("No user with that id in database.");
-            return user;
+            return _users.FirstOrDefault(u => u.userId == id);
+        }
+    }
+
+    public class EventRepository : IEventRepository
+    {
+        private readonly List<Event> _events = new List<Event>();
+
+        public void AddDatabaseEvent(int eventId, User employee, State state, bool addition)
+        {
+            var databaseEvent = new DatabaseEvent
+            {
+                eventId = eventId,
+                employee = employee,
+                state = state,
+                addition = addition
+            };
+            _events.Add(databaseEvent);
         }
 
-        public Event GetEventFromId(int id)
+        public void AddUserEvent(int eventId, User employee, State state, User user, bool borrowing)
         {
-            var evt = dataContext.GetEvents().FirstOrDefault(e => e.eventId == id);
-            if (evt == null)
-                throw new Exception("No event with that id in database.");
-            return evt;
+            var userEvent = new UserEvent
+            {
+                eventId = eventId,
+                employee = employee,
+                state = state,
+                user = user,
+                borrowing = borrowing
+            };
+            _events.Add(userEvent);
         }
 
-        public State GetStateFromId(int id)
+        public void RemoveEventById(int id)
         {
-            var state = dataContext.GetStates().FirstOrDefault(s => s.stateId == id);
-            if (state == null)
-                throw new Exception("No Book with that id in Library.");
-            return state;
+            var eventObj = _events.FirstOrDefault(e => e.eventId == id);
+            if (eventObj != null)
+            {
+                _events.Remove(eventObj);
+            }
         }
 
-        public Catalog GetCatalogFromId(int id)
+        public Event GetEventById(int id)
         {
-            var catalog = dataContext.GetCatalogs().FirstOrDefault(c => c.catalogId == id);
-            if (catalog == null)
-                throw new Exception("No Book with that id in database.");
-            return catalog;
+            return _events.FirstOrDefault(e => e.eventId == id);
+        }
+    }
+
+    public class StateRepository : IStateRepository
+    {
+        private readonly List<State> _states = new List<State>();
+
+        public void AddState(int stateId, int nrOfBooks, Catalog catalog)
+        {
+            var state = new State
+            {
+                stateId = stateId,
+                nrOfBooks = nrOfBooks,
+                catalog = catalog
+            };
+            _states.Add(state);
         }
 
+        public void RemoveStateByID(int id)
+        {
+            var state = _states.FirstOrDefault(s => s.stateId == id);
+            if (state != null)
+            {
+                _states.Remove(state);
+            }
+        }
 
+        public State GetStateById(int id)
+        {
+            return _states.FirstOrDefault(s => s.stateId == id);
+        }
     }
 }

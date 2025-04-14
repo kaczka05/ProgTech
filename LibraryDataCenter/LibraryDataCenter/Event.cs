@@ -4,7 +4,7 @@
     {
         public int eventId { get; set; }
 
-        public Users employee { get; set; }
+        public User employee { get; set; }
         public State state { get; set; }
     }
 }

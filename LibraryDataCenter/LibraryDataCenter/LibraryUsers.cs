@@ -1,9 +1,18 @@
-﻿namespace LibraryDataLayer
+﻿using LibraryLogicLayer;
+
+namespace LibraryDataLayer
 {
-    public class User
+    internal class User : IUser
     {
-        public int userId { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
+        public int UserId { get; init; }
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
+
+        public User(int userId, string firstName, string lastName)
+        {
+            UserId = userId;
+            FirstName = firstName;
+            LastName = lastName;
+        }
     }
 }

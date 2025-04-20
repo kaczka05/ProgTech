@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LibraryLogicLayer
 {
-    public class LibraryDataService
+    internal class LibraryDataService
     {
         private readonly ICatalogRepository _catalogRepository;
         private readonly IUserRepository _userRepository;
@@ -24,7 +24,6 @@ namespace LibraryLogicLayer
             _stateRepository = stateRepository;
         }
 
-        // Catalog methods
         public void AddCatalog(int catalogId, string title, string author, int numberOfPages)
         {
             _catalogRepository.AddCatalog(catalogId, title, author, numberOfPages);
@@ -40,7 +39,6 @@ namespace LibraryLogicLayer
             return _catalogRepository.GetCatalogById(catalogId);
         }
 
-        // User methods
         public void AddUser(int userId, string firstName, string lastName)
         {
             _userRepository.AddUser(userId, firstName, lastName);
@@ -56,7 +54,6 @@ namespace LibraryLogicLayer
             return _userRepository.GetUserById(userId);
         }
 
-        // Event methods
         public void AddDatabaseEvent(int eventId, User employee, LibraryState state, bool addition)
         {
             _eventRepository.AddDatabaseEvent(eventId, employee, state, addition);
@@ -77,7 +74,6 @@ namespace LibraryLogicLayer
             return _eventRepository.GetEventById(eventId);
         }
 
-        // State methods
         public void AddState(int stateId, int nrOfBooks, LibraryCatalog catalog)
         {
             _stateRepository.AddState(stateId, nrOfBooks, catalog);

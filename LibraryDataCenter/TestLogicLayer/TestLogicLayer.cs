@@ -141,7 +141,7 @@ namespace LibraryLogicLayerTests
         private IStateRepository _stateRepo;
 
         [TestInitialize]
-        public void Setup()
+        public void initup()
         {
             _catalogRepo = new CatalogRepository();
             _userRepo = new UserRepository();

@@ -1,10 +1,20 @@
-﻿namespace LibraryDataLayer
+﻿using LibraryLogicLayer;
+
+namespace LibraryDataLayer
 {
-    public class LibraryCatalog
+    internal class Book : ICatalog
     {
-        public int catalogId { get; set; }
-        public string title { get; set; }
-        public string author { get; set; }
-        public int nrOfPages { get; set; }
+        public int catalogId { get; init; }
+        public string title { get; init; }
+        public string author { get; init; }
+        public int nrOfPages { get; init; }
+
+        public Book(int catalogId, string title, string author, int nrOfPages)
+        {
+            this.catalogId = catalogId;
+            this.title = title;
+            this.author = author;
+            this.nrOfPages = nrOfPages;
+        }
     }
 }

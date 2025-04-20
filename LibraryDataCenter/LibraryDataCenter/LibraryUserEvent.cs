@@ -1,8 +1,22 @@
-﻿namespace LibraryDataLayer
+﻿using LibraryLogicLayer;
+
+namespace LibraryDataLayer
 {
-    public class LibraryUserEvent: LibraryEvent
+    internal class UserEvent : Event, IUserEvent
     {
-        public User user { get; set; }
-        public bool borrowing { get; set; } //true borrowing false returning
+        public int EventId { get; init; }
+        public User Employee { get; init; }
+        public State State { get; init; }
+        public User User { get; init; }
+        public bool Borrowing { get; init; }
+
+        public UserEvent(int eventId, User employee, State state, User user, bool borrowing)
+        {
+            EventId = eventId;
+            Employee = employee;
+            State = state;
+            User = user;
+            Borrowing = borrowing;
+        }
     }
 }

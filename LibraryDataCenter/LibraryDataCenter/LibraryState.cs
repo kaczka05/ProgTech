@@ -1,9 +1,18 @@
-﻿namespace LibraryDataLayer
+﻿using LibraryLogicLayer;
+
+namespace LibraryDataLayer
 {
-    public class LibraryState
+    internal class State : IState
     {
-        public int stateId { get; set; }
-        public int nrOfBooks { get; set;}
-        public LibraryCatalog catalog { get; set;}
+        public int StateId { get; init; }
+        public int NrOfBooks { get; init; }
+        public Book Catalog { get; init; }
+
+        public State(int stateId, int nrOfBooks, Book catalog)
+        {
+            StateId = stateId;
+            NrOfBooks = nrOfBooks;
+            Catalog = catalog;
+        }
     }
 }

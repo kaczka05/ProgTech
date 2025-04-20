@@ -1,10 +1,11 @@
-﻿namespace LibraryDataLayer
-{
-    public class LibraryEvent
-    {
-        public int eventId { get; set; }
+﻿using LibraryLogicLayer;
 
-        public User employee { get; set; }
-        public LibraryState state { get; set; }
+namespace LibraryDataLayer
+{
+    public abstract class Event : IEvent
+    {
+        public int EventId { get; init; }
+        public IUser Employee { get; init; }
+        public IState State { get; init; }
     }
 }

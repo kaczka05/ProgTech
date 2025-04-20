@@ -1,12 +1,12 @@
 ﻿
 namespace LibraryDataLayer
 {
-    public class LibraryDataContext
+    internal class LibraryDataContext
     {
-        public List<User> Users { get; } = new List<User>();
-        public List<LibraryCatalog> Catalogs { get; } = new List<LibraryCatalog>();
-        public List<LibraryEvent> Events { get; } = new List<LibraryEvent>();
-        public List<LibraryState> States { get; } = new List<LibraryState>();
+        public List<User> Users { get; init; } = new List<User>();
+        public List<Book> Catalogs { get; init; } = new List<Book>();
+        public List<Event> Events { get; init; } = new List<Event>();
+        public List<State> States { get; init; } = new List<State>();
     }
 
 }

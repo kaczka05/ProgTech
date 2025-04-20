@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LibraryLogicLayer
 {
-    public class CatalogRepository : ICatalogRepository
+    internal class CatalogRepository : ICatalogRepository
     {
         private readonly List<LibraryCatalog> _catalogs = new List<LibraryCatalog>();
 

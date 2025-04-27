@@ -7,10 +7,10 @@ namespace LibraryLogicLayer
 {
     internal class LibraryDataService
     {
-        private readonly ICatalogRepository _catalogRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IEventRepository _eventRepository;
-        private readonly IStateRepository _stateRepository;
+        private static ICatalogRepository _catalogRepository;
+        private static IUserRepository _userRepository;
+        private static IEventRepository _eventRepository;
+        private static IStateRepository _stateRepository;
 
         public LibraryDataService(
             ICatalogRepository catalogRepository,
@@ -34,7 +34,7 @@ namespace LibraryLogicLayer
             _catalogRepository.RemoveCatalogById(catalogId);
         }
 
-        public LibraryCatalog GetCatalogById(int catalogId)
+        public ICatalog GetCatalogById(int catalogId)
         {
             return _catalogRepository.GetCatalogById(catalogId);
         }
@@ -49,17 +49,17 @@ namespace LibraryLogicLayer
             _userRepository.RemoveUserById(userId);
         }
 
-        public User GetUserById(int userId)
+        public IUser GetUserById(int userId)
         {
             return _userRepository.GetUserById(userId);
         }
 
-        public void AddDatabaseEvent(int eventId, User employee, LibraryState state, bool addition)
+        public void AddDatabaseEvent(int eventId, IUser employee, IState state, bool addition)
         {
             _eventRepository.AddDatabaseEvent(eventId, employee, state, addition);
         }
 
-        public void AddUserEvent(int eventId, User employee, LibraryState state, User user, bool borrowing)
+        public void AddUserEvent(int eventId, IUser employee, IState state, IUser user, bool borrowing)
         {
             _eventRepository.AddUserEvent(eventId, employee, state, user, borrowing);
         }
@@ -69,12 +69,12 @@ namespace LibraryLogicLayer
             _eventRepository.RemoveEventById(eventId);
         }
 
-        public LibraryEvent GetEventById(int eventId)
+        public IEvent GetEventById(int eventId)
         {
             return _eventRepository.GetEventById(eventId);
         }
 
-        public void AddState(int stateId, int nrOfBooks, LibraryCatalog catalog)
+        public void AddState(int stateId, int nrOfBooks, ICatalog catalog)
         {
             _stateRepository.AddState(stateId, nrOfBooks, catalog);
         }
@@ -84,7 +84,7 @@ namespace LibraryLogicLayer
             _stateRepository.RemoveStateByID(stateId);
         }
 
-        public LibraryState GetStateById(int stateId)
+        public IState GetStateById(int stateId)
         {
             return _stateRepository.GetStateById(stateId);
         }

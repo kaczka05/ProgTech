@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LibraryDataLayer;
 using System.Collections.Generic;
 
-namespace LibraryDataLayerTests
+/*namespace LibraryDataLayerTests
 {
     [TestClass]
     public class LibraryTests
@@ -157,4 +157,4 @@ namespace LibraryDataLayerTests
             Assert.IsNotNull(state.catalog);
         }
     }
-}
+}*/

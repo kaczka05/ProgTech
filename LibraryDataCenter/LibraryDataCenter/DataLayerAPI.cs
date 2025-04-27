@@ -7,6 +7,34 @@ using System.Threading.Tasks;
 
 namespace LibraryLogicLayer
 {   
+    public interface ILibraryDataContext
+    {
+        public List<IUser> Users { get; init; }
+        public List<ICatalog> Catalogs { get; init; }
+        public List<IEvent> Events { get; init; }
+        public List<IState> States { get; init; }
+        void AddCatalog(int catalogId, string title, string author, int nrOfPages);
+
+        void RemoveCatalogById(int id);
+
+        ICatalog GetCatalogById(int id);
+
+        void AddUser(int userId, string firstName, string lastName);
+        void RemoveUserById(int id);
+
+        IUser GetUserById(int id);
+
+        void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition);
+        void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing);
+
+        void RemoveEventById(int id);
+        IEvent GetEventById(int id);
+
+        void AddState(int stateId, int nrOfBooks, int catalogId);
+        void RemoveStateByID(int id);
+
+        IState GetStateById(int id);
+    }
     public interface ICatalog
     {
         public int catalogId { get; init; }
@@ -51,43 +79,5 @@ namespace LibraryLogicLayer
         ICatalog Catalog { get; init; }
     }
 
-    public interface ICatalogRepository
-    {
-        public List<ICatalog> Catalogs { get; init; }
-        void AddCatalog(int catalogId, string title, string author, int nrOfPages);
 
-        void RemoveCatalogById(int id);
-
-        ICatalog GetCatalogById(int id);
-
-    }
-    public interface IUserRepository
-    {
-        public List<IUser> Users { get; init; } 
-        void AddUser(int userId, string firstName, string lastName);
-        void RemoveUserById(int id);
-
-        IUser GetUserById(int id);
-
-
-    }
-    public interface IEventRepository
-    {
-        public List<IEvent> Events { get; init; }
-        void AddDatabaseEvent(int eventId, IUser employee, IState state, bool addition);
-        void AddUserEvent(int eventId, IUser employee, IState state, IUser user, bool borrowing );
-
-        void RemoveEventById(int id);
-        IEvent GetEventById(int id);
-
-    }
-    public interface IStateRepository
-    {
-        public List<IState> States { get; init; }
-        void AddState(int stateId, int nrOfBooks, ICatalog catalog);
-        void RemoveStateByID(int id);
-
-        IState GetStateById(int id);
-
-    }
 }

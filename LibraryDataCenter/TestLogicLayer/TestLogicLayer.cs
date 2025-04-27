@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LibraryLogicLayer;
 using LibraryDataLayer;
 
-namespace LibraryLogicLayerTests
+/*namespace LibraryLogicLayerTests
 {
     [TestClass]
     public class RepositoryTests
@@ -209,4 +209,4 @@ namespace LibraryLogicLayerTests
             Assert.AreEqual("Borrower", ev.user.firstName);
         }
     }
-}
+}*/

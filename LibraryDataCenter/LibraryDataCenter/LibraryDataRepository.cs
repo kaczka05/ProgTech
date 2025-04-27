@@ -1,182 +1,115 @@
-﻿using LibraryDataLayer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
+using LibraryLogicLayer;
 
-namespace LibraryLogicLayer
+namespace LibraryDataLayer
 {
-    internal class LogicCatalog : ICatalog
-       {
-            public int catalogId { get; init; }
-    public string title { get; init; }
-    public string author { get; init; }
-    public int nrOfPages { get; init; }
-    }
-    internal class CatalogRepository : ICatalogRepository
+    internal class LibraryDataRepository : ILibraryDataRepository
     {
-        public List<ICatalog> Catalogs { get; init; } = new List<ICatalog>();
+        private ILibraryDataContext _libraryDataContext;
 
         public void AddCatalog(int catalogId, string title, string author, int numberOfPages)
         {
-            var catalog = new LogicCatalog
-            {
-                catalogId = catalogId,
-                title = title,
-                author = author,
-                nrOfPages = numberOfPages
-            };
-            Catalogs.Add(catalog);
+            _libraryDataContext.Catalogs.Add(new Book(catalogId, title, author, numberOfPages));
         }
 
         public void RemoveCatalogById(int id)
         {
-            var catalog = Catalogs.FirstOrDefault(c => c.catalogId == id);
+            var catalog = _libraryDataContext.Catalogs.FirstOrDefault(c => c.catalogId == id);
             if (catalog != null)
             {
-                Catalogs.Remove(catalog);
+                _libraryDataContext.Catalogs.Remove(catalog);
             }
         }
 
         public ICatalog GetCatalogById(int id)
         {
-            return Catalogs.FirstOrDefault(c => c.catalogId == id);
+            return _libraryDataContext.Catalogs.FirstOrDefault(c => c.catalogId == id);
         }
-    }
 
-    internal class LogicUser : IUser
-    {
-        public int UserId { get; init; }
-        public string FirstName { get; init; }
-        public string LastName { get; init; }
-    }
-
-    internal class UserRepository : IUserRepository
-    {
-        public List<IUser> Users { get; init; } = new List<IUser>();
 
         public void AddUser(int userId, string firstName, string lastName)
         {
-            var user = new LogicUser
-            {
-                UserId = userId,
-                FirstName = firstName,
-                LastName = lastName
-            };
-            Users.Add(user);
+            _libraryDataContext.Users.Add(new User(userId, firstName, lastName));
         }
 
         public void RemoveUserById(int id)
         {
-            var user = Users.FirstOrDefault(u => u.UserId == id);
+            var user = _libraryDataContext.Users.FirstOrDefault(u => u.UserId == id);
             if (user != null)
             {
-                Users.Remove(user);
+                _libraryDataContext.Users.Remove(user);
             }
         }
 
         public IUser GetUserById(int id)
         {
-            return Users.FirstOrDefault(u => u.UserId == id);
-        }
-    }
-
-    internal class LogicEvent : IEvent
-    {
-        public int EventId { get; init; }
-        public IUser Employee { get; init; }
-        public IState State { get; init; }
-    }
-
-    internal class EventRepository : IEventRepository
-    {
-        public List<IEvent> Events { get; init; } = new List<IEvent>();
-
-        public void AddDatabaseEvent(int eventId, IUser employee, IState state, bool addition)
-        {
-            var databaseEvent = new LogicDatabaseEvent
-            {
-                EventId = eventId,
-                Employee = employee,
-                State = state,
-                Addition = addition
-            };
-            Events.Add(databaseEvent); // Poprawiono dodanie instancji
+            return _libraryDataContext.Users.FirstOrDefault(u => u.UserId == id);
         }
 
-        public void AddUserEvent(int eventId, IUser employee, IState state, IUser user, bool borrowing)
+
+
+        public void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition)
         {
-            var userEvent = new LogicUserEvent
-            {
-                EventId = eventId,
-                Employee = employee,
-                State = state,
-                User = user,
-                Borrowing = borrowing
-            };
-            Events.Add(userEvent); // Poprawiono dodanie instancji
+            _libraryDataContext.Events.Add(new DatabaseEvent(eventId, GetUserById(employeeId), GetStateById(stateId), addition);
+        }
+
+        public void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing)
+        {
+            _libraryDataContext.Events.Add(new UserEvent(eventId, GetUserById(employeeId), GetStateById(stateId), GetUserById(userId), borrowing);
         }
 
         public void RemoveEventById(int id)
         {
-            var eventObj = Events.FirstOrDefault(e => e.EventId == id);
+            var eventObj = _libraryDataContext.Events.FirstOrDefault(e => e.EventId == id);
             if (eventObj != null)
             {
-                Events.Remove(eventObj);
+                _libraryDataContext.Events.Remove(eventObj);
             }
         }
 
         public IEvent GetEventById(int id)
         {
-            return Events.FirstOrDefault(e => e.EventId == id);
+            return _libraryDataContext.Events.FirstOrDefault(e => e.EventId == id);
         }
-    }
 
-    internal class LogicState : IState
-    {
-        public int StateId { get; init; }
-        public int NrOfBooks { get; init; }
-        public ICatalog Catalog { get; init; }
-    }
-
-    internal class StateRepository : IStateRepository
-    {
-        public List<IState> States { get; init; } = new List<IState>();
-
-        public void AddState(int stateId, int nrOfBooks, ICatalog catalog)
+        public void AddState(int stateId, int nrOfBooks, int catalogId)
         {
-            var state = new LogicState
-            {
-                StateId = stateId,
-                NrOfBooks = nrOfBooks,
-                Catalog = catalog
-            };
-            States.Add(state);
+
+            _libraryDataContext.States.Add(new State(stateId, nrOfBooks, GetCatalogById(catalogId)));
         }
 
         public void RemoveStateByID(int id)
         {
-            var state = States.FirstOrDefault(s => s.StateId == id);
+            var state = _libraryDataContext.States.FirstOrDefault(s => s.StateId == id);
             if (state != null)
             {
-                States.Remove(state);
+                _libraryDataContext.States.Remove(state);
             }
         }
 
         public IState GetStateById(int id)
         {
-            return States.FirstOrDefault(s => s.StateId == id);
+            return _libraryDataContext.States.FirstOrDefault(s => s.StateId == id);
+        }
+        public bool DoesCatalogExist(int id)
+        {
+            return _libraryDataContext.Catalogs.Any(c => c.catalogId == id);
+        }
+        public bool DoesUserExist(int id)
+        {
+            return _libraryDataContext.Users.Any(u => u.UserId == id);
+        }
+
+        public bool DoesEventExist(int id)
+        {
+            return _libraryDataContext.Events.Any(e => e.EventId == id);
+        }
+
+        public bool DoesStateExist(int id)
+        {
+            return _libraryDataContext.States.Any(s => s.StateId == id);
         }
     }
 
-    internal class LogicDatabaseEvent : LogicEvent, IDatabaseEvent
-    {
-        public bool Addition { get; init; }
-    }
-
-    internal class LogicUserEvent : LogicEvent, IUserEvent
-    {
-        public IUser User { get; init; }
-        public bool Borrowing { get; init; }
-    }
 
 }

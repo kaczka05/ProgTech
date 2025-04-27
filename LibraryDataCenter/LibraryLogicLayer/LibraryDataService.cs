@@ -5,88 +5,100 @@ using System.Linq;
 
 namespace LibraryLogicLayer
 {
-    internal class LibraryDataService
+   internal class LibraryDataService : ILibraryDataService
     {
-        private static ICatalogRepository _catalogRepository;
-        private static IUserRepository _userRepository;
-        private static IEventRepository _eventRepository;
-        private static IStateRepository _stateRepository;
-
-        public LibraryDataService(
-            ICatalogRepository catalogRepository,
-            IUserRepository userRepository,
-            IEventRepository eventRepository,
-            IStateRepository stateRepository)
+        private static ILibraryDataRepository _libraryDataRepository = default;
+        public LibraryDataService(ILibraryDataRepository libraryDataRepository)
         {
-            _catalogRepository = catalogRepository;
-            _userRepository = userRepository;
-            _eventRepository = eventRepository;
-            _stateRepository = stateRepository;
+            _libraryDataRepository = libraryDataRepository;
         }
-
-        public void AddCatalog(int catalogId, string title, string author, int numberOfPages)
+        public void LogicAddCatalogue(int catalogId, string title, string author, int numberOfPages)
         {
-            _catalogRepository.AddCatalog(catalogId, title, author, numberOfPages);
+            if (_libraryDataRepository.DoesCatalogExist(catalogId))
+            {
+                throw new Exception("Catalog already exists");
+            }
+            _libraryDataRepository.AddCatalog(catalogId, title, author, numberOfPages);
         }
-
-        public void RemoveCatalogById(int catalogId)
+        public void LogicRemoveCatalogue(int id)
         {
-            _catalogRepository.RemoveCatalogById(catalogId);
+            if (!_libraryDataRepository.DoesCatalogExist(id))
+            {
+                throw new Exception("Catalog does not exist");
+            }
+            _libraryDataRepository.RemoveCatalogById(id);
         }
-
-        public ICatalog GetCatalogById(int catalogId)
+        public void LogicAddState(int stateId, int nrOfBooks, int catalogId)
         {
-            return _catalogRepository.GetCatalogById(catalogId);
+            if (_libraryDataRepository.DoesStateExist(stateId))
+            {
+                throw new Exception("State already exists");
+            }
+            if (!_libraryDataRepository.DoesCatalogExist(catalogId))
+            {
+                throw new Exception("Catalog does not exist");
+            }
+            _libraryDataRepository.AddState(stateId, nrOfBooks, catalogId);
         }
-
-        public void AddUser(int userId, string firstName, string lastName)
+        public void LogicRemoveState(int id)
         {
-            _userRepository.AddUser(userId, firstName, lastName);
+            if (!_libraryDataRepository.DoesStateExist(id))
+            {
+                throw new Exception("State does not exist");
+            }
+            _libraryDataRepository.RemoveStateByID(id);
         }
-
-        public void RemoveUserById(int userId)
+        public void LogicAddUser(int userId, string firstName, string lastName)
         {
-            _userRepository.RemoveUserById(userId);
+            if (_libraryDataRepository.DoesUserExist(userId))
+            {
+                throw new Exception("User already exists");
+            }
+            _libraryDataRepository.AddUser(userId, firstName, lastName);
         }
-
-        public IUser GetUserById(int userId)
+        public void LogicRemoveUser(int id)
         {
-            return _userRepository.GetUserById(userId);
+            if (!_libraryDataRepository.DoesUserExist(id))
+            {
+                throw new Exception("User does not exist");
+            }
+            _libraryDataRepository.RemoveUserById(id);
         }
-
-        public void AddDatabaseEvent(int eventId, IUser employee, IState state, bool addition)
+        public void LogicAddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing)
         {
-            _eventRepository.AddDatabaseEvent(eventId, employee, state, addition);
+            if (_libraryDataRepository.DoesEventExist(eventId))
+            {
+                throw new Exception("Event already exists");
+            }
+            if (!_libraryDataRepository.DoesUserExist(userId))
+            {
+                throw new Exception("User does not exist");
+            }
+            if (!_libraryDataRepository.DoesStateExist(stateId))
+            {
+                throw new Exception("State does not exist");
+            }
+            _libraryDataRepository.AddUserEvent(eventId, employeeId, stateId, userId, borrowing);
         }
-
-        public void AddUserEvent(int eventId, IUser employee, IState state, IUser user, bool borrowing)
+        public void LogicAddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition)
         {
-            _eventRepository.AddUserEvent(eventId, employee, state, user, borrowing);
+            if (_libraryDataRepository.DoesEventExist(eventId))
+            {
+                throw new Exception("Event already exists");
+            }
+            if (!_libraryDataRepository.DoesUserExist(employeeId))
+            {
+                throw new Exception("Employee does not exist");
+            }
+            _libraryDataRepository.AddDatabaseEvent(eventId, employeeId, stateId, addition);
         }
-
-        public void RemoveEventById(int eventId)
+        public void LogicRemoveEvent(int id)
         {
-            _eventRepository.RemoveEventById(eventId);
-        }
-
-        public IEvent GetEventById(int eventId)
-        {
-            return _eventRepository.GetEventById(eventId);
-        }
-
-        public void AddState(int stateId, int nrOfBooks, ICatalog catalog)
-        {
-            _stateRepository.AddState(stateId, nrOfBooks, catalog);
-        }
-
-        public void RemoveStateById(int stateId)
-        {
-            _stateRepository.RemoveStateByID(stateId);
-        }
-
-        public IState GetStateById(int stateId)
-        {
-            return _stateRepository.GetStateById(stateId);
+            if (!_libraryDataRepository.DoesEventExist(id))
+            {
+                throw new Exception("Event does not exist");
+            }
+            _libraryDataRepository.RemoveEventById(id);
         }
     }
 }

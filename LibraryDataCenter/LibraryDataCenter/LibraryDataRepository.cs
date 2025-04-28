@@ -50,12 +50,12 @@ namespace LibraryDataLayer
 
         public void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition)
         {
-            _libraryDataContext.Events.Add(new DatabaseEvent(eventId, GetUserById(employeeId), GetStateById(stateId), addition);
+            _libraryDataContext.Events.Add(new DatabaseEvent(eventId, GetUserById(employeeId), GetStateById(stateId), addition));
         }
 
         public void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing)
         {
-            _libraryDataContext.Events.Add(new UserEvent(eventId, GetUserById(employeeId), GetStateById(stateId), GetUserById(userId), borrowing);
+            _libraryDataContext.Events.Add(new UserEvent(eventId, GetUserById(employeeId), GetStateById(stateId), GetUserById(userId), borrowing));
         }
 
         public void RemoveEventById(int id)

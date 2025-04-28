@@ -8,7 +8,7 @@ namespace LibraryLogicLayer
 {
     public interface ILibraryDataService
     {
-        public void LogicAddCatalogue(int catalogId, string title, string author, int numberOfPages)
+        public void LogicAddCatalogue(int catalogId, string title, string author, int numberOfPages);
         public void LogicRemoveCatalogue(int id);
 
         public void LogicAddState(int stateId, int nrOfBooks, int catalogId);

@@ -1,212 +1,253 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Reflection;
 using LibraryLogicLayer;
-using LibraryDataLayer;
+using System.Collections.Generic;
 
-/*namespace LibraryLogicLayerTests
+namespace TestLogicLayer
 {
-    [TestClass]
-    public class RepositoryTests
+    // Stub repository implementing ILibraryDataRepository
+    public class StubRepository : ILibraryDataRepository
     {
-        private LibraryCatalog CreateCatalog(int id = 1, string title = "Test Book", string author = "Author", int pages = 100) =>
-            new LibraryCatalog { catalogId = id, title = title, author = author, nrOfPages = pages };
+        // Control return values
+        public bool CatalogExistsReturn { get; set; }
+        public bool UserExistsReturn { get; set; }
+        public bool StateExistsReturn { get; set; }
+        public bool EventExistsReturn { get; set; }
 
-        private User CreateUser(int id = 1, string first = "John", string last = "Doe") =>
-            new User { userId = id, firstName = first, lastName = last };
+        // Record calls
+        public List<(int id, string t, string a, int p)> AddedCatalogs = new();
+        public List<int> RemovedCatalogs = new();
+        public List<(int id, string f, string l)> AddedUsers = new();
+        public List<int> RemovedUsers = new();
+        public List<(int sid, int nb, int cid)> AddedStates = new();
+        public List<int> RemovedStates = new();
+        public List<(int eid, int emp, int st, bool add)> AddedDbEvents = new();
+        public List<(int eid, int emp, int st, int usr, bool bor)> AddedUserEvents = new();
+        public List<int> RemovedEvents = new();
 
-        private LibraryState CreateState(int id = 1, int books = 5) =>
-            new LibraryState { stateId = id, nrOfBooks = books, catalog = CreateCatalog() };
+        public void AddCatalog(int catalogId, string title, string author, int nrOfPages)
+            => AddedCatalogs.Add((catalogId, title, author, nrOfPages));
+        public void RemoveCatalogById(int id)
+            => RemovedCatalogs.Add(id);
+        public void AddUser(int userId, string firstName, string lastName)
+            => AddedUsers.Add((userId, firstName, lastName));
+        public void RemoveUserById(int id)
+            => RemovedUsers.Add(id);
+        public void AddState(int stateId, int nrOfBooks, int catalogId)
+            => AddedStates.Add((stateId, nrOfBooks, catalogId));
+        public void RemoveStateByID(int id)
+            => RemovedStates.Add(id);
+        public void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition)
+            => AddedDbEvents.Add((eventId, employeeId, stateId, addition));
+        public void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing)
+            => AddedUserEvents.Add((eventId, employeeId, stateId, userId, borrowing));
+        public void RemoveEventById(int id)
+            => RemovedEvents.Add(id);
 
-        //Catalog
-        [TestMethod]
-        public void CatalogRepository_Should_Add_And_Get_Catalog()
-        {
-            var repo = new CatalogRepository();
-            repo.AddCatalog(1, "Title", "Author", 200);
-
-            var result = repo.GetCatalogById(1);
-
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Title", result.title);
-        }
-
-        [TestMethod]
-        public void CatalogRepository_Should_Remove_Catalog()
-        {
-            var repo = new CatalogRepository();
-            repo.AddCatalog(1, "Title", "Author", 200);
-            repo.RemoveCatalogById(1);
-
-            var result = repo.GetCatalogById(1);
-            Assert.IsNull(result);
-        }
-
-        //User
-        [TestMethod]
-        public void UserRepository_Should_Add_And_Get_User()
-        {
-            var repo = new UserRepository();
-            repo.AddUser(1, "Jane", "Smith");
-
-            var result = repo.GetUserById(1);
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Jane", result.firstName);
-        }
-
-        [TestMethod]
-        public void UserRepository_Should_Remove_User()
-        {
-            var repo = new UserRepository();
-            repo.AddUser(1, "Jane", "Smith");
-            repo.RemoveUserById(1);
-
-            var result = repo.GetUserById(1);
-            Assert.IsNull(result);
-        }
-
-        //State
-        [TestMethod]
-        public void StateRepository_Should_Add_And_Get_State()
-        {
-            var repo = new StateRepository();
-            var catalog = CreateCatalog();
-
-            repo.AddState(1, 10, catalog);
-            var state = repo.GetStateById(1);
-
-            Assert.IsNotNull(state);
-            Assert.AreEqual(10, state.nrOfBooks);
-        }
-
-        [TestMethod]
-        public void StateRepository_Should_Remove_State()
-        {
-            var repo = new StateRepository();
-            repo.AddState(1, 10, CreateCatalog());
-            repo.RemoveStateByID(1);
-
-            var state = repo.GetStateById(1);
-            Assert.IsNull(state);
-        }
-
-        //Event
-        [TestMethod]
-        public void EventRepository_Should_Add_And_Get_DatabaseEvent()
-        {
-            var repo = new EventRepository();
-            var employee = CreateUser();
-            var state = CreateState();
-
-            repo.AddDatabaseEvent(1, employee, state, true);
-
-            var e = repo.GetEventById(1) as LibraryDatabaseEvent;
-            Assert.IsNotNull(e);
-            Assert.IsTrue(e.addition);
-        }
-
-        [TestMethod]
-        public void EventRepository_Should_Add_And_Get_UserEvent()
-        {
-            var repo = new EventRepository();
-            var employee = CreateUser();
-            var state = CreateState();
-            var user = CreateUser(2, "Alice", "Bob");
-
-            repo.AddUserEvent(2, employee, state, user, false);
-
-            var e = repo.GetEventById(2) as LibraryUserEvent;
-            Assert.IsNotNull(e);
-            Assert.AreEqual("Alice", e.user.firstName);
-            Assert.IsFalse(e.borrowing);
-        }
-
-        [TestMethod]
-        public void EventRepository_Should_Remove_Event()
-        {
-            var repo = new EventRepository();
-            repo.AddDatabaseEvent(1, CreateUser(), CreateState(), true);
-            repo.RemoveEventById(1);
-
-            var e = repo.GetEventById(1);
-            Assert.IsNull(e);
-        }
+        public bool DoesCatalogExist(int id) => CatalogExistsReturn;
+        public bool DoesUserExist(int id) => UserExistsReturn;
+        public bool DoesStateExist(int id) => StateExistsReturn;
+        public bool DoesEventExist(int id) => EventExistsReturn;
     }
 
     [TestClass]
-    public class ServiceTests
+    public class LibraryDataServiceTests
     {
-        private LibraryDataService _service;
-        private ICatalogRepository _catalogRepo;
-        private IUserRepository _userRepo;
-        private IEventRepository _eventRepo;
-        private IStateRepository _stateRepo;
+        private StubRepository stub;
+        private ILibraryDataService service;
 
         [TestInitialize]
-        public void initup()
+        public void Init()
         {
-            _catalogRepo = new CatalogRepository();
-            _userRepo = new UserRepository();
-            _eventRepo = new EventRepository();
-            _stateRepo = new StateRepository();
-
-            _service = new LibraryDataService(_catalogRepo, _userRepo, _eventRepo, _stateRepo);
+            stub = new StubRepository();
+            // Instantiate internal LibraryDataService via reflection
+            var svcType = typeof(ILibraryDataService).Assembly
+                .GetType("LibraryLogicLayer.LibraryDataService", true);
+            service = (ILibraryDataService)Activator.CreateInstance(svcType, stub);
         }
 
         [TestMethod]
-        public void LibraryService_Should_Add_And_Get_Catalog()
+        public void LogicAddCatalogue_CallsAdd_WhenNotExists()
         {
-            _service.AddCatalog(1, "Book", "Writer", 123);
-            var catalog = _service.GetCatalogById(1);
-
-            Assert.IsNotNull(catalog);
-            Assert.AreEqual("Book", catalog.title);
+            stub.CatalogExistsReturn = false;
+            service.LogicAddCatalogue(1, "T", "A", 10);
+            Assert.AreEqual(1, stub.AddedCatalogs.Count);
+            Assert.AreEqual((1, "T", "A", 10), stub.AddedCatalogs[0]);
         }
 
         [TestMethod]
-        public void LibraryService_Should_Add_And_Get_User()
+        public void LogicAddCatalogue_Throws_WhenExists()
         {
-            _service.AddUser(1, "Emma", "Stone");
-            var user = _service.GetUserById(1);
-
-            Assert.IsNotNull(user);
-            Assert.AreEqual("Emma", user.firstName);
+            stub.CatalogExistsReturn = true;
+            Assert.ThrowsException<Exception>(() =>
+                service.LogicAddCatalogue(1, "T", "A", 10));
         }
 
         [TestMethod]
-        public void LibraryService_Should_Add_And_Get_State()
+        public void LogicRemoveCatalogue_CallsRemove_WhenExists()
         {
-            var catalog = new LibraryCatalog { catalogId = 1, title = "C#", author = "MS", nrOfPages = 300 };
-            _service.AddState(1, 5, catalog);
-
-            var state = _service.GetStateById(1);
-            Assert.IsNotNull(state);
-            Assert.AreEqual(5, state.nrOfBooks);
+            stub.CatalogExistsReturn = true;
+            service.LogicRemoveCatalogue(2);
+            Assert.AreEqual(1, stub.RemovedCatalogs.Count);
+            Assert.AreEqual(2, stub.RemovedCatalogs[0]);
         }
 
         [TestMethod]
-        public void LibraryService_Should_Add_And_Get_DatabaseEvent()
+        public void LogicRemoveCatalogue_Throws_WhenNotExists()
         {
-            var emp = new User { userId = 1, firstName = "Staff", lastName = "One" };
-            var state = new LibraryState { stateId = 1, nrOfBooks = 10, catalog = new LibraryCatalog() };
-
-            _service.AddDatabaseEvent(1, emp, state, true);
-            var ev = _service.GetEventById(1) as LibraryDatabaseEvent;
-
-            Assert.IsNotNull(ev);
-            Assert.IsTrue(ev.addition);
+            stub.CatalogExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicRemoveCatalogue(2));
         }
 
         [TestMethod]
-        public void LibraryService_Should_Add_And_Get_UserEvent()
+        public void LogicAddState_CallsAdd_WhenValid()
         {
-            var emp = new User { userId = 1, firstName = "Librarian", lastName = "Smith" };
-            var user = new User { userId = 2, firstName = "Borrower", lastName = "Jones" };
-            var state = new LibraryState { stateId = 1, nrOfBooks = 8, catalog = new LibraryCatalog() };
+            stub.StateExistsReturn = false;
+            stub.CatalogExistsReturn = true;
+            service.LogicAddState(3, 5, 1);
+            Assert.AreEqual(1, stub.AddedStates.Count);
+            Assert.AreEqual((3, 5, 1), stub.AddedStates[0]);
+        }
 
-            _service.AddUserEvent(1, emp, state, user, true);
-            var ev = _service.GetEventById(1) as LibraryUserEvent;
+        [TestMethod]
+        public void LogicAddState_Throws_WhenStateExists()
+        {
+            stub.StateExistsReturn = true;
+            Assert.ThrowsException<Exception>(() => service.LogicAddState(3, 5, 1));
+        }
 
-            Assert.IsNotNull(ev);
-            Assert.AreEqual("Borrower", ev.user.firstName);
+        [TestMethod]
+        public void LogicAddState_Throws_WhenCatalogNotExists()
+        {
+            stub.StateExistsReturn = false;
+            stub.CatalogExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicAddState(3, 5, 1));
+        }
+
+        [TestMethod]
+        public void LogicRemoveState_CallsRemove_WhenExists()
+        {
+            stub.StateExistsReturn = true;
+            service.LogicRemoveState(4);
+            Assert.AreEqual(1, stub.RemovedStates.Count);
+            Assert.AreEqual(4, stub.RemovedStates[0]);
+        }
+
+        [TestMethod]
+        public void LogicRemoveState_Throws_WhenNotExists()
+        {
+            stub.StateExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicRemoveState(4));
+        }
+
+        [TestMethod]
+        public void LogicAddUser_CallsAdd_WhenNotExists()
+        {
+            stub.UserExistsReturn = false;
+            service.LogicAddUser(5, "F", "L");
+            Assert.AreEqual(1, stub.AddedUsers.Count);
+            Assert.AreEqual((5, "F", "L"), stub.AddedUsers[0]);
+        }
+
+        [TestMethod]
+        public void LogicAddUser_Throws_WhenExists()
+        {
+            stub.UserExistsReturn = true;
+            Assert.ThrowsException<Exception>(() => service.LogicAddUser(5, "F", "L"));
+        }
+
+        [TestMethod]
+        public void LogicRemoveUser_CallsRemove_WhenExists()
+        {
+            stub.UserExistsReturn = true;
+            service.LogicRemoveUser(6);
+            Assert.AreEqual(1, stub.RemovedUsers.Count);
+            Assert.AreEqual(6, stub.RemovedUsers[0]);
+        }
+
+        [TestMethod]
+        public void LogicRemoveUser_Throws_WhenNotExists()
+        {
+            stub.UserExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicRemoveUser(6));
+        }
+
+        [TestMethod]
+        public void LogicAddDatabaseEvent_CallsAdd_WhenValid()
+        {
+            stub.EventExistsReturn = false;
+            stub.UserExistsReturn = true;
+            service.LogicAddDatabaseEvent(7, 5, 1, true);
+            Assert.AreEqual(1, stub.AddedDbEvents.Count);
+            Assert.AreEqual((7, 5, 1, true), stub.AddedDbEvents[0]);
+        }
+
+        [TestMethod]
+        public void LogicAddDatabaseEvent_Throws_WhenEventExists()
+        {
+            stub.EventExistsReturn = true;
+            Assert.ThrowsException<Exception>(() => service.LogicAddDatabaseEvent(7, 5, 1, true));
+        }
+
+        [TestMethod]
+        public void LogicAddDatabaseEvent_Throws_WhenEmployeeNotExists()
+        {
+            stub.EventExistsReturn = false;
+            stub.UserExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicAddDatabaseEvent(7, 5, 1, true));
+        }
+
+        [TestMethod]
+        public void LogicAddUserEvent_CallsAdd_WhenValid()
+        {
+            stub.EventExistsReturn = false;
+            stub.UserExistsReturn = true;
+            stub.StateExistsReturn = true;
+            service.LogicAddUserEvent(8, 5, 1, 6, false);
+            Assert.AreEqual(1, stub.AddedUserEvents.Count);
+            Assert.AreEqual((8, 5, 1, 6, false), stub.AddedUserEvents[0]);
+        }
+
+        [TestMethod]
+        public void LogicAddUserEvent_Throws_WhenEventExists()
+        {
+            stub.EventExistsReturn = true;
+            Assert.ThrowsException<Exception>(() => service.LogicAddUserEvent(8, 5, 1, 6, false));
+        }
+
+        [TestMethod]
+        public void LogicAddUserEvent_Throws_WhenUserNotExists()
+        {
+            stub.EventExistsReturn = false;
+            stub.UserExistsReturn = false;
+            stub.StateExistsReturn = true;
+            Assert.ThrowsException<Exception>(() => service.LogicAddUserEvent(8, 5, 1, 6, false));
+        }
+
+        [TestMethod]
+        public void LogicAddUserEvent_Throws_WhenStateNotExists()
+        {
+            stub.EventExistsReturn = false;
+            stub.UserExistsReturn = true;
+            stub.StateExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicAddUserEvent(8, 5, 1, 6, false));
+        }
+
+        [TestMethod]
+        public void LogicRemoveEvent_CallsRemove_WhenExists()
+        {
+            stub.EventExistsReturn = true;
+            service.LogicRemoveEvent(9);
+            Assert.AreEqual(1, stub.RemovedEvents.Count);
+            Assert.AreEqual(9, stub.RemovedEvents[0]);
+        }
+
+        [TestMethod]
+        public void LogicRemoveEvent_Throws_WhenNotExists()
+        {
+            stub.EventExistsReturn = false;
+            Assert.ThrowsException<Exception>(() => service.LogicRemoveEvent(9));
         }
     }
-}*/
+}

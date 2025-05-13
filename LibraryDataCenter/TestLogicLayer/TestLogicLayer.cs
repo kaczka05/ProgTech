@@ -1,13 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
-using LibraryLogicLayer;
 using System.Collections.Generic;
-
+using LibraryLogicLayer;
 namespace TestLogicLayer
 {
     // Stub repository implementing ILibraryDataRepository
-    public class StubRepository : ILibraryDataRepository
+    public class StubRepository 
     {
         // Control return values
         public bool CatalogExistsReturn { get; set; }

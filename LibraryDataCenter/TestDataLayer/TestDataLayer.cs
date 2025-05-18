@@ -216,5 +216,46 @@ namespace TestDataLayer
             repo.AddUserEvent(11, 5, 7, 8, false);
             Assert.IsTrue(repo.DoesEventExist(11));
         }
+
+
+
+        [TestMethod]
+        public void Catalog_User_State_Event_RandomData_Flow()
+        {
+            var rand = new Random();
+            int catalogId = rand.Next(1000, 2000);
+            string title = "Title" + rand.Next(100, 999);
+            string author = "Author" + rand.Next(100, 999);
+            int pages = rand.Next(50, 1000);
+
+            int userId = rand.Next(2000, 3000);
+            string firstName = "First" + rand.Next(100, 999);
+            string lastName = "Last" + rand.Next(100, 999);
+
+            int stateId = rand.Next(3000, 4000);
+            int nrBooks = rand.Next(1, 10);
+
+            int dbEventId = rand.Next(4000, 5000);
+            int userEventId = rand.Next(5000, 6000);
+
+            repo.AddCatalog(catalogId, title, author, pages);
+            repo.AddUser(userId, firstName, lastName);
+            repo.AddState(stateId, nrBooks, catalogId);
+
+            Assert.IsTrue(repo.DoesCatalogExist(catalogId));
+            Assert.IsTrue(repo.DoesUserExist(userId));
+            Assert.IsTrue(repo.DoesStateExist(stateId));
+
+            repo.AddDatabaseEvent(dbEventId, userId, stateId, true);
+            Assert.IsTrue(repo.DoesEventExist(dbEventId));
+
+            // Add second user for user event
+            int borrowerId = rand.Next(6000, 7000);
+            repo.AddUser(borrowerId, "Borrower" + rand.Next(100, 999), "Lender" + rand.Next(100, 999));
+            repo.AddUserEvent(userEventId, userId, stateId, borrowerId, true);
+            Assert.IsTrue(repo.DoesEventExist(userEventId));
+        }
     }
+
+
 }

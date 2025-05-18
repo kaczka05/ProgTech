@@ -5,6 +5,7 @@ namespace LibraryDataLayer
     internal class DatabaseEvent : Event, IDatabaseEvent
     {
         private IUser user;
+        private object addition;
 
         public bool Addition { get; init; }
 
@@ -16,12 +17,14 @@ namespace LibraryDataLayer
             Addition = addition;
         }
 
-        public DatabaseEvent(int eventId, IUser user, IState state, bool addition)
+        public DatabaseEvent(int eventId, IUser? user, IState? state, bool addition)
         {
             EventId = eventId;
             this.user = user;
             State = state;
             Addition = addition;
         }
+
+        
     }
 }

@@ -27,5 +27,13 @@ namespace LibraryDataLayer
             this.user2 = user2;
             Borrowing = borrowing;
         }
+
+        public UserEvent(int eventId, IUser? employee, IState? state, bool borrowing)
+        {
+            EventId = eventId;
+            Employee = employee;
+            State = state;
+            Borrowing = borrowing;
+        }
     }
 }

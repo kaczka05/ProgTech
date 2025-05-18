@@ -7,5 +7,7 @@ namespace LibraryDataLayer
         public int EventId { get; init; }
         public IUser Employee { get; init; }
         public IState State { get; init; }
+
+        public String EventType { get; init; }
     }
 }

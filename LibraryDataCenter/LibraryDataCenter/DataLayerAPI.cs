@@ -9,10 +9,21 @@ namespace LibraryDataLayer
 {   
     public interface ILibraryDataContext
     {
-        public List<IUser> Users { get; init; }
-        public List<ICatalog> Catalogs { get; init; }
-        public List<IEvent> Events { get; init; }
-        public List<IState> States { get; init; }
+        public IQueryable<ICatalog> Catalogs { get; }
+        public IQueryable<IUser> Users { get; }
+        public IQueryable<IEvent> DatabaseEvents { get; }
+        public IQueryable<IState> States { get; }
+        Task AddCatalogAsync(ICatalog catalog);
+        Task RemoveCatalogAsync(ICatalog catalog);
+        Task AddUserAsync(IUser user);
+        Task RemoveUserAsync(IUser user);
+        Task AddDatabaseEventAsync(IDatabaseEvent databaseEvent);
+        Task AddUserEventAsync(IUserEvent userEvent);
+        Task RemoveEventAsync(IEvent userEvent);
+        Task AddStateAsync(IState state);
+        Task RemoveStateAsync(IState state);
+
+
     }
     public interface ILibraryDataRepository
     {
@@ -21,18 +32,29 @@ namespace LibraryDataLayer
 
         void RemoveCatalogById(int id);
 
+        ICatalog? GetCatalogById(int id);
+
+        IEnumerable<ICatalog> GetAllCatalogs();
 
         void AddUser(int userId, string firstName, string lastName);
         void RemoveUserById(int id);
+        IUser? GetUserById(int id);
+        IEnumerable<IUser> GetAllUsers();
 
 
         void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition);
         void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing);
 
+
         void RemoveEventById(int id);
+        IEvent? GetEventById(int id);
+        IEnumerable<IEvent> GetAllEvents();
+
 
         void AddState(int stateId, int nrOfBooks, int catalogId);
         void RemoveStateByID(int id);
+        IState? GetStateById(int id);
+        IEnumerable<IState> GetAllStates();
 
         bool DoesCatalogExist(int id);
         bool DoesUserExist(int id);

@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryDataCenter\LibraryDataLayer.csproj" />
     <ProjectReference Include="..\LibraryLogicLayer\LibraryLogicLayer.csproj" />
   </ItemGroup>
 

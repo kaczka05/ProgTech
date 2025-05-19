@@ -42,8 +42,8 @@ namespace LibraryDataLayer
         IEnumerable<IUser> GetAllUsers();
 
 
-        void AddDatabaseEvent(int eventId, IUser employeeId, IState stateId, bool addition);
-        void AddUserEvent(int eventId, IUser employeeId, IState stateId, IUser userId, bool borrowing);
+        void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition);
+        void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing);
 
 
         void RemoveEventById(int id);
@@ -51,7 +51,7 @@ namespace LibraryDataLayer
         IEnumerable<IEvent> GetAllEvents();
 
 
-        void AddState(int stateId, int nrOfBooks, ICatalog catalogId);
+        void AddState(int stateId, int nrOfBooks, int catalogId);
         void RemoveStateByID(int id);
         IState? GetStateById(int id);
         IEnumerable<IState> GetAllStates();

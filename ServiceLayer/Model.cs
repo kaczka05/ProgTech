@@ -16,7 +16,7 @@ namespace LibraryPresentationLayer
 
         internal Model(ILibraryDataService? service = null)
         {
-            _libraryDataService = service ?? LibraryDataService.CreateNewService();
+            _libraryDataService = service ?? ILibraryDataService.CreateNewService();  //TODO
         }
 
 

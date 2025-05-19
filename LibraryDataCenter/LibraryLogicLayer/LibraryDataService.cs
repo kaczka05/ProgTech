@@ -160,15 +160,7 @@ namespace LibraryLogicLayer
                 .ToList();
 
         
-        public static ILibraryDataService CreateNewService(ILibraryDataRepository data)
-        {
-            return new LibraryDataService(data);
-        }
-        public  ILibraryDataService CreateNewService()
-        {
-            return new LibraryDataService();
-        }
-
+      
 
 
     }

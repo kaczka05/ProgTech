@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LibraryLogicLayer
 {
     public interface ILibraryDataService
@@ -24,6 +25,16 @@ namespace LibraryLogicLayer
         List<ILogicUser> GetAllUsersAsync();
         List<ILogicEvent> GetAllEventsAsync();
         List<ILogicState> GetAllStatesAsync();
+
+        public static ILibraryDataService CreateNewService()
+        {
+            return new LibraryDataService();
+        }
+
+        public static ILibraryDataService CreateNewService(ILibraryDataRepository data)
+        {
+            return new LibraryDataService(data);
+        }
 
     }
     public interface ILogicCatalog
@@ -73,4 +84,6 @@ namespace LibraryLogicLayer
         int NrOfBooks { get; init; }
         ILogicCatalog Catalog { get; init; }
     }
+
 }
+    

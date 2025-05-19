@@ -114,6 +114,11 @@ namespace LibraryPresentationLayer
 
     internal class VMUserEvent : PropertyChange
     {
+        private IModelUser employee;
+        private IModelState state;
+        private object user;
+        private object borrowing;
+
         public int EventId { get; set; }
         public VMUser Employee { get; set; }
         public VMState State { get; set; }
@@ -134,6 +139,16 @@ namespace LibraryPresentationLayer
             Borrowing = false;
             User = new VMUser();
         }
+
+        public VMUserEvent(int eventId, IModelUser employee, IModelState state, object user, object borrowing)
+        {
+            EventId = eventId;
+            this.employee = employee;
+            this.state = state;
+            this.user = user;
+            this.borrowing = borrowing;
+        }
+
         public int _eventId
         {
             get => EventId;
@@ -181,7 +196,46 @@ namespace LibraryPresentationLayer
         }
 
     }
-    internal class VMDatabaseEvent : PropertyChange
+    internal class VMEvent : PropertyChange
+    {
+        private IModelUser employee;
+        private IModelState state;
+        private object user;
+        private object borrowing;
+        private object addition;
+
+        public int EventId { get; set; }
+        public VMUser Employee { get; set; }
+        public VMState State { get; set; }
+        public bool Addition { get; set; }
+        public VMUser User { get; set; }
+        public bool Borrowing { get; set; }
+ 
+
+        public VMEvent(int eventId, VMUser employee, VMState state)
+        {
+            EventId = eventId;
+            Employee = employee;
+            State = state;
+        }
+        public VMEvent()
+        {
+            EventId = 0;
+            Employee = new VMUser();
+            State = new VMState();
+        }
+
+        public VMEvent(int eventId, IModelUser employee, IModelState state, object user, object borrowing, object addition)
+        {
+            EventId = eventId;
+            this.employee = employee;
+            this.state = state;
+            this.user = user;
+            this.borrowing = borrowing;
+            this.addition = addition;
+        }
+    }
+    internal class VMDatabaseEvent : VMEvent
     {
 
         public int EventId { get; set; }
@@ -239,7 +293,7 @@ namespace LibraryPresentationLayer
             }
         }
     }
-    internal class VMState : PropertyChange
+    internal class VMState : VMEvent
     {
         public int StateId { get; set; }
         public int NrOfBooks { get; set; }

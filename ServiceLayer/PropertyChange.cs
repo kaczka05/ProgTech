@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,12 +10,14 @@ namespace LibraryPresentationLayer
 {
     internal class PropertyChange : INotifyPropertyChanged
     {
-        public event EventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string PropertyName)
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
                 return false;
@@ -24,7 +27,6 @@ namespace LibraryPresentationLayer
         }
 
         private string name;
-
         public string Name
         {
             get => name;

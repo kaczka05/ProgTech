@@ -106,9 +106,10 @@ namespace LibraryDataLayer
             {
                 IUser employee = GetUserById((int)ev.Employee);
                 IState state = GetStateById((int)ev.State);
+                IUser user = GetUserById((int)ev.User);
                 if (ev.EventType == "User")
                 {
-                    return new UserEvent(ev.EventId, employee, state, (bool)ev.Borrowing);
+                    return new UserEvent(ev.EventId, employee, state, user, (bool)ev.Borrowing);
                 }
                 else if (ev.EventType == "Database")
                 {

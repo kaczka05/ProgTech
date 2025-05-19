@@ -60,13 +60,24 @@ namespace LibraryDataLayer
         bool DoesUserExist(int id);
         bool DoesEventExist(int id);
         bool DoesStateExist(int id);
+
+        public static ILibraryDataRepository CreateNewRepository()
+        {
+            return new LibraryDataRepository();
+        }
+
+        public static ILibraryDataRepository CreateNewRepository(string connectionString)
+        {
+            return new LibraryDataRepository(connectionString);
+        }
+
     }
     public interface ICatalog
     {
-        public int catalogId { get; init; }
-        public string title { get; init; }
-        public string author { get; init; }
-        public int nrOfPages { get; init; }
+        public int CatalogId { get; init; }
+        public string Title { get; init; }
+        public string Author { get; init; }
+        public int NrOfPages { get; init; }
     }
     public interface IUser
     {
@@ -79,6 +90,9 @@ namespace LibraryDataLayer
         int EventId { get; init; }
         IUser Employee { get; init; }
         IState State { get; init; }
+        bool Addition { get; init; }
+        IUser User { get; init; }
+        bool Borrowing { get; init; }
     }
 
     public interface IDatabaseEvent

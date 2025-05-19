@@ -9,17 +9,17 @@ namespace TestDataLayer
     // In-test implementation of interfaces
     public class TestBook : ICatalog
     {
-        public int catalogId { get; init; }
-        public string title { get; init; }
-        public string author { get; init; }
-        public int nrOfPages { get; init; }
+        public int CatalogId { get; init; }
+        public string Title { get; init; }
+        public string Author { get; init; }
+        public int NrOfPages { get; init; }
 
         public TestBook(int catalogId, string title, string author, int nrOfPages)
         {
-            this.catalogId = catalogId;
-            this.title = title;
-            this.author = author;
-            this.nrOfPages = nrOfPages;
+            CatalogId = catalogId;
+            Title = title;
+            Author = author;
+            NrOfPages = nrOfPages;
         }
     }
 
@@ -52,12 +52,13 @@ namespace TestDataLayer
     }
 
     // Now implement IEvent so we can store in List<IEvent>
-    public class TestDatabaseEvent : IEvent, IDatabaseEvent
+    public class TestDatabaseEvent : Event, IDatabaseEvent
     {
         public int EventId { get; init; }
         public IUser Employee { get; init; }
         public IState State { get; init; }
         public bool Addition { get; init; }
+
 
         public TestDatabaseEvent(int id, IUser emp, IState st, bool add)
         {

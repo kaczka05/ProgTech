@@ -4,17 +4,17 @@ namespace LibraryDataLayer
 {
     internal class Book : ICatalog
     {
-        public int catalogId { get; init; }
-        public string title { get; init; }
-        public string author { get; init; }
-        public int nrOfPages { get; init; }
+        public int CatalogId { get; init; }
+        public string Title { get; init; }
+        public string Author { get; init; }
+        public int NrOfPages { get; init; }
 
         public Book(int catalogId, string title, string author, int nrOfPages)
         {
-            this.catalogId = catalogId;
-            this.title = title;
-            this.author = author;
-            this.nrOfPages = nrOfPages;
+            this.CatalogId = catalogId;
+            this.Title = title;
+            this.Author = author;
+            this.NrOfPages = nrOfPages;
         }
     }
 }

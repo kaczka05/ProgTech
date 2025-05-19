@@ -31,7 +31,7 @@ namespace LibraryPresentationLayer
         {
             UpdateViemCommand = new RelayCommand(ChangeView);
 
-            SelectedVM = new CatalogViewModel();
+            SelectedVM = new VMCatalogList();
         }
 
         private void ChangeView(object obj)
@@ -41,16 +41,16 @@ namespace LibraryPresentationLayer
                 switch (viewName)
                 {
                     case "Catalog":
-                        SelectedVM = new CatalogViewModel();
+                        SelectedVM = new VMCatalogList();
                         break;
                     case "User":
-                        SelectedVM = new UserViewModel();
+                        SelectedVM = new VMUserList();
                         break;
                     case "Event":
-                        SelectedVM = new EventViewModel();
+                        SelectedVM = new VMEventList();
                         break;
                     case "State":
-                        SelectedVM = new StateViewModel();
+                        SelectedVM = new VMStateList();
                         break;
                     default:
                         break;

@@ -13,10 +13,10 @@ namespace LibraryPresentationLayer
         Task RemoveCatalogAsync(int id);
         Task AddUserAsync(int id, string firstName, string lastName);
         Task RemoveUserAsync(int id);
-        Task AddDatabaseEventAsync(int id, IModelUser employeeId, IModelState stateId, bool addition);
-        Task AddUserEventAsync(int id, IModelUser employeeId, IModelState stateId, IModelUser userId, bool borrowing);
+        Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition);
+        Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing);
         Task RemoveEventAsync(int id);
-        Task AddStateAsync(int id, int nrOfBooks, IModelCatalog catalogId);
+        Task AddStateAsync(int id, int nrOfBooks, int catalogId);
         Task RemoveStateAsync(int id);
 
         List<IModelCatalog> GetAllCatalogsAsync();
@@ -43,6 +43,9 @@ namespace LibraryPresentationLayer
         int EventId { get; init; }
         IModelUser Employee { get; init; }
         IModelState State { get; init; }
+        IModelUser User { get; set; }
+        bool Borrowing { get; set; }
+        bool Addition { get; set; }
     }
 
     public interface IModelDatabaseEvent

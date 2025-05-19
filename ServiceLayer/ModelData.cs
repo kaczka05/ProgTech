@@ -41,7 +41,11 @@ namespace LibraryPresentationlLayer
         public int EventId { get; init; }
         public IModelUser Employee { get; init; }
         public IModelState State { get; init; }
-        
+        public IModelUser  User { get; set; }
+        public bool Borrowing { get; set; }
+        public bool Addition { get; set; }
+
+
     }
     internal class ModelDatabaseEvent : ModelEvent, IModelDatabaseEvent
     {

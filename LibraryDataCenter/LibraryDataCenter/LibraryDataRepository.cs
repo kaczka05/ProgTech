@@ -127,7 +127,7 @@ namespace LibraryDataLayer
             }
         }
 
-        // Dodawanie użytkownika
+
         public void AddUser(int userId, string firstName, string lastName)
         {
             Users user = new Users
@@ -140,7 +140,7 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Usuwanie użytkownika
+
         public void RemoveUserById(int id)
         {
             Users user = _libraryDataContext.Users.Single(u => u.UserId == id);
@@ -148,7 +148,7 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Pobieranie użytkownika po ID
+   
         public IUser? GetUserById(int id)
         {
             var user = (from u in _libraryDataContext.Users
@@ -157,7 +157,7 @@ namespace LibraryDataLayer
             return EntryToObj(user);
         }
 
-        // Pobieranie wszystkich użytkowników
+     
         public IEnumerable<IUser> GetAllUsers()
         {
             var users = from u in _libraryDataContext.Users
@@ -165,7 +165,7 @@ namespace LibraryDataLayer
             return users;
         }
 
-        // Dodawanie zdarzenia bazy (DatabaseEvent)
+  
         public void AddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition)
         {
             Events ev = new Events
@@ -180,7 +180,7 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Dodawanie zdarzenia użytkownika (UserEvent)
+       
         public void AddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing)
         {
             Events ev = new Events
@@ -196,7 +196,7 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Usuwanie zdarzenia
+    
         public void RemoveEventById(int id)
         {
             Events ev = _libraryDataContext.Events.Single(e => e.EventId == id);
@@ -204,7 +204,6 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Pobieranie zdarzenia po ID
         public IEvent? GetEventById(int id)
         {
             var ev = (from e in _libraryDataContext.Events
@@ -213,14 +212,13 @@ namespace LibraryDataLayer
             return EntryToObj(ev);
         }
 
-        // Pobieranie wszystkich zdarzeń
         public IEnumerable<IEvent> GetAllEvents()
         {
             var events = from e in _libraryDataContext.Events
                          select EntryToObj(e);
             return events;
         }
-        // Pomocnicza konwersja States -> IState
+      
         private IState? EntryToObj(States state)
         {
             if (state != null)
@@ -234,7 +232,7 @@ namespace LibraryDataLayer
             }
         }
 
-        // Dodawanie stanu
+   
         public void AddState(int stateId, int nrOfBooks, int catalogId)
         {
             States state = new States
@@ -247,7 +245,7 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Usuwanie stanu
+     
         public void RemoveStateByID(int id)
         {
             States state = _libraryDataContext.States.Single(s => s.StateId == id);
@@ -255,7 +253,6 @@ namespace LibraryDataLayer
             _libraryDataContext.SubmitChanges();
         }
 
-        // Pobieranie stanu po ID
         public IState? GetStateById(int id)
         {
             var state = (from s in _libraryDataContext.States

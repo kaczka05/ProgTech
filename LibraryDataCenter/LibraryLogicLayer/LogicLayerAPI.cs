@@ -14,10 +14,10 @@ namespace LibraryLogicLayer
         Task RemoveCatalogAsync(int id);
         Task AddUserAsync(int id, string firstName, string lastName);
         Task RemoveUserAsync(int id);
-        Task AddDatabaseEventAsync(int id, ILogicUser employeeId, ILogicState stateId, bool addition);
-        Task AddUserEventAsync(int id, ILogicUser employeeId, ILogicState stateId, ILogicUser userId, bool borrowing);
+        Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition);
+        Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing);
         Task RemoveEventAsync(int id);
-        Task AddStateAsync(int id, int nrOfBooks, ILogicCatalog catalogId);
+        Task AddStateAsync(int id, int nrOfBooks, int catalogId);
         Task RemoveStateAsync(int id);
 
         List<ILogicCatalog> GetAllCatalogsAsync();

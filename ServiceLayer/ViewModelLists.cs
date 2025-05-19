@@ -232,6 +232,7 @@ namespace LibraryPresentationLayer
         private bool Addition;
         private int _user;
         private bool Borrowing;
+        private VMEvent _event;
         private IModelEvent _modelEvent;
         private IModel model;
         public ICommand AddDatabaseEventCommand { get; }
@@ -251,7 +252,7 @@ namespace LibraryPresentationLayer
         public VMEventList(IModel model)
         {
             this.model = model;
-            _events = new ObservableCollection<IVMEvent>();
+            _events = new ObservableCollection<VMEvent>();
             AddDatabaseEventCommand = new RelayCommand(e => { AddDatabaseEvent(); }, a => true);
             AddUserEventCommand = new RelayCommand(e => { AddUserEvent(); }, a => true);
             RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
@@ -360,4 +361,105 @@ namespace LibraryPresentationLayer
         }
 
     }
-}
+    internal class VMStateList : PropertyChange
+    {
+        private int StateId;
+        private int NrOfBooks;
+        private VMCatalog Catalog;
+        private IModelState _modelState;
+        private IModel model;
+        public ICommand AddStateCommand { get; }
+        public ICommand RemoveStateCommand { get; }
+        public ICommand UpdateStateCommand { get; }
+        private ObservableCollection<VMState> _states;
+        public VMStateList()
+        {
+            this.model = model;
+            _states = new ObservableCollection<VMState>();
+            AddStateCommand = new RelayCommand(e => { Add(); }, a => true);
+            RemoveStateCommand = new RelayCommand(e => { Delete(); }, a => true);
+            UpdateStateCommand = new RelayCommand(e => { GetStates(); }, a => true);
+        }
+        public VMStateList(IModel model)
+        {
+            this.model = model;
+            _states = new ObservableCollection<VMState>();
+            AddStateCommand = new RelayCommand(e => { Add(); }, a => true);
+            RemoveStateCommand = new RelayCommand(e => { Delete(); }, a => true);
+            UpdateStateCommand = new RelayCommand(e => { GetStates(); }, a => true);
+        }
+        public ObservableCollection<VMState> States
+        {
+            get => _states;
+            set
+            {
+                _states = value;
+                OnPropertyChanged(nameof(States));
+            }
+        }
+        public IModelState ModelState
+        {
+            get => _modelState;
+            set
+            {
+                _modelState = value;
+                OnPropertyChanged(nameof(ModelState));
+            }
+        }
+
+        public int stateId
+        {
+            get => StateId;
+            set
+            {
+                StateId = value;
+                OnPropertyChanged(nameof(stateId));
+            }
+        }
+        public int nrOfBooks
+        {
+            get => NrOfBooks;
+            set
+            {
+                NrOfBooks = value;
+                OnPropertyChanged(nameof(nrOfBooks));
+            }
+        }
+        public VMCatalog catalog
+        {
+            get => Catalog;
+            set
+            {
+                Catalog = value;
+                OnPropertyChanged(nameof(catalog));
+            }
+        }
+        private VMCatalog ConvertToVMCatalog(IModelCatalog catalog) =>
+         new VMCatalog(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages);
+        private VMState? CatalogToPresentationLayer(IModelState state)
+        {
+            if (state == null)
+                return null;
+            return new VMState(state.StateId,state.NrOfBooks, ConvertToVMCatalog(state.Catalog));
+        }
+        public void GetStates()
+        {
+            var states = model.GetAllStatesAsync();
+            States.Clear();
+            foreach (var state in states)
+            {
+                States.Add(CatalogToPresentationLayer(state));
+            }
+            OnPropertyChanged(nameof(States));
+        }
+        private async Task Add()
+        {
+            await model.AddStateAsync(StateId, NrOfBooks, Catalog.CatalogId);
+        }
+        private async Task Delete()
+        {
+            await model.RemoveStateAsync(StateId);
+        }
+
+    }
+    }

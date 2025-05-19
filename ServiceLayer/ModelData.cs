@@ -1,18 +1,18 @@
-﻿using LibraryDataLayer;
-using LibraryLogicLayer;
+﻿using LibraryLogicLayer;
+using LibraryPresentationLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryLogicLayer
+namespace LibraryPresentationlLayer
 {
-    internal class LogicState : ILogicState
+    internal class ModelState : IModelState
     {
-        private ICatalog catalog;
+        private IModelCatalog catalog;
 
-        public LogicState(int stateId, int nrOfBooks, ILogicCatalog catalog)
+        public ModelState(int stateId, int nrOfBooks, IModelCatalog catalog)
         {
             StateId = stateId;
             NrOfBooks = nrOfBooks;
@@ -21,54 +21,53 @@ namespace LibraryLogicLayer
 
         public int StateId { get; init; }
         public int NrOfBooks { get; init; }
-        public ILogicCatalog Catalog { get; init; }
+        public IModelCatalog Catalog { get; init; }
         
     }
-    internal class LogicUser : ILogicUser
+    internal class ModelUser : IModelUser
     {
         public int UserId { get; init; }
         public string FirstName { get; init; }
         public string LastName { get; init; }
-        public LogicUser(int userId, string firstName, string lastName)
+        public ModelUser(int userId, string firstName, string lastName)
         {
             UserId = userId;
             FirstName = firstName;
             LastName = lastName;
         }
     }
-    internal class LogicEvent : ILogicEvent
+    internal class ModelEvent : IModelEvent
     {
         public int EventId { get; init; }
-        public ILogicUser Employee { get; init; }
-        public ILogicState State { get; init; }
-        public bool Addition { get; init; }
-        public ILogicUser User { get; init; }
-        public bool Borrowing { get; init; }
-
+        public IModelUser Employee { get; init; }
+        public IModelState State { get; init; }
+        
     }
-    internal class LogicDatabaseEvent : LogicEvent, ILogicDatabaseEvent
+    internal class ModelDatabaseEvent : ModelEvent, IModelDatabaseEvent
     {
-
+      
         public int EventId { get; init; }
-        public ILogicUser Employee { get; init; }
-        public ILogicState State { get; init; }
+        public IModelUser Employee { get; init; }
+        public IModelState State { get; init; }
         public bool Addition { get; init; }
-        public LogicDatabaseEvent(int eventId, ILogicUser employee, ILogicState state, bool addition)
+        public ModelDatabaseEvent(int eventId, IModelUser employee, IModelState state, bool addition)
         {
             EventId = eventId;
             Employee = employee;
             State = state;
             Addition = addition;
         }
+
     }
-    internal class LogicUserEvent : LogicEvent, ILogicUserEvent
+    internal class ModelUserEvent : ModelEvent, IModelUserEvent
     {
+
         public int EventId { get; init; }
-        public ILogicUser Employee { get; init; }
-        public ILogicState State { get; init; }
-        public ILogicUser User { get; init; }
+        public IModelUser Employee { get; init; }
+        public IModelState State { get; init; }
+        public IModelUser User { get; init; }
         public bool Borrowing { get; init; }
-        public LogicUserEvent(int eventId, ILogicUser employee, ILogicState state, ILogicUser user, bool borrowing)
+        public ModelUserEvent(int eventId, IModelUser employee, IModelState state, IModelUser user, bool borrowing)
         {
             EventId = eventId;
             Employee = employee;
@@ -77,13 +76,13 @@ namespace LibraryLogicLayer
             Borrowing = borrowing;
         }
     }
-    internal class LogicCatalog : ILogicCatalog
+    internal class ModelCatalog : IModelCatalog
     {
         public int CatalogId { get; init; }
         public string Title { get; init; }
         public string Author { get; init; }
         public int NrOfPages { get; init; }
-        public LogicCatalog(int catalogId, string title, string author, int nrOfPages)
+        public ModelCatalog(int catalogId, string title, string author, int nrOfPages)
         {
             CatalogId = catalogId;
             Title = title;

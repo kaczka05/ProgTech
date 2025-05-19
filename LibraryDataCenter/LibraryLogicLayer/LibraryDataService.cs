@@ -46,16 +46,16 @@ namespace LibraryLogicLayer
 
 
         private LogicState ConvertToLogicState(IState state) =>
-            new LogicState(state.StateId, state.NrOfBooks, state.Catalog);
+            new LogicState(state.StateId, state.NrOfBooks, ConvertToLogicCatalog(state.Catalog));
 
-        public async Task AddStateAsync(int id, int nrOfBooks, int catalogId) =>
+        public async Task AddStateAsync(int id, int nrOfBooks, ICatalog catalogId) =>
             await Task.Run(() =>
             {
                 if (_libraryDataRepository.DoesStateExist(id))
                 {
                     throw new Exception("State already exists");
                 }
-                if (!_libraryDataRepository.DoesCatalogExist(catalogId))
+                if (!_libraryDataRepository.DoesCatalogExist(catalogId.CatalogId))
                 {
                     throw new Exception("Catalog does not exist");
                 }
@@ -101,9 +101,9 @@ namespace LibraryLogicLayer
                 .Select(u => (ILogicUser)ConvertToLogicUser(u))
                 .ToList();
         private LogicUserEvent ConvertToLogicDatabaseEvent(IEvent userEvent) =>
-            new LogicUserEvent(userEvent.EventId, userEvent.Employee, userEvent.State, userEvent.User, userEvent.Borrowing);
+            new LogicUserEvent(userEvent.EventId, ConvertToLogicUser(userEvent.Employee), ConvertToLogicState(userEvent.State), ConvertToLogicUser(userEvent.User), userEvent.Borrowing);
         private LogicDatabaseEvent ConvertToLogicUserEvent(IEvent databaseEvent) =>
-            new LogicDatabaseEvent(databaseEvent.EventId, databaseEvent.Employee, databaseEvent.State, databaseEvent.Addition);
+            new LogicDatabaseEvent(databaseEvent.EventId, ConvertToLogicUser(databaseEvent.Employee), ConvertToLogicState(databaseEvent.State), databaseEvent.Addition);
 
         private LogicEvent ConvertToLogicEvent(IEvent eventObj)
         {
@@ -115,31 +115,31 @@ namespace LibraryLogicLayer
             };
         }
 
-        public async Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) =>
+        public async Task AddUserEventAsync(int id, ILogicUser employeeId, ILogicState stateId, ILogicUser userId, bool borrowing) =>
             await Task.Run(() =>
             {
                 if (_libraryDataRepository.DoesEventExist(id))
                 {
                     throw new Exception("Event already exists");
                 }
-                if (!_libraryDataRepository.DoesUserExist(userId))
+                if (!_libraryDataRepository.DoesUserExist(userId.UserId))
                 {
                     throw new Exception("User does not exist");
                 }
-                if (!_libraryDataRepository.DoesStateExist(stateId))
+                if (!_libraryDataRepository.DoesStateExist(stateId.StateId))
                 {
                     throw new Exception("State does not exist");
                 }
                 _libraryDataRepository.AddUserEvent(id, employeeId, stateId, userId, borrowing);
             });
-        public async Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) =>
+        public async Task AddDatabaseEventAsync(int id, IUser employeeId, IState stateId, bool addition) =>
             await Task.Run(() =>
             {
                 if (_libraryDataRepository.DoesEventExist(id))
                 {
                     throw new Exception("Event already exists");
                 }
-                if (!_libraryDataRepository.DoesUserExist(employeeId))
+                if (!_libraryDataRepository.DoesUserExist(employeeId.UserId))
                 {
                     throw new Exception("Employee does not exist");
                 }
@@ -160,7 +160,14 @@ namespace LibraryLogicLayer
                 .ToList();
 
         
-
+        public static ILibraryDataService CreateNewService(ILibraryDataRepository data)
+        {
+            return new LibraryDataService(data);
+        }
+        public static ILibraryDataService CreateNewService()
+        {
+            return new LibraryDataService();
+        }
 
 
 

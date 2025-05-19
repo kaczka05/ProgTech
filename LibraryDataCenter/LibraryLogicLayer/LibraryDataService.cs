@@ -48,14 +48,14 @@ namespace LibraryLogicLayer
         private LogicState ConvertToLogicState(IState state) =>
             new LogicState(state.StateId, state.NrOfBooks, ConvertToLogicCatalog(state.Catalog));
 
-        public async Task AddStateAsync(int id, int nrOfBooks, ICatalog catalogId) =>
+        public async Task AddStateAsync(int id, int nrOfBooks, int catalogId) =>
             await Task.Run(() =>
             {
                 if (_libraryDataRepository.DoesStateExist(id))
                 {
                     throw new Exception("State already exists");
                 }
-                if (!_libraryDataRepository.DoesCatalogExist(catalogId.CatalogId))
+                if (!_libraryDataRepository.DoesCatalogExist(catalogId))
                 {
                     throw new Exception("Catalog does not exist");
                 }
@@ -115,31 +115,31 @@ namespace LibraryLogicLayer
             };
         }
 
-        public async Task AddUserEventAsync(int id, ILogicUser employeeId, ILogicState stateId, ILogicUser userId, bool borrowing) =>
+        public async Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) =>
             await Task.Run(() =>
             {
                 if (_libraryDataRepository.DoesEventExist(id))
                 {
                     throw new Exception("Event already exists");
                 }
-                if (!_libraryDataRepository.DoesUserExist(userId.UserId))
+                if (!_libraryDataRepository.DoesUserExist(userId))
                 {
                     throw new Exception("User does not exist");
                 }
-                if (!_libraryDataRepository.DoesStateExist(stateId.StateId))
+                if (!_libraryDataRepository.DoesStateExist(stateId))
                 {
                     throw new Exception("State does not exist");
                 }
                 _libraryDataRepository.AddUserEvent(id, employeeId, stateId, userId, borrowing);
             });
-        public async Task AddDatabaseEventAsync(int id, IUser employeeId, IState stateId, bool addition) =>
+        public async Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) =>
             await Task.Run(() =>
             {
                 if (_libraryDataRepository.DoesEventExist(id))
                 {
                     throw new Exception("Event already exists");
                 }
-                if (!_libraryDataRepository.DoesUserExist(employeeId.UserId))
+                if (!_libraryDataRepository.DoesUserExist(employeeId))
                 {
                     throw new Exception("Employee does not exist");
                 }
@@ -164,7 +164,7 @@ namespace LibraryLogicLayer
         {
             return new LibraryDataService(data);
         }
-        public static ILibraryDataService CreateNewService()
+        public  ILibraryDataService CreateNewService()
         {
             return new LibraryDataService();
         }

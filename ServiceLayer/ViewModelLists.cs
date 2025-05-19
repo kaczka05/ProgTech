@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using LibraryLogicLayer;
+using LibraryPresentationlLayer;
+using LibraryDataLayer;
 
 namespace LibraryPresentationLayer
 {
@@ -224,10 +227,10 @@ namespace LibraryPresentationLayer
     internal class VMEventList : PropertyChange
     {
         private int EventId;
-        private IModelUser _employee;
-        private IModelState _state;
+        private int _employee;
+        private int _state;
         private bool Addition;
-        private IModelUser _user;
+        private int _user;
         private bool Borrowing;
         private IModelEvent _modelEvent;
         private IModel model;
@@ -235,11 +238,11 @@ namespace LibraryPresentationLayer
         public ICommand AddUserEventCommand { get; }
         public ICommand RemoveEventCommand { get; }
         public ICommand UpdateEventCommand { get; }
-        private ObservableCollection<IModelEvent> _events;
-        public VMEventList()
+        private ObservableCollection<VMEvent> _events;
+        public VMEventList()    
         {
             this.model = model;
-            _events = new ObservableCollection<IModelEvent>();
+            _events = new ObservableCollection<VMEvent>();
             AddDatabaseEventCommand = new RelayCommand(e => { AddDatabaseEvent(); }, a => true);
             AddUserEventCommand = new RelayCommand(e => { AddUserEvent(); }, a => true);
             RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
@@ -248,13 +251,13 @@ namespace LibraryPresentationLayer
         public VMEventList(IModel model)
         {
             this.model = model;
-            _events = new ObservableCollection<IModelEvent>();
+            _events = new ObservableCollection<IVMEvent>();
             AddDatabaseEventCommand = new RelayCommand(e => { AddDatabaseEvent(); }, a => true);
             AddUserEventCommand = new RelayCommand(e => { AddUserEvent(); }, a => true);
             RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateEventCommand = new RelayCommand(e => { GetEvents(); }, a => true);
         }
-        public ObservableCollection<IModelEvent> Events
+        public ObservableCollection<VMEvent> Events
         {
             get => _events;
             set
@@ -281,7 +284,7 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(eventId));
             }
         }
-        public IModelUser employee
+        public int employee
         {
             get => _employee;
             set
@@ -290,7 +293,7 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(employee));
             }
         }
-        public IModelState state
+        public int state
         {
             get => _state;
             set
@@ -308,7 +311,7 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(addition));
             }
         }
-        public IModelUser user
+        public int user
         {
             get => _user;
             set
@@ -326,11 +329,12 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(borrowing));
             }
         }
-        private IModelEvent? EventToPresentationLayer(IModelEvent eventObj)
+        
+        private VMEvent? EventToPresentationLayer(IModelEvent eventObj)
         {
             if (eventObj == null)
                 return null;
-            return new VMEvent(eventObj.EventId, eventObj.Employee, eventObj.State);
+            return new VMEvent(eventObj.EventId, eventObj.Employee, eventObj.State, eventObj.User, eventObj.Borrowing, eventObj.Addition);
         }
         public void GetEvents()
         {

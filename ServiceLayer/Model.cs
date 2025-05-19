@@ -12,12 +12,13 @@ namespace LibraryPresentationLayer
     internal class Model : IModel
     {
 
-        private static ILibraryDataService _libraryDataService = default;
+        private ILibraryDataService _libraryDataService = default;
 
-        internal Model(ILibraryDataService?  service = null)
+        internal Model(ILibraryDataService? service = null)
         {
-            _libraryDataService = service ?? ILibraryDataService.CreateNewService();
+            _libraryDataService = service ?? LibraryDataService.CreateNewService();
         }
+
 
         private IModelCatalog ConvertToModelCatalog(ILogicCatalog catalog) =>
             new ModelCatalog(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages);
@@ -76,12 +77,12 @@ namespace LibraryPresentationLayer
         private ModelDatabaseEvent ConvertToModelUserEvent(ILogicEvent databaseEvent) =>
             new ModelDatabaseEvent(databaseEvent.EventId, ConvertToModelUser(databaseEvent.Employee), ConvertToModelState(databaseEvent.State), databaseEvent.Addition);
 
-        private ModelEvent ConvertToLogicEvent(ILogicEvent eventObj)
+        private ModelEvent ConvertToModelEvent(ILogicEvent eventObj)
         {
             return eventObj switch
             {
-                ILogicUserEvent userEvent => ConvertToModelUserEvent(eventObj),
-                ILogicDatabaseEvent databaseEvent => ConvertToModelDatabaseEvent(eventObj),
+                IModelUserEvent userEvent => ConvertToModelUserEvent(eventObj),
+                IModelDatabaseEvent databaseEvent => ConvertToModelDatabaseEvent(eventObj),
                 _ => throw new Exception("Unknown event type")
             };
         }
@@ -89,13 +90,15 @@ namespace LibraryPresentationLayer
 
         private IModelState ConvertToModelState(ILogicState state) =>
             new ModelState(state.StateId, state.NrOfBooks, ConvertToModelCatalog(state.Catalog));
+        
+  
 
-        public async Task AddDatabaseEventAsync(int id, IModelUser employeeId, IModelState stateId, bool addition) =>
+        public async Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) =>
             await Task.Run(() =>
             {
                 _libraryDataService.AddDatabaseEventAsync(id, employeeId, stateId, addition);
             });
-        public async Task AddUserEventAsync(int id, IModelUser employeeId, IModelState stateId, IModelUser userId, bool borrowing) =>
+        public async Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) =>
             await Task.Run(() =>
             {
                 _libraryDataService.AddUserEventAsync(id, employeeId, stateId, userId, borrowing);

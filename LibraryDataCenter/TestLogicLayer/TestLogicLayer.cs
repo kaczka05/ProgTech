@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 using LibraryLogicLayer;
 
 namespace TestLogicLayer
@@ -17,7 +18,6 @@ namespace TestLogicLayer
         {
             stub = new StubRepository();
 
-            // Find the constructor of LibraryDataService
             var svcType = typeof(ILibraryDataService).Assembly
                 .GetType("LibraryLogicLayer.LibraryDataService", throwOnError: true);
 
@@ -25,13 +25,9 @@ namespace TestLogicLayer
             if (ctor == null || ctor.GetParameters().Length != 1)
                 throw new InvalidOperationException("Expected one constructor with one parameter");
 
-            // Get the parameter type (interface, but unknown to us)
             var paramType = ctor.GetParameters()[0].ParameterType;
-
-            // Create a proxy object that has the same methods
             var proxy = DispatchProxyGenerator.CreateProxy(paramType, stub);
 
-            // Create the service
             service = (ILibraryDataService)Activator.CreateInstance(svcType, proxy);
         }
 
@@ -44,17 +40,32 @@ namespace TestLogicLayer
             Assert.AreEqual((1, "T", "A", 10), stub.AddedCatalogs[0]);
         }
 
+        [TestMethod]
+        public void LogicAddCatalogue_WithStaticAndRandomData_WorksCorrectly()
+        {
+            stub.CatalogExistsReturn = false;
+
+            // Static data test
+            var staticData = StaticTestData.GetTestData();
+            service.LogicAddCatalogue(staticData.Id, staticData.Title, staticData.Author, staticData.Pages);
+            Assert.AreEqual(staticData, stub.AddedCatalogs.Last());
+
+            // Random data test
+            var randomData = RandomTestData.GetTestData();
+            service.LogicAddCatalogue(randomData.Id, randomData.Title, randomData.Author, randomData.Pages);
+            Assert.AreEqual(randomData, stub.AddedCatalogs.Last());
+        }
+
         public class StubRepository
         {
             public bool CatalogExistsReturn { get; set; }
-            public List<(int, string, string, int)> AddedCatalogs = new();
+            public List<(int Id, string Title, string Author, int Pages)> AddedCatalogs = new();
 
             public bool DoesCatalogExist(int id) => CatalogExistsReturn;
             public void AddCatalog(int catalogId, string title, string author, int nrOfPages)
                 => AddedCatalogs.Add((catalogId, title, author, nrOfPages));
         }
 
-        // DispatchProxy that dynamically forwards calls to StubRepository
         public class DispatchProxyGenerator : DispatchProxy
         {
             private object _target;
@@ -87,7 +98,30 @@ namespace TestLogicLayer
                 proxy._target = target;
                 return proxy;
             }
+        }
 
+        // Simple static test data generator
+        public static class StaticTestData
+        {
+            public static (int Id, string Title, string Author, int Pages) GetTestData()
+            {
+                return (101, "StaticTitle", "StaticAuthor", 123);
+            }
+        }
+
+        // Simple random test data generator
+        public static class RandomTestData
+        {
+            private static readonly Random rnd = new();
+
+            public static (int Id, string Title, string Author, int Pages) GetTestData()
+            {
+                int id = rnd.Next(1000, 9999);
+                string title = "Title" + rnd.Next(1, 100);
+                string author = "Author" + rnd.Next(1, 100);
+                int pages = rnd.Next(50, 500);
+                return (id, title, author, pages);
+            }
         }
     }
 }

@@ -11,8 +11,8 @@ namespace WpfApp1
             InitializeComponent();
 
             // Connect to logic layer only
-            ILibraryDataService dataService = new LibraryDataService(); 
-            DataContext = new MainViewModel(dataService);
+            //ILibraryDataService dataService = new LibraryDataService(); 
+            //DataContext = new MainViewModel(dataService);
         }
     }
 }

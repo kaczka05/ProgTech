@@ -1,24 +1,89 @@
-﻿using System;
+﻿using LibraryDataLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LibraryLogicLayer
 {
     public interface ILibraryDataService
     {
-        public void LogicAddCatalogue(int catalogId, string title, string author, int numberOfPages);
-        public void LogicRemoveCatalogue(int id);
 
-        public void LogicAddState(int stateId, int nrOfBooks, int catalogId);
-        public void LogicRemoveState(int id);
-        public void LogicAddUser(int userId, string firstName, string lastName);
-        public void LogicRemoveUser(int id);
-        public void LogicAddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing);
-        public void LogicAddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition);
-        public void LogicRemoveEvent(int id );
+        Task AddCatalogAsync(int id, string author, string title, int nrOfPages);
+        Task RemoveCatalogAsync(int id);
+        Task AddUserAsync(int id, string firstName, string lastName);
+        Task RemoveUserAsync(int id);
+        Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition);
+        Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing);
+        Task RemoveEventAsync(int id);
+        Task AddStateAsync(int id, int nrOfBooks, int catalogId);
+        Task RemoveStateAsync(int id);
 
+        List<ILogicCatalog> GetAllCatalogsAsync();
+        List<ILogicUser> GetAllUsersAsync();
+        List<ILogicEvent> GetAllEventsAsync();
+        List<ILogicState> GetAllStatesAsync();
+
+        public static ILibraryDataService CreateNewService()
+        {
+            return new LibraryDataService();
+        }
+
+        public static ILibraryDataService CreateNewService(ILibraryDataRepository data)
+        {
+            return new LibraryDataService(data);
+        }
 
     }
+    public interface ILogicCatalog
+    {
+        public int CatalogId { get; init; }
+        public string Title { get; init; }
+        public string Author { get; init; }
+        public int NrOfPages { get; init; }
+    }
+    public interface ILogicUser
+    {
+        int UserId { get; init; }
+        string FirstName { get; init; }
+        string LastName { get; init; }
+    }
+    public interface ILogicEvent
+    {
+        int EventId { get; init; }
+        ILogicUser Employee { get; init; }
+        ILogicState State { get; init; }
+        bool Addition { get; init; }
+        ILogicUser User { get; init; }
+        bool Borrowing { get; init; }
+
+    }
+
+    public interface ILogicDatabaseEvent
+    {
+        int EventId { get; init; }
+        ILogicUser Employee { get; init; }
+        ILogicState State { get; init; }
+        bool Addition { get; init; }
+    }
+
+    public interface ILogicUserEvent
+    {
+        int EventId { get; init; }
+        ILogicUser Employee { get; init; }
+        ILogicState State { get; init; }
+        ILogicUser User { get; init; }
+        bool Borrowing { get; init; }
+    }
+
+    public interface ILogicState
+    {
+        int StateId { get; init; }
+        int NrOfBooks { get; init; }
+        ILogicCatalog Catalog { get; init; }
+    }
+
 }
+    

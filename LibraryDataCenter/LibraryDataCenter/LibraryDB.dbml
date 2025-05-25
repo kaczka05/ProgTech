@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Database1" Class="LibraryDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.Books" Member="Books">
+    <Type Name="Books">
+      <Column Name="catalogId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="author" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="nrOfPages" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Books_States" Member="States" ThisKey="catalogId" OtherKey="Catalog" Type="States" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="Users">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Association Name="Users_Events" Member="Events" ThisKey="UserId" OtherKey="Employee" Type="Events" />
+      <Association Name="Users_Events1" Member="Events1" ThisKey="UserId" OtherKey="User" Type="Events" />
+    </Type>
+  </Table>
+  <Table Name="dbo.States" Member="States">
+    <Type Name="States">
+      <Column Name="StateId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NrOfBooks" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Catalog" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="States_Events" Member="Events" ThisKey="StateId" OtherKey="State" Type="Events" />
+      <Association Name="Books_States" Member="Books" ThisKey="Catalog" OtherKey="catalogId" Type="Books" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Events" Member="Events">
+    <Type Name="Events">
+      <Column Name="EventId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Employee" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="State" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EventType" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="[User]" Member="User" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Addition" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Borrowing" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Users_Events" Member="Users" ThisKey="Employee" OtherKey="UserId" Type="Users" IsForeignKey="true" />
+      <Association Name="States_Events" Member="States" ThisKey="State" OtherKey="StateId" Type="States" IsForeignKey="true" />
+      <Association Name="Users_Events1" Member="Users1" ThisKey="User" OtherKey="UserId" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryDataLayer", "Library
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryLogicLayer", "LibraryLogicLayer\LibraryLogicLayer.csproj", "{97980B41-3A9E-4DC0-AB94-25EA51DEFEDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDataLayer", "TestDataLayer\TestDataLayer.csproj", "{0DE656FE-3102-417C-8BDE-2246F9A352D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestDataLayer", "TestDataLayer\TestDataLayer.csproj", "{0DE656FE-3102-417C-8BDE-2246F9A352D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLogicLayer", "TestLogicLayer\TestLogicLayer.csproj", "{C5950C7C-3D50-45D5-AB8F-8B500F16388D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLogicLayer", "TestLogicLayer\TestLogicLayer.csproj", "{C5950C7C-3D50-45D5-AB8F-8B500F16388D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{B0A5FE03-983C-4AB9-B2C6-199B0711406A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{C5950C7C-3D50-45D5-AB8F-8B500F16388D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5950C7C-3D50-45D5-AB8F-8B500F16388D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5950C7C-3D50-45D5-AB8F-8B500F16388D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A5FE03-983C-4AB9-B2C6-199B0711406A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A5FE03-983C-4AB9-B2C6-199B0711406A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A5FE03-983C-4AB9-B2C6-199B0711406A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A5FE03-983C-4AB9-B2C6-199B0711406A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

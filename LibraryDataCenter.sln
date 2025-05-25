@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDataLayer", "LibraryDat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLogicLayer", "LibraryDataCenter\TestLogicLayer\TestLogicLayer.csproj", "{C5950C7C-3D50-45D5-AB8F-8B500F16388D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryPresentationLayer", "ServiceLayer\LibraryPresentationLayer.csproj", "{037DE661-6CBF-4BA5-B773-0EE978E8CCE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C5950C7C-3D50-45D5-AB8F-8B500F16388D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5950C7C-3D50-45D5-AB8F-8B500F16388D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5950C7C-3D50-45D5-AB8F-8B500F16388D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{037DE661-6CBF-4BA5-B773-0EE978E8CCE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{037DE661-6CBF-4BA5-B773-0EE978E8CCE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{037DE661-6CBF-4BA5-B773-0EE978E8CCE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{037DE661-6CBF-4BA5-B773-0EE978E8CCE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

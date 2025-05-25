@@ -8,97 +8,160 @@ namespace LibraryLogicLayer
    internal class LibraryDataService : ILibraryDataService
     {
         private static ILibraryDataRepository _libraryDataRepository = default;
+        public LibraryDataService()
+        {
+            _libraryDataRepository = ILibraryDataRepository.CreateNewRepository();
+        }
         public LibraryDataService(ILibraryDataRepository libraryDataRepository)
         {
             _libraryDataRepository = libraryDataRepository;
         }
-        public void LogicAddCatalogue(int catalogId, string title, string author, int numberOfPages)
+
+        private LogicCatalog ConvertToLogicCatalog(ICatalog catalog) =>
+            new LogicCatalog(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages);
+        
+        public async Task AddCatalogAsync(int id, string author, string title, int nrOfPages) =>
+            await Task.Run(() =>
+            {
+                if (_libraryDataRepository.DoesCatalogExist(id))
+                {
+                    throw new Exception("Catalog already exists");
+                }
+                _libraryDataRepository.AddCatalog(id, title, author, nrOfPages);
+            });
+
+        public async Task RemoveCatalogAsync(int id) =>
+            await Task.Run(() =>
+            {
+                if (!_libraryDataRepository.DoesCatalogExist(id))
+                {
+                    throw new Exception("Catalog does not exist");
+                }
+                _libraryDataRepository.RemoveCatalogById(id);
+            });
+        public List<ILogicCatalog> GetAllCatalogsAsync() =>
+            _libraryDataRepository.GetAllCatalogs()
+                .Select(c => (ILogicCatalog)ConvertToLogicCatalog(c))
+                .ToList();
+
+
+        private LogicState ConvertToLogicState(IState state) =>
+            new LogicState(state.StateId, state.NrOfBooks, ConvertToLogicCatalog(state.Catalog));
+
+        public async Task AddStateAsync(int id, int nrOfBooks, int catalogId) =>
+            await Task.Run(() =>
+            {
+                if (_libraryDataRepository.DoesStateExist(id))
+                {
+                    throw new Exception("State already exists");
+                }
+                if (!_libraryDataRepository.DoesCatalogExist(catalogId))
+                {
+                    throw new Exception("Catalog does not exist");
+                }
+                _libraryDataRepository.AddState(id, nrOfBooks, catalogId);
+            });
+        public async Task RemoveStateAsync(int id) =>
+            await Task.Run(() =>
+            {
+                if (!_libraryDataRepository.DoesStateExist(id))
+                {
+                    throw new Exception("State does not exist");
+                }
+                _libraryDataRepository.RemoveStateByID(id);
+            });
+
+        public List<ILogicState> GetAllStatesAsync() =>
+                        _libraryDataRepository.GetAllStates()
+                .Select(s => (ILogicState)ConvertToLogicState(s))
+                .ToList();
+
+        private LogicUser ConvertToLogicUser(IUser user) =>
+            new LogicUser(user.UserId, user.FirstName, user.LastName);
+        public async Task AddUserAsync(int id, string firstName, string lastName) =>
+            await Task.Run(() =>
+            {
+                if (_libraryDataRepository.DoesUserExist(id))
+                {
+                    throw new Exception("User already exists");
+                }
+                _libraryDataRepository.AddUser(id, firstName, lastName);
+            });
+        public async Task RemoveUserAsync(int id) =>
+            await Task.Run(() =>
+            {
+                if (!_libraryDataRepository.DoesUserExist(id))
+                {
+                    throw new Exception("User does not exist");
+                }
+                _libraryDataRepository.RemoveUserById(id);
+            });
+        public List<ILogicUser> GetAllUsersAsync() =>
+            _libraryDataRepository.GetAllUsers()
+                .Select(u => (ILogicUser)ConvertToLogicUser(u))
+                .ToList();
+        private LogicUserEvent ConvertToLogicDatabaseEvent(IEvent userEvent) =>
+            new LogicUserEvent(userEvent.EventId, ConvertToLogicUser(userEvent.Employee), ConvertToLogicState(userEvent.State), ConvertToLogicUser(userEvent.User), userEvent.Borrowing);
+        private LogicDatabaseEvent ConvertToLogicUserEvent(IEvent databaseEvent) =>
+            new LogicDatabaseEvent(databaseEvent.EventId, ConvertToLogicUser(databaseEvent.Employee), ConvertToLogicState(databaseEvent.State), databaseEvent.Addition);
+
+        private LogicEvent ConvertToLogicEvent(IEvent eventObj)
         {
-            if (_libraryDataRepository.DoesCatalogExist(catalogId))
+            return eventObj switch
             {
-                throw new Exception("Catalog already exists");
-            }
-            _libraryDataRepository.AddCatalog(catalogId, title, author, numberOfPages);
+                IUserEvent userEvent => ConvertToLogicUserEvent(eventObj),
+                IDatabaseEvent databaseEvent => ConvertToLogicDatabaseEvent(eventObj),
+                _ => throw new Exception("Unknown event type")
+            };
         }
-        public void LogicRemoveCatalogue(int id)
-        {
-            if (!_libraryDataRepository.DoesCatalogExist(id))
+
+        public async Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) =>
+            await Task.Run(() =>
             {
-                throw new Exception("Catalog does not exist");
-            }
-            _libraryDataRepository.RemoveCatalogById(id);
-        }
-        public void LogicAddState(int stateId, int nrOfBooks, int catalogId)
-        {
-            if (_libraryDataRepository.DoesStateExist(stateId))
+                if (_libraryDataRepository.DoesEventExist(id))
+                {
+                    throw new Exception("Event already exists");
+                }
+                if (!_libraryDataRepository.DoesUserExist(userId))
+                {
+                    throw new Exception("User does not exist");
+                }
+                if (!_libraryDataRepository.DoesStateExist(stateId))
+                {
+                    throw new Exception("State does not exist");
+                }
+                _libraryDataRepository.AddUserEvent(id, employeeId, stateId, userId, borrowing);
+            });
+        public async Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) =>
+            await Task.Run(() =>
             {
-                throw new Exception("State already exists");
-            }
-            if (!_libraryDataRepository.DoesCatalogExist(catalogId))
+                if (_libraryDataRepository.DoesEventExist(id))
+                {
+                    throw new Exception("Event already exists");
+                }
+                if (!_libraryDataRepository.DoesUserExist(employeeId))
+                {
+                    throw new Exception("Employee does not exist");
+                }
+                _libraryDataRepository.AddDatabaseEvent(id, employeeId, stateId, addition);
+            });
+        public async Task RemoveEventAsync(int id) =>
+            await Task.Run(() =>
             {
-                throw new Exception("Catalog does not exist");
-            }
-            _libraryDataRepository.AddState(stateId, nrOfBooks, catalogId);
-        }
-        public void LogicRemoveState(int id)
-        {
-            if (!_libraryDataRepository.DoesStateExist(id))
-            {
-                throw new Exception("State does not exist");
-            }
-            _libraryDataRepository.RemoveStateByID(id);
-        }
-        public void LogicAddUser(int userId, string firstName, string lastName)
-        {
-            if (_libraryDataRepository.DoesUserExist(userId))
-            {
-                throw new Exception("User already exists");
-            }
-            _libraryDataRepository.AddUser(userId, firstName, lastName);
-        }
-        public void LogicRemoveUser(int id)
-        {
-            if (!_libraryDataRepository.DoesUserExist(id))
-            {
-                throw new Exception("User does not exist");
-            }
-            _libraryDataRepository.RemoveUserById(id);
-        }
-        public void LogicAddUserEvent(int eventId, int employeeId, int stateId, int userId, bool borrowing)
-        {
-            if (_libraryDataRepository.DoesEventExist(eventId))
-            {
-                throw new Exception("Event already exists");
-            }
-            if (!_libraryDataRepository.DoesUserExist(userId))
-            {
-                throw new Exception("User does not exist");
-            }
-            if (!_libraryDataRepository.DoesStateExist(stateId))
-            {
-                throw new Exception("State does not exist");
-            }
-            _libraryDataRepository.AddUserEvent(eventId, employeeId, stateId, userId, borrowing);
-        }
-        public void LogicAddDatabaseEvent(int eventId, int employeeId, int stateId, bool addition)
-        {
-            if (_libraryDataRepository.DoesEventExist(eventId))
-            {
-                throw new Exception("Event already exists");
-            }
-            if (!_libraryDataRepository.DoesUserExist(employeeId))
-            {
-                throw new Exception("Employee does not exist");
-            }
-            _libraryDataRepository.AddDatabaseEvent(eventId, employeeId, stateId, addition);
-        }
-        public void LogicRemoveEvent(int id)
-        {
-            if (!_libraryDataRepository.DoesEventExist(id))
-            {
-                throw new Exception("Event does not exist");
-            }
-            _libraryDataRepository.RemoveEventById(id);
-        }
+                if (!_libraryDataRepository.DoesEventExist(id))
+                {
+                    throw new Exception("Event does not exist");
+                }
+                _libraryDataRepository.RemoveEventById(id);
+            });
+        public List<ILogicEvent> GetAllEventsAsync() =>
+            _libraryDataRepository.GetAllEvents()
+                .Select(e => (ILogicEvent)ConvertToLogicEvent(e))
+                .ToList();
+
+        
+      
+
+
     }
 }

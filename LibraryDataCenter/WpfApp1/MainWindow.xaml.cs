@@ -10,7 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WpfApp1
-{
+{   //
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -18,6 +18,7 @@ namespace WpfApp1
     {
         public MainWindow()
         {
+            //
             InitializeComponent();
         }
     }

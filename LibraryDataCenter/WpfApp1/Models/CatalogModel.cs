@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 
 namespace LibraryApp.Models
-{
+{//
     public class CatalogModel : INotifyPropertyChanged
     {
         private int _catalogId;

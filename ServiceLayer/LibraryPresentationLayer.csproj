@@ -7,13 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\LibraryLogicLayer\LibraryLogicLayer.csproj" />
+    <ProjectReference Include="..\LibraryDataCenter\LibraryLogicLayer\LibraryLogicLayer.csproj" />
   </ItemGroup>
 
 </Project>

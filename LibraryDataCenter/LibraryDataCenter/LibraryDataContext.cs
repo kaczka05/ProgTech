@@ -27,14 +27,14 @@ namespace LibraryDataLayer
 
         public async Task AddCatalogAsync(ICatalog catalog)
         {
-            var entity = new Book(catalog.catalogId, catalog.title, catalog.author, catalog.nrOfPages);
+            var entity = new Book(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages);
             await Books.AddAsync(entity);
             await SaveChangesAsync();
         }
 
         public async Task RemoveCatalogAsync(ICatalog catalog)
         {
-            var entity = await Books.FindAsync(catalog.catalogId);
+            var entity = await Books.FindAsync(catalog.CatalogId);
             if (entity != null)
             {
                 Books.Remove(entity);

@@ -1,14 +1,12 @@
-﻿using LibraryDataLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace LibraryLogicLayer
+namespace LibraryPresentationLayer
 {
-    public interface ILibraryDataService
+    public interface IModel
     {
 
         Task AddCatalogAsync(int id, string author, string title, int nrOfPages);
@@ -21,69 +19,56 @@ namespace LibraryLogicLayer
         Task AddStateAsync(int id, int nrOfBooks, int catalogId);
         Task RemoveStateAsync(int id);
 
-        List<ILogicCatalog> GetAllCatalogsAsync();
-        List<ILogicUser> GetAllUsersAsync();
-        List<ILogicEvent> GetAllEventsAsync();
-        List<ILogicState> GetAllStatesAsync();
-
-        public static ILibraryDataService CreateNewService()
-        {
-            return new LibraryDataService();
-        }
-
-        public static ILibraryDataService CreateNewService(ILibraryDataRepository data)
-        {
-            return new LibraryDataService(data);
-        }
+        List<IModelCatalog> GetAllCatalogsAsync();
+        List<IModelUser> GetAllUsersAsync();
+        List<IModelEvent> GetAllEventsAsync();
+        List<IModelState> GetAllStatesAsync();
 
     }
-    public interface ILogicCatalog
+    public interface IModelCatalog
     {
         public int CatalogId { get; init; }
         public string Title { get; init; }
         public string Author { get; init; }
         public int NrOfPages { get; init; }
     }
-    public interface ILogicUser
+    public interface IModelUser
     {
         int UserId { get; init; }
         string FirstName { get; init; }
         string LastName { get; init; }
     }
-    public interface ILogicEvent
+    public interface IModelEvent
     {
         int EventId { get; init; }
-        ILogicUser Employee { get; init; }
-        ILogicState State { get; init; }
+        IModelUser Employee { get; init; }
+        IModelState State { get; init; }
+        IModelUser User { get; set; }
+        bool Borrowing { get; set; }
+        bool Addition { get; set; }
+    }
+
+    public interface IModelDatabaseEvent
+    {
+        int EventId { get; init; }
+        IModelUser Employee { get; init; }
+        IModelState State { get; init; }
         bool Addition { get; init; }
-        ILogicUser User { get; init; }
-        bool Borrowing { get; init; }
-
     }
 
-    public interface ILogicDatabaseEvent
+    public interface IModelUserEvent
     {
         int EventId { get; init; }
-        ILogicUser Employee { get; init; }
-        ILogicState State { get; init; }
-        bool Addition { get; init; }
-    }
-
-    public interface ILogicUserEvent
-    {
-        int EventId { get; init; }
-        ILogicUser Employee { get; init; }
-        ILogicState State { get; init; }
-        ILogicUser User { get; init; }
+        IModelUser Employee { get; init; }
+        IModelState State { get; init; }
+        IModelUser User { get; init; }
         bool Borrowing { get; init; }
     }
 
-    public interface ILogicState
+    public interface IModelState
     {
         int StateId { get; init; }
         int NrOfBooks { get; init; }
-        ILogicCatalog Catalog { get; init; }
+        IModelCatalog Catalog { get; init; }
     }
-
 }
-    

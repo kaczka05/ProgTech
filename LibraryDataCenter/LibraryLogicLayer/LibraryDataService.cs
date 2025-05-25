@@ -46,7 +46,7 @@ namespace LibraryLogicLayer
 
 
         private LogicState ConvertToLogicState(IState state) =>
-            new LogicState(state.StateId, state.NrOfBooks, state.Catalog);
+            new LogicState(state.StateId, state.NrOfBooks, ConvertToLogicCatalog(state.Catalog));
 
         public async Task AddStateAsync(int id, int nrOfBooks, int catalogId) =>
             await Task.Run(() =>
@@ -101,9 +101,9 @@ namespace LibraryLogicLayer
                 .Select(u => (ILogicUser)ConvertToLogicUser(u))
                 .ToList();
         private LogicUserEvent ConvertToLogicDatabaseEvent(IEvent userEvent) =>
-            new LogicUserEvent(userEvent.EventId, userEvent.Employee, userEvent.State, userEvent.User, userEvent.Borrowing);
+            new LogicUserEvent(userEvent.EventId, ConvertToLogicUser(userEvent.Employee), ConvertToLogicState(userEvent.State), ConvertToLogicUser(userEvent.User), userEvent.Borrowing);
         private LogicDatabaseEvent ConvertToLogicUserEvent(IEvent databaseEvent) =>
-            new LogicDatabaseEvent(databaseEvent.EventId, databaseEvent.Employee, databaseEvent.State, databaseEvent.Addition);
+            new LogicDatabaseEvent(databaseEvent.EventId, ConvertToLogicUser(databaseEvent.Employee), ConvertToLogicState(databaseEvent.State), databaseEvent.Addition);
 
         private LogicEvent ConvertToLogicEvent(IEvent eventObj)
         {
@@ -160,8 +160,7 @@ namespace LibraryLogicLayer
                 .ToList();
 
         
-
-
+      
 
 
     }

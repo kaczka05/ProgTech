@@ -6,6 +6,7 @@ using System.Windows.Input;
 using WpfApp1.Commands;
 using WpfApp1.Models;
 using LibraryLogicLayer;
+using System.Runtime.CompilerServices;
 
 namespace WpfApp1.ViewModels
 {
@@ -15,6 +16,7 @@ namespace WpfApp1.ViewModels
         private CatalogModel? _selectedCatalog;
 
         public ObservableCollection<CatalogModel> Catalogs { get; } = new();
+
 
         public CatalogModel? SelectedCatalog
         {
@@ -60,15 +62,15 @@ namespace WpfApp1.ViewModels
                 });
             }
         }
-
-        private async Task AddCatalogAsync()
+     
+        public async Task AddCatalogAsync()
         {
             int newId = Catalogs.Any() ? Catalogs.Max(x => x.CatalogId) + 1 : 1;
             await _libraryService.AddCatalogAsync(newId, "New Author", "New Book", 100);
             await LoadCatalogsAsync();
         }
 
-        private async Task DeleteCatalogAsync()
+        public async Task DeleteCatalogAsync()
         {
             if (SelectedCatalog != null)
             {

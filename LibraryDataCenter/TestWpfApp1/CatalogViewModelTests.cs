@@ -1,4 +1,5 @@
 using LibraryLogicLayer;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,18 @@ using WpfApp1.ViewModels;
 namespace TestWpfApp1
 {
     // Define the same interface used by the logic layer
-    public interface ILogicCatalog
-    {
-        int CatalogId { get; }
-        string Title { get; }
-        string Author { get; }
-        int NrOfPages { get; }
-    }
+    
 
     // Fake object implementing ILogicCatalog
     public class FakeCatalog : ILogicCatalog
     {
-        public int CatalogId { get; set; }
-        public string Title { get; set; } = "";
-        public string Author { get; set; } = "";
-        public int NrOfPages { get; set; }
+
+
+        public int CatalogId { get; init; }
+        public string Title { get; init; } = "";
+        public string Author { get; init; } = "";
+        public int NrOfPages { get; init; }
+
     }
 
     // Fake service that returns fake catalogs
@@ -36,9 +34,11 @@ namespace TestWpfApp1
         }
     }
 
+
     // ViewModel that uses the fake service via adapter
     public class TestableCatalogViewModel : CatalogViewModel
     {
+
         public TestableCatalogViewModel(FakeLibraryDataService fake)
             : base(new Adapter(fake)) { }
 
@@ -52,13 +52,25 @@ namespace TestWpfApp1
                 _fake = fake;
             }
 
-            public Task<List<ILogicCatalog>> GetAllCatalogsAsync()
+        
+
+            public Task AddCatalogAsync(int id, string author, string title, int nrOfPages)
             {
-                return Task.FromResult(_fake.GetAllCatalogs().ToList());
+                _fake.CatalogsToReturn.Add(new FakeCatalog
+                {
+                    CatalogId = id,
+                    Author = author,
+                    Title = title,
+                    NrOfPages = nrOfPages
+                });
+                return Task.CompletedTask;
             }
 
-            public Task AddCatalogAsync(int id, string author, string title, int nrOfPages) => Task.CompletedTask;
-            public Task RemoveCatalogAsync(int id) => Task.CompletedTask;
+            public Task RemoveCatalogAsync(int id) 
+            { 
+                _fake.CatalogsToReturn.RemoveAll(c => c.CatalogId == id);
+                return Task.CompletedTask;
+            }
 
             // Not needed in this test
             public Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) => throw new System.NotImplementedException();
@@ -72,38 +84,87 @@ namespace TestWpfApp1
             public Task RemoveStateAsync(int id) => throw new System.NotImplementedException();
             public Task RemoveUserAsync(int id) => throw new System.NotImplementedException();
 
-            List<LibraryLogicLayer.ILogicCatalog> ILibraryDataService.GetAllCatalogsAsync()
+            public List<LibraryLogicLayer.ILogicCatalog> GetAllCatalogsAsync()
             {
-                throw new NotImplementedException();
+                return _fake.GetAllCatalogs().Cast<LibraryLogicLayer.ILogicCatalog>().ToList();
             }
+
+
         }
+
     }
+
+
+
 
     [TestClass]
     public class CatalogViewModelTests
     {
-        [TestMethod]
-        public async Task ViewModel_LoadsCatalogsFromFakeService()
+        public static class StaticTestData
         {
-            // Arrange: create fake service with one catalog
-            var fake = new FakeLibraryDataService();
-            fake.CatalogsToReturn.Add(new FakeCatalog
+            public static (int Id, string Title, string Author, int Pages) GetTestData()
+            {
+                return (101, "StaticTitle", "StaticAuthor", 123);
+            }
+        }
+
+        public static class RandomTestData
+        {
+            private static readonly System.Random rnd = new();
+
+            public static (int Id, string Title, string Author, int Pages) GetTestData()
+            {
+                int id = rnd.Next(1000, 9999);
+                string title = "Title" + rnd.Next(1, 100);
+                string author = "Author" + rnd.Next(1, 100);
+                int pages = rnd.Next(50, 500);
+                return (id, title, author, pages);
+            }
+        }
+        private async Task WaitForConditionAsync(Func<bool> condition, int timeoutMs = 2000, int pollMs = 50)
+        {
+            var start = DateTime.UtcNow;
+            while (!condition())
+            {
+                if ((DateTime.UtcNow - start).TotalMilliseconds > timeoutMs)
+                    break;
+                await Task.Delay(pollMs);
+            }
+        }
+        
+        [TestMethod]
+        public async Task AddCatalogCommand_AddsNewCatalog()
+        {
+    
+            var fakeService = new FakeLibraryDataService();
+            fakeService.CatalogsToReturn.Add(new FakeCatalog
             {
                 CatalogId = 1,
-                Title = "Test Book",
-                Author = "Tester",
-                NrOfPages = 123
+                Title = "New Book",
+                Author = "New Author",
+                NrOfPages = 100
             });
+            Assert.AreEqual(1, fakeService.CatalogsToReturn.Count);
+            Assert.AreEqual("New Book", fakeService.CatalogsToReturn[0].Title);
+            Assert.AreEqual("New Author", fakeService.CatalogsToReturn[0].Author);
+            Assert.AreEqual(100, fakeService.CatalogsToReturn[0].NrOfPages);
+            var viewModel = new TestableCatalogViewModel(fakeService);
 
-            var vm = new TestableCatalogViewModel(fake);
+        
+            await Task.Delay(200);
+            Assert.IsTrue(viewModel.AddCatalogCommand.CanExecute(null));
+            await Task.Run(() => viewModel.AddCatalogCommand.Execute(null));
+            await WaitForConditionAsync(() => viewModel.Catalogs.Any(b => b.Title == "New Book"));
+            Assert.IsTrue(viewModel.Catalogs.Any(b => b.Title == "New Book"));
 
-            // Act: wait for async data loading
-            await Task.Delay(200); // Give time for LoadCatalogsAsync in constructor
+            await Task.Run(() => viewModel.DeleteCatalogCommand.Execute(null));
+            await WaitForConditionAsync(() => viewModel.Catalogs.Count() == 0);
 
-            // Assert: verify data was loaded
-            Assert.AreEqual("Test Book", vm.Catalogs[0].Title);
-            Assert.AreEqual(1, vm.Catalogs.Count);
-            Assert.AreEqual("Test Book", vm.Catalogs[0].Title);
+            Assert.IsTrue(viewModel.Catalogs.Count() == 0, "Catalog should be deleted");
+
+
         }
+        
+     
     }
 }

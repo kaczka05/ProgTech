@@ -30,10 +30,16 @@ namespace WpfApp1.ViewModels
         public ICommand AddCatalogCommand { get; }
         public ICommand DeleteCatalogCommand { get; }
 
+        // 1) Default constructor: uses the real service
         public CatalogViewModel()
-        {   
+            : this(ILibraryDataService.CreateNewService())
+        {
+        }
 
-            _libraryService = ILibraryDataService.CreateNewService();
+        // 2) Injection constructor: accept any ILibraryDataService
+        public CatalogViewModel(ILibraryDataService libraryService)
+        {
+            _libraryService = libraryService;
             AddCatalogCommand = new RelayCommand(async _ => await AddCatalogAsync());
             DeleteCatalogCommand = new RelayCommand(async _ => await DeleteCatalogAsync(), _ => SelectedCatalog != null);
             _ = LoadCatalogsAsync();
@@ -41,7 +47,7 @@ namespace WpfApp1.ViewModels
 
         private async Task LoadCatalogsAsync()
         {
-            /*var logicCatalogs = await Task.Run(() => _libraryService.GetAllCatalogsAsync());
+            var logicCatalogs = await Task.Run(() => _libraryService.GetAllCatalogsAsync());
             Catalogs.Clear();
             foreach (var c in logicCatalogs)
             {
@@ -52,7 +58,7 @@ namespace WpfApp1.ViewModels
                     Author = c.Author,
                     NrOfPages = c.NrOfPages
                 });
-            }*/
+            }
         }
 
         private async Task AddCatalogAsync()

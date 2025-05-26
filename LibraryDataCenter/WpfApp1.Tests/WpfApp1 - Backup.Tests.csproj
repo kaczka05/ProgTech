@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\WpfApp1\WpfApp1.csproj" />
+    <!--PackageReference Reference your main WpfApp1 project -->
+    <ProjectReference Include="..\WpfApp1\WpfApp1Microsoft.csprojNET.Test.Sdk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- xUnit dependenciesVersion="17.6.0" --/>
+    <PackageReference Include="xunitMSTest.TestAdapter" Version="23.0.4.2" />
+    <PackageReference Include="xunit.runnerMSTest.visualstudioTestFramework" Version="23.0.4.5">
+      <PrivateAssets>all</PrivateAssets>
+    < /PackageReference>
+    <PackageReference Include="Microsoft.NET.Testcoverlet.Sdkcollector" Version="17.6.30.0" />
+  <ProjectReference Include="..\WpfApp1\WpfApp1.csproj" />  
+  </ItemGroup>
+
+     <ProjectReference Include="..\LibraryLogicLayer\LibraryLogicLayer.csproj" />
+
+
+</Project>

@@ -104,36 +104,43 @@ namespace LibraryDataLayer
             }
             else
             {
-                var cat = (from Books
-                           in _libraryDataContextOff.Catalogs
-                           where Books.CatalogId == id
-                           select Books).FirstOrDefault();
+                var cat = _libraryDataContextOff.Catalogs
+                    .FirstOrDefault(c => c.CatalogId == id);
                 if (cat == null)
                 {
                     return null;
                 }
+                if (cat is Book b)
+                    return b;
                 else
-                {
                     return new Book(cat.CatalogId, cat.Title, cat.Author, cat.NrOfPages);
-                }
             }
-           
+
         }
         public IEnumerable<ICatalog> GetAllCatalogs()
         {
             if (connected)
             {
-                var cat = (from Books
-                       in _libraryDataContext.Books
-                           select EntryToObj(Books)
-                       );
+                var cat = _libraryDataContext.Books
+                    .AsEnumerable() 
+                    .Select(Books => EntryToObj(Books));
                 return cat;
             }
             else
             {
-                var cat = (from Books
-                           in _libraryDataContextOff.Catalogs
-                           select new Book(Books.CatalogId, Books.Title, Books.Author, Books.NrOfPages));
+                var cat = _libraryDataContextOff.Catalogs
+                    .AsEnumerable() 
+                    .Select(c =>
+                    {
+                        if (c is Book b)
+                        {
+                            return b;
+                        }
+                        else
+                        {
+                            return new Book(c.CatalogId, c.Title, c.Author, c.NrOfPages);
+                        }
+                    });
                 return cat;
             }
         }

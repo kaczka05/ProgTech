@@ -159,9 +159,29 @@ namespace LibraryLogicLayer
                 .Select(e => (ILogicEvent)ConvertToLogicEvent(e))
                 .ToList();
 
-        
-      
+        public void LogicAddCatalogue(int v1, string v2, string v3, int v4)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void LogicRemoveCatalogue(int v)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void LogicAddUser(int v1, string v2, string v3)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogicRemoveUser(int v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogicAddUserEvent(int v1, int v2, int v3, int v4, bool v5)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

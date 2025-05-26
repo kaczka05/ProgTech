@@ -183,5 +183,10 @@ namespace LibraryLogicLayer
         {
             throw new NotImplementedException();
         }
+
+        public Task AddEventAsync(int newEventId, object userId, object stateId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

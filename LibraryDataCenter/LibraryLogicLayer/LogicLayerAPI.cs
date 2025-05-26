@@ -41,6 +41,7 @@ namespace LibraryLogicLayer
         void LogicAddUser(int v1, string v2, string v3);
         void LogicRemoveUser(int v);
         void LogicAddUserEvent(int v1, int v2, int v3, int v4, bool v5);
+        Task AddEventAsync(int newEventId, object userId, object stateId);
     }
     public interface ILogicCatalog
     {

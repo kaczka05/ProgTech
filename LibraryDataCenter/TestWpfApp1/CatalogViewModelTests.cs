@@ -1,29 +1,43 @@
 using LibraryLogicLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using WpfApp1.Models;
+using System.Linq;
+using System.Threading.Tasks;
 using WpfApp1.ViewModels;
 
 namespace TestWpfApp1
 {
-    // Fake that mimics the logic layer interface (WITHOUT referencing it)
+    public interface ILogicCatalog
+    {
+        int CatalogId { get; }
+        string Title { get; }
+        string Author { get; }
+        int NrOfPages { get; }
+    }
+
+    public class FakeCatalog : ILogicCatalog
+    {
+        public int CatalogId { get; set; }
+        public string Title { get; set; } = "";
+        public string Author { get; set; } = "";
+        public int NrOfPages { get; set; }
+    }
+
     public class FakeLibraryDataService
     {
-        public List<CatalogModel> CatalogsToReturn = new();
+        public List<ILogicCatalog> CatalogsToReturn = new();
 
-        public IEnumerable<CatalogModel> GetAllCatalogs()
+        public IEnumerable<ILogicCatalog> GetAllCatalogs()
         {
             return CatalogsToReturn;
         }
     }
 
-    // Helper ViewModel that accepts our fake directly
     public class TestableCatalogViewModel : CatalogViewModel
     {
         public TestableCatalogViewModel(FakeLibraryDataService fake)
             : base(new Adapter(fake)) { }
 
-        // Adapter that adapts fake to expected logic interface
         private class Adapter : LibraryLogicLayer.ILibraryDataService
         {
             private readonly FakeLibraryDataService _fake;
@@ -33,72 +47,27 @@ namespace TestWpfApp1
                 _fake = fake;
             }
 
-            public Task AddCatalogAsync(int id, string author, string title, int nrOfPages)
+            public Task<List<ILogicCatalog>> GetAllCatalogsAsync()
             {
-                throw new NotImplementedException();
+                return Task.FromResult(_fake.GetAllCatalogs().ToList());
             }
 
-            public Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition)
-            {
-                throw new NotImplementedException();
-            }
+            public Task AddCatalogAsync(int id, string author, string title, int nrOfPages) => Task.CompletedTask;
+            public Task RemoveCatalogAsync(int id) => Task.CompletedTask;
 
-            public Task AddStateAsync(int id, int nrOfBooks, int catalogId)
-            {
-                throw new NotImplementedException();
-            }
+            // Other interface methods not used here can throw
+            public Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) => throw new NotImplementedException();
+            public Task AddStateAsync(int id, int nrOfBooks, int catalogId) => throw new NotImplementedException();
+            public Task AddUserAsync(int id, string firstName, string lastName) => throw new NotImplementedException();
+            public Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) => throw new NotImplementedException();
+            public List<ILogicEvent> GetAllEventsAsync() => throw new NotImplementedException();
+            public List<ILogicState> GetAllStatesAsync() => throw new NotImplementedException();
+            public List<ILogicUser> GetAllUsersAsync() => throw new NotImplementedException();
+            public Task RemoveEventAsync(int id) => throw new NotImplementedException();
+            public Task RemoveStateAsync(int id) => throw new NotImplementedException();
+            public Task RemoveUserAsync(int id) => throw new NotImplementedException();
 
-            public Task AddUserAsync(int id, string firstName, string lastName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<CatalogModel> GetAllCatalogs()
-            {
-                return _fake.GetAllCatalogs();
-            }
-
-            public List<ILogicCatalog> GetAllCatalogsAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<ILogicEvent> GetAllEventsAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<ILogicState> GetAllStatesAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public List<ILogicUser> GetAllUsersAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task RemoveCatalogAsync(int id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task RemoveEventAsync(int id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task RemoveStateAsync(int id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task RemoveUserAsync(int id)
+            List<LibraryLogicLayer.ILogicCatalog> ILibraryDataService.GetAllCatalogsAsync()
             {
                 throw new NotImplementedException();
             }
@@ -109,19 +78,22 @@ namespace TestWpfApp1
     public class CatalogViewModelTests
     {
         [TestMethod]
-        public void ViewModel_LoadsCatalogsFromFakeService()
+        public async Task ViewModel_LoadsCatalogsFromFakeService()
         {
             // Arrange
             var fake = new FakeLibraryDataService();
-            fake.CatalogsToReturn.Add(new CatalogModel
+            fake.CatalogsToReturn.Add(new FakeCatalog
             {
-
+                CatalogId = 1,
                 Title = "Test Book",
                 Author = "Tester",
-
+                NrOfPages = 123
             });
 
             var vm = new TestableCatalogViewModel(fake);
+
+            // Wait for async load
+            await Task.Delay(100); // Optional wait to ensure async runs
 
             // Act
             var catalogs = vm.Catalogs;

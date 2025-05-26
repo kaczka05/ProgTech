@@ -7,6 +7,7 @@ using WpfApp1.ViewModels;
 
 namespace TestWpfApp1
 {
+    // Define the same interface used by the logic layer
     public interface ILogicCatalog
     {
         int CatalogId { get; }
@@ -15,6 +16,7 @@ namespace TestWpfApp1
         int NrOfPages { get; }
     }
 
+    // Fake object implementing ILogicCatalog
     public class FakeCatalog : ILogicCatalog
     {
         public int CatalogId { get; set; }
@@ -23,6 +25,7 @@ namespace TestWpfApp1
         public int NrOfPages { get; set; }
     }
 
+    // Fake service that returns fake catalogs
     public class FakeLibraryDataService
     {
         public List<ILogicCatalog> CatalogsToReturn = new();
@@ -33,11 +36,13 @@ namespace TestWpfApp1
         }
     }
 
+    // ViewModel that uses the fake service via adapter
     public class TestableCatalogViewModel : CatalogViewModel
     {
         public TestableCatalogViewModel(FakeLibraryDataService fake)
             : base(new Adapter(fake)) { }
 
+        // Adapter translates fake to real service interface
         private class Adapter : LibraryLogicLayer.ILibraryDataService
         {
             private readonly FakeLibraryDataService _fake;
@@ -55,17 +60,17 @@ namespace TestWpfApp1
             public Task AddCatalogAsync(int id, string author, string title, int nrOfPages) => Task.CompletedTask;
             public Task RemoveCatalogAsync(int id) => Task.CompletedTask;
 
-            // Other interface methods not used here can throw
-            public Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) => throw new NotImplementedException();
-            public Task AddStateAsync(int id, int nrOfBooks, int catalogId) => throw new NotImplementedException();
-            public Task AddUserAsync(int id, string firstName, string lastName) => throw new NotImplementedException();
-            public Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) => throw new NotImplementedException();
-            public List<ILogicEvent> GetAllEventsAsync() => throw new NotImplementedException();
-            public List<ILogicState> GetAllStatesAsync() => throw new NotImplementedException();
-            public List<ILogicUser> GetAllUsersAsync() => throw new NotImplementedException();
-            public Task RemoveEventAsync(int id) => throw new NotImplementedException();
-            public Task RemoveStateAsync(int id) => throw new NotImplementedException();
-            public Task RemoveUserAsync(int id) => throw new NotImplementedException();
+            // Not needed in this test
+            public Task AddDatabaseEventAsync(int id, int employeeId, int stateId, bool addition) => throw new System.NotImplementedException();
+            public Task AddStateAsync(int id, int nrOfBooks, int catalogId) => throw new System.NotImplementedException();
+            public Task AddUserAsync(int id, string firstName, string lastName) => throw new System.NotImplementedException();
+            public Task AddUserEventAsync(int id, int employeeId, int stateId, int userId, bool borrowing) => throw new System.NotImplementedException();
+            public List<ILogicEvent> GetAllEventsAsync() => throw new System.NotImplementedException();
+            public List<ILogicState> GetAllStatesAsync() => throw new System.NotImplementedException();
+            public List<ILogicUser> GetAllUsersAsync() => throw new System.NotImplementedException();
+            public Task RemoveEventAsync(int id) => throw new System.NotImplementedException();
+            public Task RemoveStateAsync(int id) => throw new System.NotImplementedException();
+            public Task RemoveUserAsync(int id) => throw new System.NotImplementedException();
 
             List<LibraryLogicLayer.ILogicCatalog> ILibraryDataService.GetAllCatalogsAsync()
             {
@@ -80,7 +85,7 @@ namespace TestWpfApp1
         [TestMethod]
         public async Task ViewModel_LoadsCatalogsFromFakeService()
         {
-            // Arrange
+            // Arrange: create fake service with one catalog
             var fake = new FakeLibraryDataService();
             fake.CatalogsToReturn.Add(new FakeCatalog
             {
@@ -92,15 +97,13 @@ namespace TestWpfApp1
 
             var vm = new TestableCatalogViewModel(fake);
 
-            // Wait for async load
-            await Task.Delay(100); // Optional wait to ensure async runs
+            // Act: wait for async data loading
+            await Task.Delay(200); // Give time for LoadCatalogsAsync in constructor
 
-            // Act
-            var catalogs = vm.Catalogs;
-
-            // Assert
-            Assert.AreEqual(1, catalogs.Count);
-            Assert.AreEqual("Test Book", catalogs[0].Title);
+            // Assert: verify data was loaded
+            Assert.AreEqual("Test Book", vm.Catalogs[0].Title);
+            Assert.AreEqual(1, vm.Catalogs.Count);
+            Assert.AreEqual("Test Book", vm.Catalogs[0].Title);
         }
     }
 }

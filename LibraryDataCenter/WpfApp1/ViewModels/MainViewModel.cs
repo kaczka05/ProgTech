@@ -1,5 +1,5 @@
-﻿using LibraryApp.Models;
-using LibraryApp.Commands;
+﻿using WpfApp1.Models;
+using WpfApp1.Commands;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;

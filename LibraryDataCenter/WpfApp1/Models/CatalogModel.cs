@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
 
-namespace LibraryApp.Models
-{//
+namespace WpfApp1.Models
+{
     public class CatalogModel : INotifyPropertyChanged
     {
         private int _catalogId;
-        private string _title;
-        private string _author;
+        private string _title = string.Empty;
+        private string _author = string.Empty;
         private int _nrOfPages;
 
         public int CatalogId

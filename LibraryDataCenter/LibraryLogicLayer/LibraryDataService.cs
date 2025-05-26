@@ -7,7 +7,7 @@ namespace LibraryLogicLayer
 {
    internal class LibraryDataService : ILibraryDataService
     {
-        private static ILibraryDataRepository _libraryDataRepository = default;
+        private readonly ILibraryDataRepository _libraryDataRepository = default;
         public LibraryDataService()
         {
             _libraryDataRepository = ILibraryDataRepository.CreateNewRepository();

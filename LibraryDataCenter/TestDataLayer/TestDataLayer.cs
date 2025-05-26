@@ -22,7 +22,7 @@ namespace TestDataLayer
             public void Setup()
             {
                 // U¿yj connection stringa do bazy testowej lub in-memory
-                string testConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Database1;Integrated Security=True;";
+                string testConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=C:\\Users\\damia\\Desktop\\IT SEM 4\\ProgTech\\LibraryDataCenter\\LibraryDataCenter\\Database1.mdf;Integrated Security=True;";
                 repo = ILibraryDataRepository.CreateNewRepository(testConnectionString);
 
                 // Wyczyœæ dane testowe
@@ -38,7 +38,7 @@ namespace TestDataLayer
 
                 Assert.IsNotNull(catalog);
                 Assert.AreEqual("Title", catalog.Title);
-                Assert.AreEqual("Autor", catalog.Author);
+                Assert.AreEqual("Author", catalog.Author);
                 Assert.AreEqual(123, catalog.NrOfPages);
             }
 

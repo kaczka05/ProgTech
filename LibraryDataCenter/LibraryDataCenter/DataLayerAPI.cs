@@ -11,7 +11,7 @@ namespace LibraryDataLayer
     {
         public IQueryable<ICatalog> Catalogs { get; }
         public IQueryable<IUser> Users { get; }
-        public IQueryable<IEvent> DatabaseEvents { get; }
+        public IQueryable<IEvent> Events { get; }
         public IQueryable<IState> States { get; }
         Task AddCatalogAsync(ICatalog catalog);
         Task RemoveCatalogAsync(ICatalog catalog);

@@ -319,7 +319,7 @@ namespace LibraryDataLayer
             }
             else
             {
-                IEvent ev = _libraryDataContextOff.DatabaseEvents.Single(e => e.EventId == id);
+                IEvent ev = _libraryDataContextOff.Events.Single(e => e.EventId == id);
                 _libraryDataContextOff.RemoveEventAsync(ev);
             }
 
@@ -329,7 +329,7 @@ namespace LibraryDataLayer
         {
             if (!connected)
             {
-                var ev = _libraryDataContextOff.DatabaseEvents
+                var ev = _libraryDataContextOff.Events
                     .FirstOrDefault(e => e.EventId == id);
                 if (ev == null)
                 {
@@ -351,14 +351,32 @@ namespace LibraryDataLayer
         {
             if (!connected)
             {
-                return _libraryDataContextOff.DatabaseEvents
-                    .Select(e => EntryToObj(e));
+                IEnumerable<IEvent> cat = _libraryDataContextOff.Events
+                .AsEnumerable()
+                .Select(c =>
+                {
+                    if (c is DatabaseEvent dbEvent)
+                    {
+                        return (IEvent)dbEvent;
+                    }
+                    else if (c is UserEvent userEvent)
+                    {
+                        return (IEvent)userEvent;
+                    }
+                    else
+                    {
+                        return new DatabaseEvent(c.EventId, GetUserById(c.Employee.UserId), GetStateById(c.State.StateId), c.Addition);
+                    }
+                });
+
+                return cat;
             }
-            else 
-            { 
-            var events = from e in _libraryDataContext.Events
-                         select EntryToObj(e);
-            return events;
+            else
+            {
+                var events = _libraryDataContext.Events
+                             .AsEnumerable()
+                             .Select(e => EntryToObj(e));
+                return events;
             }
         }
       
@@ -424,7 +442,7 @@ namespace LibraryDataLayer
                 {
                     return null;
                 }
-                return new State(state.StateId, state.NrOfBooks, GetCatalogById(state.CatalogId));
+                return new State(state.StateId, state.NrOfBooks, GetCatalogById(state.Catalog.CatalogId));
             }
             else
             {
@@ -440,14 +458,14 @@ namespace LibraryDataLayer
             if (!connected)
             {
                 return _libraryDataContextOff.States
-                    .Select(s => new State(s.StateId, s.NrOfBooks, GetCatalogById(s.CatalogId)));
+                    .Select(s => new State(s.StateId, s.NrOfBooks, GetCatalogById(s.Catalog.CatalogId)));
             }
             else
             { 
                 var states = from s in _libraryDataContext.States
                              select EntryToObj(s);
             return states;
-            }
+        }
         }
 
 
@@ -484,7 +502,7 @@ namespace LibraryDataLayer
             }
             else
             {
-                return _libraryDataContextOff.DatabaseEvents.Any(e => e.EventId == id);
+                return _libraryDataContextOff.Events.Any(e => e.EventId == id);
             }
         }
         public bool DoesStateExist(int id)

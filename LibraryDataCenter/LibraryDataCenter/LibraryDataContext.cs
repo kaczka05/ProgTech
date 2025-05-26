@@ -13,7 +13,7 @@ namespace LibraryDataLayer
 
         public IQueryable<ICatalog> Catalogs => _books.AsQueryable();
         public IQueryable<IUser> Users => _users.AsQueryable();
-        public IQueryable<IEvent> DatabaseEvents => _events.AsQueryable();
+        public IQueryable<IEvent> Events => _events.AsQueryable();
         public IQueryable<IState> States => _states.AsQueryable();
 
         public Task AddCatalogAsync(ICatalog catalog)

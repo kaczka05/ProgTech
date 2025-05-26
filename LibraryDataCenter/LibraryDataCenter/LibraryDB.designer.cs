@@ -70,6 +70,7 @@ namespace LibraryDataLayer
 
         public LibraryDBDataContext()
         {
+			OnCreated();
         }
 
         public System.Data.Linq.Table<Books> Books

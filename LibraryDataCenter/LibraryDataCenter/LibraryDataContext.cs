@@ -1,118 +1,92 @@
-﻿
-
-
-using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LibraryDataLayer
 {
-    internal class LibraryDataContext : DbContext, ILibraryDataContext
+    internal class LibraryDataContext : ILibraryDataContext
     {
-        private readonly string _connectionString;
-        public LibraryDataContext(string connectionString)
+        private readonly List<Book> _books = new();
+        private readonly List<User> _users = new();
+        private readonly List<Event> _events = new();
+        private readonly List<State> _states = new();
+
+        public IQueryable<ICatalog> Catalogs => _books.AsQueryable();
+        public IQueryable<IUser> Users => _users.AsQueryable();
+        public IQueryable<IEvent> DatabaseEvents => _events.AsQueryable();
+        public IQueryable<IState> States => _states.AsQueryable();
+
+        public Task AddCatalogAsync(ICatalog catalog)
         {
-            _connectionString = connectionString;
-        }
-       
-        public DbSet<Book> Books { get; set; }
-        public IQueryable<ICatalog> Catalogs => Books;
-
-        public DbSet<User> UsersDbSet { get; set; }
-        public IQueryable<IUser> Users => UsersDbSet;
-
-        public DbSet<Event> EventsDbSet { get; set; }
-        public IQueryable<IEvent> DatabaseEvents => EventsDbSet;
-
-        public DbSet<State> StatesDbSet { get; set; }
-        public IQueryable<IState> States => StatesDbSet;
-
-        public async Task AddCatalogAsync(ICatalog catalog)
-        {
-            var entity = new Book(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages);
-            await Books.AddAsync(entity);
-            await SaveChangesAsync();
+            _books.Add(new Book(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages));
+            return Task.CompletedTask;
         }
 
-        public async Task RemoveCatalogAsync(ICatalog catalog)
+        public Task RemoveCatalogAsync(ICatalog catalog)
         {
-            var entity = await Books.FindAsync(catalog.CatalogId);
-            if (entity != null)
-            {
-                Books.Remove(entity);
-                await SaveChangesAsync();
-            }
+            var book = _books.FirstOrDefault(b => b.CatalogId == catalog.CatalogId);
+            if (book != null)
+                _books.Remove(book);
+            return Task.CompletedTask;
         }
 
-        public async Task AddUserAsync(IUser user)
+        public Task AddUserAsync(IUser user)
         {
-            var entity = new User(user.UserId, user.FirstName, user.LastName);
-            await UsersDbSet.AddAsync(entity);
-            await SaveChangesAsync();
+            _users.Add(new User(user.UserId, user.FirstName, user.LastName));
+            return Task.CompletedTask;
         }
 
-        public async Task RemoveUserAsync(IUser user)
+        public Task RemoveUserAsync(IUser user)
         {
-            var entity = await UsersDbSet.FindAsync(user.UserId);
-            if (entity != null)
-            {
-                UsersDbSet.Remove(entity);
-                await SaveChangesAsync();
-            }
+            var u = _users.FirstOrDefault(x => x.UserId == user.UserId);
+            if (u != null)
+                _users.Remove(u);
+            return Task.CompletedTask;
         }
 
-        public async Task AddDatabaseEventAsync(IDatabaseEvent databaseEvent)
+        public Task AddDatabaseEventAsync(IDatabaseEvent databaseEvent)
         {
-            var entity = new DatabaseEvent(
+            _events.Add(new DatabaseEvent(
                 databaseEvent.EventId,
                 databaseEvent.Employee,
                 databaseEvent.State,
                 databaseEvent.Addition
-            );
-            await EventsDbSet.AddAsync(entity);
-            await SaveChangesAsync();
+            ));
+            return Task.CompletedTask;
         }
 
-        public async Task AddUserEventAsync(IUserEvent userEvent)
+        public Task AddUserEventAsync(IUserEvent userEvent)
         {
-            var entity = new UserEvent(
+            _events.Add(new UserEvent(
                 userEvent.EventId,
                 userEvent.Employee,
                 userEvent.State,
                 userEvent.User,
                 userEvent.Borrowing
-            );
-            await EventsDbSet.AddAsync(entity);
-            await SaveChangesAsync();
+            ));
+            return Task.CompletedTask;
         }
 
-        public async Task RemoveEventAsync(IEvent eventObj)
+        public Task RemoveEventAsync(IEvent eventObj)
         {
-            var entity = await EventsDbSet.FindAsync(eventObj.EventId);
-            if (entity != null)
-            {
-                EventsDbSet.Remove(entity);
-                await SaveChangesAsync();
-            }
+            var ev = _events.FirstOrDefault(e => e.EventId == eventObj.EventId);
+            if (ev != null)
+                _events.Remove(ev);
+            return Task.CompletedTask;
         }
 
-        public async Task AddStateAsync(IState state)
+        public Task AddStateAsync(IState state)
         {
-            var entity = new State(state.StateId, state.NrOfBooks, state.Catalog);
-            await StatesDbSet.AddAsync(entity);
-            await SaveChangesAsync();
+            _states.Add(new State(state.StateId, state.NrOfBooks, state.Catalog));
+            return Task.CompletedTask;
         }
 
-        public async Task RemoveStateAsync(IState state)
+        public Task RemoveStateAsync(IState state)
         {
-            var entity = await StatesDbSet.FindAsync(state.StateId);
-            if (entity != null)
-            {
-                StatesDbSet.Remove(entity);
-                await SaveChangesAsync();
-            }
+            var s = _states.FirstOrDefault(x => x.StateId == state.StateId);
+            if (s != null)
+                _states.Remove(s);
+            return Task.CompletedTask;
         }
-
-
     }
-
-
 }

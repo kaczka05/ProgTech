@@ -8,18 +8,21 @@ namespace LibraryDataLayer
     internal class LibraryDataRepository : ILibraryDataRepository
     {
         private LibraryDBDataContext _libraryDataContext;
-
+        private LibraryDataContext _libraryDataContextOff;
+        private bool connected;
         
 
         public LibraryDataRepository(string? customConnectionString = null)
         {
             if (customConnectionString != null)
             {
+                connected = true;
                 _libraryDataContext = new LibraryDBDataContext(customConnectionString);
             }
             else
             {
-                _libraryDataContext = new LibraryDBDataContext();
+                connected = false;
+                _libraryDataContextOff = new LibraryDataContext();
             }
         }
 
@@ -39,51 +42,100 @@ namespace LibraryDataLayer
 
         public void AddCatalog(int catalogId, string title, string author, int numberOfPages)
         {
-            Books book = new Books
-            { 
-                catalogId = catalogId,
-                title = title,
-                author = author,
-                nrOfPages = numberOfPages }
+            
+            if(connected)
+            {
+                Books book = new Books
+                {
+                    catalogId = catalogId,
+                    title = title,
+                    author = author,
+                    nrOfPages = numberOfPages
+                }
             ;
-            _libraryDataContext.Books.InsertOnSubmit(book);
-            _libraryDataContext.SubmitChanges();
+                _libraryDataContext.Books.InsertOnSubmit(book);
+                _libraryDataContext.SubmitChanges();
+            }
+            else
+            {
+                Book book = new Book(catalogId,title,author,numberOfPages);            
+                _libraryDataContextOff.AddCatalogAsync(book);
+            }
+
         }
 
         public void RemoveCatalogById(int id)
         {
-            Books cat = _libraryDataContext.Books.Single(Books => Books.catalogId == id);
-            _libraryDataContext.Books.DeleteOnSubmit(cat);
-            _libraryDataContext.SubmitChanges();
+            if (connected)
+            {
+                Books cat = _libraryDataContext.Books.Single(Books => Books.catalogId == id);
+                _libraryDataContext.Books.DeleteOnSubmit(cat);
+                _libraryDataContext.SubmitChanges();
+            }
+            else
+            {
+                Book cat = (Book)_libraryDataContextOff.Catalogs.Single(Books => Books.CatalogId == id);
+                _libraryDataContextOff.RemoveCatalogAsync(cat);
+            }
+
         }
 
         public ICatalog? GetCatalogById(int id)
         {
-            Books c = new Books();
-            var cat = (from Books
-                       in _libraryDataContext.Books
-                       where Books.catalogId == id
-                       select Books).FirstOrDefault();
-            if (cat == null)
+            if(connected)
             {
-                return null;
+                Books c = new Books();
+                var cat = (from Books
+                           in _libraryDataContext.Books
+                           where Books.catalogId == id
+                           select Books).FirstOrDefault();
+                if (cat == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    c.catalogId = cat.catalogId;
+                    c.title = cat.title;
+                    c.author = cat.author;
+                    c.nrOfPages = cat.nrOfPages;
+                    return EntryToObj(c);
+                }
             }
             else
             {
-                c.catalogId = cat.catalogId;
-                c.title = cat.title;
-                c.author = cat.author;
-                c.nrOfPages = cat.nrOfPages;
-                return EntryToObj(c);
+                var cat = (from Books
+                           in _libraryDataContextOff.Catalogs
+                           where Books.CatalogId == id
+                           select Books).FirstOrDefault();
+                if (cat == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return new Book(cat.CatalogId, cat.Title, cat.Author, cat.NrOfPages);
+                }
             }
+           
         }
         public IEnumerable<ICatalog> GetAllCatalogs()
         {
-            var cat = (from Books
+            if (connected)
+            {
+                var cat = (from Books
                        in _libraryDataContext.Books
-                       select EntryToObj(Books)
+                           select EntryToObj(Books)
                        );
-            return cat;
+                return cat;
+            }
+            else
+            {
+                var cat = (from Books
+                           in _libraryDataContextOff.Catalogs
+                           select new Book(Books.CatalogId, Books.Title, Books.Author, Books.NrOfPages));
+                return cat;
+            }
         }
         private IUser? EntryToObj(Users user)
         {
@@ -274,23 +326,26 @@ namespace LibraryDataLayer
 
         public bool DoesCatalogExist(int id)
         {
-            return _libraryDataContext.Books.Any(c => c.catalogId == id);
+            /*if (_libraryDataContext == null) throw new InvalidOperationException("Data context is not initialized.");
+            return _libraryDataContext.Books.Any(c => c.catalogId == id);*/
+            return false;
         }
         public bool DoesUserExist(int id)
         {
+            if (_libraryDataContext == null) throw new InvalidOperationException("Data context is not initialized.");
             return _libraryDataContext.Users.Any(u => u.UserId == id);
         }
-
         public bool DoesEventExist(int id)
         {
+            if (_libraryDataContext == null) throw new InvalidOperationException("Data context is not initialized.");
             return _libraryDataContext.Events.Any(e => e.EventId == id);
         }
-
         public bool DoesStateExist(int id)
         {
+            if (_libraryDataContext == null) throw new InvalidOperationException("Data context is not initialized.");
             return _libraryDataContext.States.Any(s => s.StateId == id);
         }
-        
+
     }
 
 

@@ -12,6 +12,10 @@ namespace LibraryPresentationLayer
 {
     internal class ViewModel : PropertyChange
     {
+        private VMCatalogList _vmCatalogList = new VMCatalogList();
+        private VMUserList _vmUserList = new VMUserList();
+        private VMEventList _vmEventList = new VMEventList();
+        private VMStateList _vmStateList = new VMStateList();
         private PropertyChange _selectedVM;
         public PropertyChange SelectedVM
         {
@@ -25,14 +29,14 @@ namespace LibraryPresentationLayer
             }
         }
 
-        public ICommand UpdateViemCommand { get; }
+        public ICommand UpdateVMCommand { get; }
 
 
         public ViewModel()
         {
-            UpdateViemCommand = new RelayCommand(ChangeView);
+            UpdateVMCommand = new RelayCommand(ChangeView);
 
-            SelectedVM = new VMCatalogList();
+            SelectedVM = _vmCatalogList;
         }
 
         private void ChangeView(object obj)
@@ -42,16 +46,16 @@ namespace LibraryPresentationLayer
                 switch (viewName)
                 {
                     case "Catalog":
-                        SelectedVM = new VMCatalogList();
+                        SelectedVM = _vmCatalogList;
                         break;
                     case "User":
-                        SelectedVM = new VMUserList();
+                        SelectedVM = _vmUserList;
                         break;
                     case "Event":
-                        SelectedVM = new VMEventList();
+                        SelectedVM = _vmEventList;
                         break;
                     case "State":
-                        SelectedVM = new VMStateList();
+                        SelectedVM = _vmStateList;
                         break;
                     default:
                         break;

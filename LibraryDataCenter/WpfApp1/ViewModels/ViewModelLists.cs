@@ -46,9 +46,17 @@ namespace LibraryPresentationLayer
             EditCatalogCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
 
-        public VMCatalog? SelectedCatalog
+        public VMCatalog SelectedCatalog
         {
-            get => _catalog;
+            get
+            {
+                if (_catalog == null)
+                {
+                    _catalog = new VMCatalog();
+                    OnPropertyChanged(nameof(SelectedCatalog));
+                }
+                return _catalog;
+            }
             set
             {
                 if (_catalog != value)
@@ -140,7 +148,7 @@ namespace LibraryPresentationLayer
         private async Task Edit()
         {
             await model.RemoveCatalogAsync(_catalog.CatalogId);
-            await model.AddCatalogAsync(_catalog.CatalogId, _catalog.Title, _catalog.Author, _catalog.NrOfPages);
+            await model.AddCatalogAsync(CatalogId, Title, Author, NrOfPages);
         }
 
      

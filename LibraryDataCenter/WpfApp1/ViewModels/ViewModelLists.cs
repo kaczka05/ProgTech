@@ -24,14 +24,17 @@ namespace LibraryPresentationLayer
         public ICommand AddCatalogCommand { get; }
         public ICommand RemoveCatalogCommand { get; }
         public ICommand UpdateCatalogCommand { get; }
+        public ICommand EditCatalogCommand { get; }
+
         private ObservableCollection<VMCatalog> _catalogs;
         public VMCatalogList()
         {
-            this.model = model;
+            this.model = new Model();
             _catalogs = new ObservableCollection<VMCatalog>();
             AddCatalogCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveCatalogCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateCatalogCommand = new RelayCommand(e => { GetCatalogs(); }, a => true);
+            EditCatalogCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
         public VMCatalogList(IModel model)
         {
@@ -40,6 +43,20 @@ namespace LibraryPresentationLayer
             AddCatalogCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveCatalogCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateCatalogCommand = new RelayCommand(e => { GetCatalogs(); }, a => true);
+            EditCatalogCommand = new RelayCommand(e => { Edit(); }, a => true);
+        }
+
+        public VMCatalog? SelectedCatalog
+        {
+            get => _catalog;
+            set
+            {
+                if (_catalog != value)
+                {
+                    _catalog = value;
+                    OnPropertyChanged(nameof(SelectedCatalog));
+                }
+            }
         }
         public ObservableCollection<VMCatalog> Catalogs
         {
@@ -118,12 +135,15 @@ namespace LibraryPresentationLayer
         }
         private async Task Delete()
         {
-            await model.RemoveCatalogAsync(CatalogId);
+            await model.RemoveCatalogAsync(_catalog.CatalogId);
         }
-        public void XD()
+        private async Task Edit()
         {
-
+            await model.RemoveCatalogAsync(_catalog.CatalogId);
+            await model.AddCatalogAsync(_catalog.CatalogId, _catalog.Title, _catalog.Author, _catalog.NrOfPages);
         }
+
+     
     }
     internal class VMUserList : PropertyChange
     {

@@ -135,6 +135,27 @@ namespace TestLogicLayer
         private StubRepository stub;
         private ILibraryDataService service;
 
+        public static class StaticTestData
+        {
+            public static (int Id, string Title, string Author, int Pages) GetTestData()
+            {
+                return (101, "StaticTitle", "StaticAuthor", 123);
+            }
+        }
+
+        public static class RandomTestData
+        {
+            private static readonly System.Random rnd = new();
+
+            public static (int Id, string Title, string Author, int Pages) GetTestData()
+            {
+                int id = rnd.Next(1000, 9999);
+                string title = "Title" + rnd.Next(1, 100);
+                string author = "Author" + rnd.Next(1, 100);
+                int pages = rnd.Next(50, 500);
+                return (id, title, author, pages);
+            }
+        }
         [TestInitialize]
         public void Init()
         {
@@ -152,11 +173,20 @@ namespace TestLogicLayer
             service = (ILibraryDataService)Activator.CreateInstance(svcType, proxy);
         }
 
+
         [TestMethod]
         public void LogicAddCatalogue_Works_WhenNotExists()
         {
             stub.CatalogExistsReturn = false;
             service.LogicAddCatalogue(1, "Book", "Author", 123);
+            Assert.AreEqual(1, stub.AddedCatalogs.Count);
+        }
+
+        [TestMethod]
+        public void LogicAddCatalogue_Works_WhenNotExists_With_Random_Data()
+        {
+            stub.CatalogExistsReturn = false;
+            service.LogicAddCatalogue(StaticTestData.GetTestData().Id, StaticTestData.GetTestData().Title, StaticTestData.GetTestData().Author, StaticTestData.GetTestData().Pages);
             Assert.AreEqual(1, stub.AddedCatalogs.Count);
         }
 

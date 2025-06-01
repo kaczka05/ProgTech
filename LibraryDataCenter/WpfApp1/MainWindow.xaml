@@ -10,23 +10,34 @@
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
         <!-- Master List -->
         <GroupBox Header="Catalogs" Grid.Column="0" Margin="0,0,10,0">
             <StackPanel>
-                <ListBox x:Name="CatalogsListBox"
-                         ItemsSource="{Binding Catalogs}"
-                         SelectedItem="{Binding SelectedCatalog, Mode=TwoWay}"
-                         DisplayMemberPath="Title"
-                         Height="350" />
+
+                <DataGrid x:Name="CatalogsDataGrid"
+                      ItemsSource="{Binding Catalogs}"
+                      SelectedItem="{Binding SelectedCatalog, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      Height="350"
+                      CanUserAddRows="False"
+                      IsReadOnly="True">    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Catalog ID" Binding="{Binding CatalogId}" Width="*"/>
+                        <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                        <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
+                        <DataGridTextColumn Header="Number of Pages" Binding="{Binding NrOfPages}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" >
                     <Button Content="Add" Command="{Binding AddCatalogCommand}" Width="75" Margin="5"/>
                     <Button Content="Remove" Command="{Binding RemoveCatalogCommand}" Width="75" Margin="5"/>
                     <Button Content="Refresh" Command="{Binding UpdateCatalogCommand}" Width="75" Margin="5"/>
+                    <Button Content="Edit" Command="{Binding EditCatalogCommand}" Width="75" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -35,16 +46,16 @@
         <GroupBox Header="Details" Grid.Column="1">
             <StackPanel Margin="10">
                 <Label Content="Catalog ID:"/>
-                <TextBox Text="{Binding catalogId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding SelectedCatalog.CatalogId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Label Content="Title:" Margin="0,10,0,0"/>
-                <TextBox Text="{Binding title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding SelectedCatalog.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Label Content="Author:" Margin="0,10,0,0"/>
-                <TextBox Text="{Binding author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding SelectedCatalog.Author, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Label Content="Number of Pages:" Margin="0,10,0,0"/>
-                <TextBox Text="{Binding nrOfPages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding SelectedCatalog.NrOfPages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </GroupBox>
     </Grid>

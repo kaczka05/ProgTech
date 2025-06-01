@@ -2,7 +2,7 @@
      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
      xmlns:local="clr-namespace:LibraryPresentationLayer"  
-     Title="Catalogs Master-Detail" Height="450" Width="800">  
+     Title="Master-Detail" Height="700" Width="800">  
 
  <Window.DataContext>  
      <local:ViewModel />  
@@ -58,8 +58,168 @@
                  </StackPanel>  
              </GroupBox>  
          </Grid>  
-     </DataTemplate>  
- </Window.Resources>  
+     </DataTemplate>
+        <DataTemplate DataType="{x:Type local:VMUserList}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Header="Users" Grid.Column="0" Margin="0,0,10,0">
+                    <StackPanel>
+                        <DataGrid x:Name="CatalogsDataGrid"  
+                  ItemsSource="{Binding Users}"  
+                  SelectedItem="{Binding SelectedUser, Mode=TwoWay}"  
+                  AutoGenerateColumns="False"  
+                  Height="300"  
+                  CanUserAddRows="False"  
+                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="User ID" Binding="{Binding UserId}" Width="*"/>
+                                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*"/>
+                                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" >
+                            <Button Content="Add" Command="{Binding AddUserCommand}" Width="75" Margin="5"/>
+                            <Button Content="Remove" Command="{Binding RemoveUserCommand}" Width="75" Margin="5"/>
+                            <Button Content="Refresh" Command="{Binding UpdateUserCommand}" Width="75" Margin="5"/>
+                            <Button Content="Edit" Command="{Binding EditUserCommand}" Width="75" Margin="5"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Details" Grid.Column="1" Margin="10">
+                    <StackPanel>
+                        <Label Content="Catalog ID:"/>
+                        <TextBox Text="{Binding userId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Title:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding firstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Author:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding lastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                   
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:VMEventList}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Header="Events" Grid.Column="0" Margin="0,0,10,0">
+                    <StackPanel>
+                        <DataGrid x:Name="EventsDataGrid"
+                          ItemsSource="{Binding Events}"
+                          SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
+                          AutoGenerateColumns="False"
+                          Height="300"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Event ID" Binding="{Binding EventId}" Width="*"/>
+                                <DataGridTextColumn Header="Employee" Binding="{Binding Employee.UserId}" Width="*"/>
+                                <DataGridTextColumn Header="State" Binding="{Binding State.StateId}" Width="*"/>
+                                <DataGridTextColumn Header="User" Binding="{Binding User.UserId}" Width="*"/>
+                                <DataGridCheckBoxColumn Header="Borrowing" Binding="{Binding Borrowing}" Width="*"/>
+                                <DataGridCheckBoxColumn Header="Addition" Binding="{Binding Addition}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" >
+                            <Button Content="Add" Command="{Binding AddEventCommand}" Width="75" Margin="5"/>
+                            <Button Content="Remove" Command="{Binding RemoveEventCommand}" Width="75" Margin="5"/>
+                            <Button Content="Refresh" Command="{Binding UpdateEventCommand}" Width="75" Margin="5"/>
+                            <Button Content="Edit" Command="{Binding EditEventCommand}" Width="75" Margin="5"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Details" Grid.Column="1" Margin="10">
+                    <StackPanel>
+                        <Label Content="Event ID:"/>
+                        <TextBox Text="{Binding eventId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Employee ID:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="State ID:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding state, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="User ID:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding user, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Borrowing:" Margin="0,10,0,0"/>
+                        <CheckBox IsChecked="{Binding borrowing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Addition:" Margin="0,10,0,0"/>
+                        <CheckBox IsChecked="{Binding addition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:VMStateList}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Header="States" Grid.Column="0" Margin="0,0,10,0">
+                    <StackPanel>
+                        <DataGrid x:Name="StatesDataGrid"
+                          ItemsSource="{Binding States}"
+                          SelectedItem="{Binding SelectedState, Mode=TwoWay}"
+                          AutoGenerateColumns="False"
+                          Height="300"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="State ID" Binding="{Binding StateId}" Width="*"/>
+                                <DataGridTextColumn Header="Number of Books" Binding="{Binding NrOfBooks}" Width="*"/>
+                                <DataGridTextColumn Header="Catalog ID" Binding="{Binding Catalog.CatalogId}" Width="*"/>
+                                <DataGridTextColumn Header="Catalog Title" Binding="{Binding Catalog.Title}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" >
+                            <Button Content="Add" Command="{Binding AddStateCommand}" Width="75" Margin="5"/>
+                            <Button Content="Remove" Command="{Binding RemoveStateCommand}" Width="75" Margin="5"/>
+                            <Button Content="Refresh" Command="{Binding UpdateStateCommand}" Width="75" Margin="5"/>
+                            <Button Content="Edit" Command="{Binding EditStateCommand}" Width="75" Margin="5"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Details" Grid.Column="1" Margin="10">
+                    <StackPanel>
+                        <Label Content="State ID:"/>
+                        <TextBox Text="{Binding stateId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Number of Books:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding nrOfBooks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Catalog ID:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding catalog.CatalogId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Catalog Title:" Margin="0,10,0,0"/>
+                        <TextBox Text="{Binding catalog.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </DataTemplate>
+
+
+
+    </Window.Resources>  
  <Grid Margin="10">  
      <DockPanel>  
          <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">  

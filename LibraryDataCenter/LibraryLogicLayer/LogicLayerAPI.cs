@@ -59,10 +59,10 @@ namespace LibraryLogicLayer
     public interface ILogicEvent
     {
         int EventId { get; init; }
-        ILogicUser Employee { get; init; }
-        ILogicState State { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
         bool Addition { get; init; }
-        ILogicUser User { get; init; }
+        int User { get; init; }
         bool Borrowing { get; init; }
 
     }
@@ -70,17 +70,17 @@ namespace LibraryLogicLayer
     public interface ILogicDatabaseEvent
     {
         int EventId { get; init; }
-        ILogicUser Employee { get; init; }
-        ILogicState State { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
         bool Addition { get; init; }
     }
 
     public interface ILogicUserEvent
     {
         int EventId { get; init; }
-        ILogicUser Employee { get; init; }
-        ILogicState State { get; init; }
-        ILogicUser User { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
+        int User { get; init; }
         bool Borrowing { get; init; }
     }
 
@@ -88,7 +88,7 @@ namespace LibraryLogicLayer
     {
         int StateId { get; init; }
         int NrOfBooks { get; init; }
-        ILogicCatalog Catalog { get; init; }
+        int Catalog { get; init; }
     }
 
 }

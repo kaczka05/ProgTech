@@ -41,9 +41,9 @@ namespace LibraryPresentationLayer
     public interface IModelEvent
     {
         int EventId { get; init; }
-        IModelUser Employee { get; init; }
-        IModelState State { get; init; }
-        IModelUser User { get; set; }
+        int Employee { get; init; }
+        int State { get; init; }
+        int User { get; set; }
         bool Borrowing { get; set; }
         bool Addition { get; set; }
     }
@@ -51,17 +51,17 @@ namespace LibraryPresentationLayer
     public interface IModelDatabaseEvent
     {
         int EventId { get; init; }
-        IModelUser Employee { get; init; }
-        IModelState State { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
         bool Addition { get; init; }
     }
 
     public interface IModelUserEvent
     {
         int EventId { get; init; }
-        IModelUser Employee { get; init; }
-        IModelState State { get; init; }
-        IModelUser User { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
+        int User { get; init; }
         bool Borrowing { get; init; }
     }
 
@@ -69,6 +69,6 @@ namespace LibraryPresentationLayer
     {
         int StateId { get; init; }
         int NrOfBooks { get; init; }
-        IModelCatalog Catalog { get; init; }
+        int Catalog { get; init; }
     }
 }

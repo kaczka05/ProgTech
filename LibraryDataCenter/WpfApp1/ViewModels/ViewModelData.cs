@@ -198,39 +198,39 @@ namespace LibraryPresentationLayer
     }
     internal class VMEvent : PropertyChange
     {
-        private IModelUser employee;
-        private IModelState state;
-        private object user;
+        private object employeeId;
+        private object stateId;
+        private object userId;
         private object borrowing;
         private object addition;
 
         public int EventId { get; set; }
-        public VMUser Employee { get; set; }
-        public VMState State { get; set; }
+        public int EmployeeId { get; set; }
+        public int StateId { get; set; }
         public bool Addition { get; set; }
-        public VMUser User { get; set; }
+        public int UserId { get; set; }
         public bool Borrowing { get; set; }
  
 
-        public VMEvent(int eventId, VMUser employee, VMState state)
+        public VMEvent(int eventId, int employeeId, int stateId)
         {
             EventId = eventId;
-            Employee = employee;
-            State = state;
+            EmployeeId = employeeId;
+            StateId = stateId;
         }
         public VMEvent()
         {
             EventId = 0;
-            Employee = new VMUser();
-            State = new VMState();
+            EmployeeId = 0;
+            StateId = 0;
         }
 
-        public VMEvent(int eventId, IModelUser employee, IModelState state, object user, object borrowing, object addition)
+        public VMEvent(int eventId, int employee, int state, object user, object borrowing, object addition)
         {
             EventId = eventId;
-            this.employee = employee;
-            this.state = state;
-            this.user = user;
+            this.employeeId = employee;
+            this.stateId = state;
+            this.userId = user;
             this.borrowing = borrowing;
             this.addition = addition;
         }
@@ -239,21 +239,22 @@ namespace LibraryPresentationLayer
     {
 
         public int EventId { get; set; }
-        public VMUser Employee { get; set; }
-        public VMState State { get; set; }
+        public int EmployeeId { get; set; }
+        public int StateId { get; set; }
         public bool Addition { get; set; }
-        public VMDatabaseEvent(int eventId, VMUser employee, VMState state, bool addition)
+
+        public VMDatabaseEvent(int eventId, int employee, int state, bool addition)
         {
             EventId = eventId;
-            Employee = employee;
-            State = state;
+            EmployeeId = employee;
+            StateId = state;
             Addition = addition;
         }
         public VMDatabaseEvent()
         {
             EventId = 0;
-            Employee = new VMUser();
-            State = new VMState();
+            EmployeeId = 0;
+            StateId = 0;
             Addition = false;
         }
         public int _eventId
@@ -265,21 +266,21 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(_eventId));
             }
         }
-        public VMUser _employee
+        public int _employee
         {
-            get => Employee;
+            get => EmployeeId;
             set
             {
-                Employee = value;
+                EmployeeId = value;
                 OnPropertyChanged(nameof(_employee));
             }
         }
-        public VMState _state
+        public int _state
         {
-            get => State;
+            get => StateId;
             set
             {
-                State = value;
+                StateId = value;
                 OnPropertyChanged(nameof(_state));
             }
         }
@@ -293,22 +294,22 @@ namespace LibraryPresentationLayer
             }
         }
     }
-    internal class VMState : VMEvent
+    internal class VMState : PropertyChange
     {
         public int StateId { get; set; }
         public int NrOfBooks { get; set; }
-        public VMCatalog Catalog { get; set; }
-        public VMState(int stateId, int nrOfBooks, VMCatalog catalog)
+        public int CatalogId { get; set; }
+        public VMState(int stateId, int nrOfBooks, int catalogId)
         {
             StateId = stateId;
             NrOfBooks = nrOfBooks;
-            Catalog = catalog;
+            CatalogId = catalogId;
         }
         public VMState()
         {
             StateId = 0;
             NrOfBooks = 0;
-            Catalog = new VMCatalog();
+            CatalogId = 0;
         }
         public int _stateId
         {
@@ -326,6 +327,15 @@ namespace LibraryPresentationLayer
             {
                 NrOfBooks = value;
                 OnPropertyChanged(nameof(_nrOfBooks));
+            }
+        }
+        public int _catalog
+        {
+            get => CatalogId;
+            set
+            {
+                CatalogId = value;
+                OnPropertyChanged(nameof(_catalog));
             }
         }
     }

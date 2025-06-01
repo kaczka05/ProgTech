@@ -12,7 +12,7 @@ namespace LibraryPresentationlLayer
     {
         private IModelCatalog catalog;
 
-        public ModelState(int stateId, int nrOfBooks, IModelCatalog catalog)
+        public ModelState(int stateId, int nrOfBooks, int catalog)
         {
             StateId = stateId;
             NrOfBooks = nrOfBooks;
@@ -21,7 +21,7 @@ namespace LibraryPresentationlLayer
 
         public int StateId { get; init; }
         public int NrOfBooks { get; init; }
-        public IModelCatalog Catalog { get; init; }
+        public int Catalog { get; init; }
         
     }
     internal class ModelUser : IModelUser
@@ -39,9 +39,9 @@ namespace LibraryPresentationlLayer
     internal class ModelEvent : IModelEvent
     {
         public int EventId { get; init; }
-        public IModelUser Employee { get; init; }
-        public IModelState State { get; init; }
-        public IModelUser  User { get; set; }
+        public int Employee { get; init; }
+        public int State { get; init; }
+        public int User { get; set; }
         public bool Borrowing { get; set; }
         public bool Addition { get; set; }
 
@@ -51,10 +51,10 @@ namespace LibraryPresentationlLayer
     {
       
         public int EventId { get; init; }
-        public IModelUser Employee { get; init; }
-        public IModelState State { get; init; }
+        public int Employee { get; init; }
+        public int State { get; init; }
         public bool Addition { get; init; }
-        public ModelDatabaseEvent(int eventId, IModelUser employee, IModelState state, bool addition)
+        public ModelDatabaseEvent(int eventId, int employee, int state, bool addition)
         {
             EventId = eventId;
             Employee = employee;
@@ -67,11 +67,11 @@ namespace LibraryPresentationlLayer
     {
 
         public int EventId { get; init; }
-        public IModelUser Employee { get; init; }
-        public IModelState State { get; init; }
-        public IModelUser User { get; init; }
+        public int Employee { get; init; }
+        public int State { get; init; }
+        public int User { get; init; }
         public bool Borrowing { get; init; }
-        public ModelUserEvent(int eventId, IModelUser employee, IModelState state, IModelUser user, bool borrowing)
+        public ModelUserEvent(int eventId, int employee, int state, int user, bool borrowing)
         {
             EventId = eventId;
             Employee = employee;

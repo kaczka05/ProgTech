@@ -73,9 +73,9 @@ namespace LibraryPresentationLayer
         }
 
         private ModelUserEvent ConvertToModelDatabaseEvent(ILogicEvent userEvent) =>
-            new ModelUserEvent(userEvent.EventId, ConvertToModelUser(userEvent.Employee), ConvertToModelState(userEvent.State), ConvertToModelUser(userEvent.User), userEvent.Borrowing);
+            new ModelUserEvent(userEvent.EventId, userEvent.Employee, userEvent.State, userEvent.User, userEvent.Borrowing);
         private ModelDatabaseEvent ConvertToModelUserEvent(ILogicEvent databaseEvent) =>
-            new ModelDatabaseEvent(databaseEvent.EventId, ConvertToModelUser(databaseEvent.Employee), ConvertToModelState(databaseEvent.State), databaseEvent.Addition);
+            new ModelDatabaseEvent(databaseEvent.EventId, databaseEvent.Employee, databaseEvent.State, databaseEvent.Addition);
 
         private ModelEvent ConvertToModelEvent(ILogicEvent eventObj)
         {
@@ -89,7 +89,7 @@ namespace LibraryPresentationLayer
 
 
         private IModelState ConvertToModelState(ILogicState state) =>
-            new ModelState(state.StateId, state.NrOfBooks, ConvertToModelCatalog(state.Catalog));
+            new ModelState(state.StateId, state.NrOfBooks, state.Catalog);
         
   
 

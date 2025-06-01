@@ -461,11 +461,13 @@ namespace LibraryDataLayer
                     .Select(s => new State(s.StateId, s.NrOfBooks, GetCatalogById(s.Catalog.CatalogId)));
             }
             else
-            { 
-                var states = from s in _libraryDataContext.States
-                             select EntryToObj(s);
-            return states;
-        }
+            {
+                var cat = _libraryDataContext.States
+                    .AsEnumerable()
+                    .Select(States => EntryToObj(States));
+                return cat;
+            }
+           
         }
 
 

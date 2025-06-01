@@ -12,10 +12,11 @@ namespace LibraryPresentationLayer
 {
     internal class ViewModel : PropertyChange
     {
-        private VMCatalogList _vmCatalogList = new VMCatalogList();
-        private VMUserList _vmUserList = new VMUserList();
-        private VMEventList _vmEventList = new VMEventList();
-        private VMStateList _vmStateList = new VMStateList();
+        private static Model model = new Model();
+        private VMCatalogList _vmCatalogList = new VMCatalogList(model);
+        private VMUserList _vmUserList = new VMUserList(model);
+        private VMEventList _vmEventList = new VMEventList(model);
+        private VMStateList _vmStateList = new VMStateList(model);
         private PropertyChange _selectedVM;
         public PropertyChange SelectedVM
         {
@@ -53,7 +54,7 @@ namespace LibraryPresentationLayer
                         break;
                     case "Event":
                         SelectedVM = _vmEventList;
-                        break;
+                        break;  
                     case "State":
                         SelectedVM = _vmStateList;
                         break;

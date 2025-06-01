@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using LibraryLogicLayer;
 using LibraryPresentationlLayer;
+using LibraryDataLayer;
 
 
 namespace LibraryPresentationLayer
@@ -59,10 +60,21 @@ namespace LibraryPresentationLayer
             }
             set
             {
-                if (_catalog != value)
+                if (_catalog != value && value != null)
                 {
                     _catalog = value;
+
+                    CatalogId = _catalog.CatalogId;
+                    Title = _catalog.Title;
+                    Author = _catalog.Author;
+                    NrOfPages = _catalog.NrOfPages;
+
+
                     OnPropertyChanged(nameof(SelectedCatalog));
+                    OnPropertyChanged(nameof(catalogId));
+                    OnPropertyChanged(nameof(title));
+                    OnPropertyChanged(nameof(author));
+                    OnPropertyChanged(nameof(nrOfPages));
                 }
             }
         }
@@ -148,6 +160,7 @@ namespace LibraryPresentationLayer
         private async Task Edit()
         {
             await model.RemoveCatalogAsync(_catalog.CatalogId);
+            await Task.Delay(200);
             await model.AddCatalogAsync(CatalogId, Title, Author, NrOfPages);
         }
 
@@ -164,14 +177,16 @@ namespace LibraryPresentationLayer
         public ICommand AddUserCommand { get; }
         public ICommand RemoveUserCommand { get; }
         public ICommand UpdateUserCommand { get; }
+        public ICommand EditUserCommand { get; }
         private ObservableCollection<VMUser> _users;
         public VMUserList()
         {
-            this.model = model;
+            this.model = new Model();
             _users = new ObservableCollection<VMUser>();
             AddUserCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveUserCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateUserCommand = new RelayCommand(e => { GetUsers(); }, a => true);
+            EditUserCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
         public VMUserList(IModel model)
         {
@@ -180,7 +195,9 @@ namespace LibraryPresentationLayer
             AddUserCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveUserCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateUserCommand = new RelayCommand(e => { GetUsers(); }, a => true);
+            EditUserCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
+        
         public ObservableCollection<VMUser> Users
         {
             get => _users;
@@ -188,6 +205,30 @@ namespace LibraryPresentationLayer
             {
                 _users = value;
                 OnPropertyChanged(nameof(Users));
+            }
+        }
+        public VMUser SelectedUser
+        {
+            get
+            {
+                if (_user == null)
+                {
+                    _user = new VMUser();
+                    OnPropertyChanged(nameof(SelectedUser));
+                }
+                return _user;
+            }
+            set
+            {
+                if (_user != value && value != null)
+                {
+                    _user = value;
+                    UserId = _user.UserId;
+                    FirstName = _user.FirstName;
+                    LastName = _user.LastName;
+                    
+                    OnPropertyChanged(nameof(SelectedUser));
+                }
             }
         }
         public IModelUser ModelUser
@@ -249,7 +290,13 @@ namespace LibraryPresentationLayer
         }
         private async Task Delete()
         {
-            await model.RemoveUserAsync(UserId);
+            await model.RemoveUserAsync(_user.UserId);
+        }
+        private async Task Edit()
+        {
+            await model.RemoveUserAsync(_user.UserId);
+            await Task.Delay(200);
+            await model.AddUserAsync(UserId, FirstName, LastName);
         }
     }
     internal class VMEventList : PropertyChange
@@ -263,28 +310,57 @@ namespace LibraryPresentationLayer
         private VMEvent _event;
         private IModelEvent _modelEvent;
         private IModel model;
-        public ICommand AddDatabaseEventCommand { get; }
-        public ICommand AddUserEventCommand { get; }
+        public ICommand AddEventCommand { get; }
         public ICommand RemoveEventCommand { get; }
         public ICommand UpdateEventCommand { get; }
+
+        public ICommand EditEventCommand { get; }
         private ObservableCollection<VMEvent> _events;
         public VMEventList()    
         {
-            this.model = model;
+            this.model = new Model();
             _events = new ObservableCollection<VMEvent>();
-            AddDatabaseEventCommand = new RelayCommand(e => { AddDatabaseEvent(); }, a => true);
-            AddUserEventCommand = new RelayCommand(e => { AddUserEvent(); }, a => true);
+            AddEventCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateEventCommand = new RelayCommand(e => { GetEvents(); }, a => true);
+            EditEventCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
         public VMEventList(IModel model)
         {
             this.model = model;
             _events = new ObservableCollection<VMEvent>();
-            AddDatabaseEventCommand = new RelayCommand(e => { AddDatabaseEvent(); }, a => true);
-            AddUserEventCommand = new RelayCommand(e => { AddUserEvent(); }, a => true);
+            AddEventCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateEventCommand = new RelayCommand(e => { GetEvents(); }, a => true);
+            EditEventCommand = new RelayCommand(e => { Edit(); }, a => true);
+        }
+        public VMEvent SelectedEvent
+        {
+            get
+            {
+                if (_event == null)
+                {
+                    _event = new VMEvent();
+                    OnPropertyChanged(nameof(SelectedEvent));
+                }
+                return _event;
+            }
+            set
+            {
+                if (_event != value)
+                {
+                    _event = value;
+                    EventId = _event.EventId;
+                    _employee = _event.EmployeeId;
+                    _state = _event.StateId;
+                    Addition = _event.Addition;
+                    _user = _event.UserId;
+                    Borrowing = _event.Borrowing;
+
+
+                    OnPropertyChanged(nameof(SelectedEvent));
+                }
+            }
         }
         public ObservableCollection<VMEvent> Events
         {
@@ -375,38 +451,58 @@ namespace LibraryPresentationLayer
             }
             OnPropertyChanged(nameof(Events));
         }
-        private async Task AddDatabaseEvent()
+        private async Task Add()
         {
-            await model.AddDatabaseEventAsync(EventId, employee, state, Addition);
-        }
-        private async Task AddUserEvent()
-        {
-            await model.AddUserEventAsync(EventId, employee, state, user,borrowing);
-        }
-        private async Task Delete()
-        {
-            await model.RemoveEventAsync(EventId);
+            if (user != 0)
+            {
+                await model.AddUserEventAsync(EventId, employee, state, user, borrowing);
+            }
+            else
+            {
+                await model.AddDatabaseEventAsync(EventId, employee, state, Addition);
+            }
         }
 
+        private async Task Delete()
+        {
+            await model.RemoveEventAsync(_event.EventId);
+        }
+        private async Task Edit()
+        {
+            await model.RemoveEventAsync(_event.EventId);
+            await Task.Delay(200);
+            if (borrowing)
+            {
+                await model.AddUserEventAsync(EventId, employee, state, user, borrowing);
+            }
+            else
+            {
+                await model.AddDatabaseEventAsync(EventId, employee, state, Addition);
+            }
+        }
     }
     internal class VMStateList : PropertyChange
     {
         private int StateId;
         private int NrOfBooks;
+        private int CatalogId;
         private VMCatalog Catalog;
+        private VMState _state;
         private IModelState _modelState;
         private IModel model;
         public ICommand AddStateCommand { get; }
         public ICommand RemoveStateCommand { get; }
         public ICommand UpdateStateCommand { get; }
+        public ICommand EditStateCommand { get; }
         private ObservableCollection<VMState> _states;
         public VMStateList()
         {
-            this.model = model;
+            this.model = new Model();
             _states = new ObservableCollection<VMState>();
             AddStateCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveStateCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateStateCommand = new RelayCommand(e => { GetStates(); }, a => true);
+            EditStateCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
         public VMStateList(IModel model)
         {
@@ -415,7 +511,32 @@ namespace LibraryPresentationLayer
             AddStateCommand = new RelayCommand(e => { Add(); }, a => true);
             RemoveStateCommand = new RelayCommand(e => { Delete(); }, a => true);
             UpdateStateCommand = new RelayCommand(e => { GetStates(); }, a => true);
+            EditStateCommand = new RelayCommand(e => { Edit(); }, a => true);
         }
+        public VMState SelectedState
+        {
+            get
+            {
+                if (_state == null)
+                {
+                    _state = new VMState();
+                    OnPropertyChanged(nameof(SelectedState));
+                }
+                return _state;
+            }
+            set
+            {
+                if (_state != value)
+                {
+                    StateId = _state.StateId;
+                    NrOfBooks = _state.NrOfBooks;
+                    CatalogId = _state.CatalogId;
+                    _state = value;
+                    OnPropertyChanged(nameof(SelectedState));
+                }
+            }
+        }
+
         public ObservableCollection<VMState> States
         {
             get => _states;
@@ -468,7 +589,7 @@ namespace LibraryPresentationLayer
         {
             if (state == null)
                 return null;
-            return new VMState(state.StateId,state.NrOfBooks, ConvertToVMCatalog(state.Catalog));
+            return new VMState(state.StateId,state.NrOfBooks, (state.Catalog));
         }
         public void GetStates()
         {
@@ -482,11 +603,19 @@ namespace LibraryPresentationLayer
         }
         private async Task Add()
         {
+            Catalog = new VMCatalog();
+            Catalog.CatalogId = CatalogId;
             await model.AddStateAsync(StateId, NrOfBooks, Catalog.CatalogId);
         }
         private async Task Delete()
         {
             await model.RemoveStateAsync(StateId);
+        }
+        private async Task Edit()
+        {
+            await model.RemoveStateAsync(_state.StateId);
+            await Task.Delay(200);
+            await model.AddStateAsync(StateId, NrOfBooks, CatalogId);
         }
 
     }

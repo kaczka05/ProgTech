@@ -12,7 +12,7 @@ namespace LibraryLogicLayer
     {
         private ICatalog catalog;
 
-        public LogicState(int stateId, int nrOfBooks, ILogicCatalog catalog)
+        public LogicState(int stateId, int nrOfBooks, int catalog)
         {
             StateId = stateId;
             NrOfBooks = nrOfBooks;
@@ -21,7 +21,7 @@ namespace LibraryLogicLayer
 
         public int StateId { get; init; }
         public int NrOfBooks { get; init; }
-        public ILogicCatalog Catalog { get; init; }
+        public int Catalog { get; init; }
         
     }
     internal class LogicUser : ILogicUser
@@ -39,10 +39,10 @@ namespace LibraryLogicLayer
     internal class LogicEvent : ILogicEvent
     {
         public int EventId { get; init; }
-        public ILogicUser Employee { get; init; }
-        public ILogicState State { get; init; }
+        public int Employee { get; init; }
+        public int State { get; init; }
         public bool Addition { get; init; }
-        public ILogicUser User { get; init; }
+        public int User { get; init; }
         public bool Borrowing { get; init; }
 
     }
@@ -50,10 +50,10 @@ namespace LibraryLogicLayer
     {
 
         public int EventId { get; init; }
-        public ILogicUser Employee { get; init; }
-        public ILogicState State { get; init; }
+        public int Employee { get; init; }
+        public int State { get; init; }
         public bool Addition { get; init; }
-        public LogicDatabaseEvent(int eventId, ILogicUser employee, ILogicState state, bool addition)
+        public LogicDatabaseEvent(int eventId, int employee, int state, bool addition)
         {
             EventId = eventId;
             Employee = employee;
@@ -64,11 +64,11 @@ namespace LibraryLogicLayer
     internal class LogicUserEvent : LogicEvent, ILogicUserEvent
     {
         public int EventId { get; init; }
-        public ILogicUser Employee { get; init; }
-        public ILogicState State { get; init; }
-        public ILogicUser User { get; init; }
+        public int Employee { get; init; }
+        public int State { get; init; }
+        public int User { get; init; }
         public bool Borrowing { get; init; }
-        public LogicUserEvent(int eventId, ILogicUser employee, ILogicState state, ILogicUser user, bool borrowing)
+        public LogicUserEvent(int eventId, int employee, int state, int  user, bool borrowing)
         {
             EventId = eventId;
             Employee = employee;

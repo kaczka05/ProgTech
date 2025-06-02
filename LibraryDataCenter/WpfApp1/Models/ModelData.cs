@@ -41,36 +41,13 @@ namespace LibraryPresentationlLayer
         public int EventId { get; init; }
         public int Employee { get; init; }
         public int State { get; init; }
-        public int User { get; set; }
-        public bool Borrowing { get; set; }
-        public bool Addition { get; set; }
-
-
-    }
-    internal class ModelDatabaseEvent : ModelEvent, IModelDatabaseEvent
-    {
-      
-        public int EventId { get; init; }
-        public int Employee { get; init; }
-        public int State { get; init; }
+        public int User { get; init; }
+        public bool Borrowing { get; init; }
         public bool Addition { get; init; }
-        public ModelDatabaseEvent(int eventId, int employee, int state, bool addition)
-        {
-            EventId = eventId;
-            Employee = employee;
-            State = state;
-            Addition = addition;
-        }
 
     }
     internal class ModelUserEvent : ModelEvent, IModelUserEvent
     {
-
-        public int EventId { get; init; }
-        public int Employee { get; init; }
-        public int State { get; init; }
-        public int User { get; init; }
-        public bool Borrowing { get; init; }
         public ModelUserEvent(int eventId, int employee, int state, int user, bool borrowing)
         {
             EventId = eventId;
@@ -80,6 +57,18 @@ namespace LibraryPresentationlLayer
             Borrowing = borrowing;
         }
     }
+    internal class ModelDatabaseEvent : ModelEvent, IModelDatabaseEvent
+    {
+        public ModelDatabaseEvent(int eventId, int employee, int state, bool addition)
+        {
+            EventId = eventId;
+            Employee = employee;
+            State = state;
+            Addition = addition;
+        }
+
+    }
+    
     internal class ModelCatalog : IModelCatalog
     {
         public int CatalogId { get; init; }

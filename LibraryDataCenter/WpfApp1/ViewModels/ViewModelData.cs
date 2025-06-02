@@ -114,39 +114,35 @@ namespace LibraryPresentationLayer
 
     internal class VMUserEvent : PropertyChange
     {
-        private IModelUser employee;
-        private IModelState state;
-        private object user;
-        private object borrowing;
 
         public int EventId { get; set; }
-        public VMUser Employee { get; set; }
-        public VMState State { get; set; }
+        public int EmployeeId { get; set; }
+        public int StateId { get; set; }
         public bool Borrowing { get; set; }
-        public VMUser User { get; set; }
+        public int UserId { get; set; }
 
-        public VMUserEvent(int eventId, VMUser employee, VMState state)
+        public VMUserEvent(int eventId, int employee, int state)
         {
             EventId = eventId;
-            Employee = employee;
-            State = state;
+            EmployeeId = employee;
+            StateId = state;
         }
         public VMUserEvent()
         {
             EventId = 0;
-            Employee = new VMUser();
-            State = new VMState();
+            EmployeeId = 0;
+            StateId = 0;
             Borrowing = false;
-            User = new VMUser();
+            UserId = 0;
         }
 
-        public VMUserEvent(int eventId, IModelUser employee, IModelState state, object user, object borrowing)
+        public VMUserEvent(int eventId, int employee, int state, int user, bool borrowing)
         {
             EventId = eventId;
-            this.employee = employee;
-            this.state = state;
-            this.user = user;
-            this.borrowing = borrowing;
+            EmployeeId = employee;
+            StateId = state;
+            UserId = user;
+            Borrowing = borrowing;
         }
 
         public int _eventId
@@ -158,21 +154,21 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(_eventId));
             }
         }
-        public VMUser _employee
+        public int _employee
         {
-            get => Employee;
+            get => EmployeeId;
             set
             {
-                Employee = value;
+                EmployeeId = value;
                 OnPropertyChanged(nameof(_employee));
             }
         }
-        public VMState _state
+        public int _state
         {
-            get => State;
+            get => StateId;
             set
             {
-                State = value;
+                StateId = value;
                 OnPropertyChanged(nameof(_state));
             }
         }
@@ -185,12 +181,12 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(_borrowing));
             }
         }
-        public VMUser _user
+        public int _user
         {
-            get => User;
+            get => UserId;
             set
             {
-                User = value;
+                UserId = value;
                 OnPropertyChanged(nameof(_user));
             }
         }
@@ -198,11 +194,6 @@ namespace LibraryPresentationLayer
     }
     internal class VMEvent : PropertyChange
     {
-        private object employeeId;
-        private object stateId;
-        private object userId;
-        private object borrowing;
-        private object addition;
 
         public int EventId { get; set; }
         public int EmployeeId { get; set; }
@@ -225,17 +216,17 @@ namespace LibraryPresentationLayer
             StateId = 0;
         }
 
-        public VMEvent(int eventId, int employee, int state, object user, object borrowing, object addition)
+        public VMEvent(int eventId, int employee, int state, int user, bool borrowing, bool addition)
         {
             EventId = eventId;
-            this.employeeId = employee;
-            this.stateId = state;
-            this.userId = user;
-            this.borrowing = borrowing;
-            this.addition = addition;
+            EmployeeId = employee;
+            StateId = state;
+            UserId = user;
+            Borrowing = borrowing;
+            Addition = addition;
         }
     }
-    internal class VMDatabaseEvent : VMEvent
+    internal class VMDatabaseEvent : PropertyChange
     {
 
         public int EventId { get; set; }

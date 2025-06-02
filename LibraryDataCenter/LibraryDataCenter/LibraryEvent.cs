@@ -5,15 +5,15 @@ namespace LibraryDataLayer
     public abstract class Event : IEvent
     {
         public int EventId { get; init; }
-        public IUser Employee { get; init; }
-        public IState State { get; init; }
+        public int Employee { get; init; }
+        public int State { get; init; }
 
         public bool Addition { get; init; }
 
         public bool Borrowing { get; init; }
 
-        public IUser User { get; init; }
-        public Event(int eventId, IUser employee, IState state, bool addition)
+        public int User { get; init; }
+        public Event(int eventId, int employee, int state, bool addition)
         {
             EventId = eventId;
             Employee = employee;
@@ -21,7 +21,10 @@ namespace LibraryDataLayer
             Addition = addition;
         }
 
-        protected Event(int eventId, IUser employee, IState state)
+      
+
+
+        protected Event(int eventId, int employee, int state)
         {
             EventId = eventId;
             Employee = employee;

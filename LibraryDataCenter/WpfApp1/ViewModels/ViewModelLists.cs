@@ -226,7 +226,11 @@ namespace LibraryPresentationLayer
                     UserId = _user.UserId;
                     FirstName = _user.FirstName;
                     LastName = _user.LastName;
-                    
+
+                    OnPropertyChanged(nameof(userId));
+                    OnPropertyChanged(nameof(firstName));
+                    OnPropertyChanged(nameof(lastName));
+
                     OnPropertyChanged(nameof(SelectedUser));
                 }
             }
@@ -302,10 +306,10 @@ namespace LibraryPresentationLayer
     internal class VMEventList : PropertyChange
     {
         private int EventId;
-        private int _employee;
-        private int _state;
+        private int EmployeeId;
+        private int StateId;
         private bool Addition;
-        private int _user;
+        private int UserId;
         private bool Borrowing;
         private VMEvent _event;
         private IModelEvent _modelEvent;
@@ -347,15 +351,21 @@ namespace LibraryPresentationLayer
             }
             set
             {
-                if (_event != value)
+                if (_event != value && value!=null)
                 {
                     _event = value;
                     EventId = _event.EventId;
-                    _employee = _event.EmployeeId;
-                    _state = _event.StateId;
+                    EmployeeId = _event.EmployeeId;
+                    StateId = _event.StateId;
                     Addition = _event.Addition;
-                    _user = _event.UserId;
+                    UserId = _event.UserId;
                     Borrowing = _event.Borrowing;
+                    OnPropertyChanged(nameof(eventId));
+                    OnPropertyChanged(nameof(employee));
+                    OnPropertyChanged(nameof(state));
+                    OnPropertyChanged(nameof(addition));
+                    OnPropertyChanged(nameof(user));
+                    OnPropertyChanged(nameof(borrowing));
 
 
                     OnPropertyChanged(nameof(SelectedEvent));
@@ -391,19 +401,19 @@ namespace LibraryPresentationLayer
         }
         public int employee
         {
-            get => _employee;
+            get => EmployeeId;
             set
             {
-                _employee = value;
+                EmployeeId = value;
                 OnPropertyChanged(nameof(employee));
             }
         }
         public int state
         {
-            get => _state;
+            get => StateId;
             set
             {
-                _state = value;
+                StateId = value;
                 OnPropertyChanged(nameof(state));
             }
         }
@@ -418,10 +428,10 @@ namespace LibraryPresentationLayer
         }
         public int user
         {
-            get => _user;
+            get => UserId;
             set
             {
-                _user = value;
+                UserId = value;
                 OnPropertyChanged(nameof(user));
             }
         }
@@ -451,15 +461,17 @@ namespace LibraryPresentationLayer
             }
             OnPropertyChanged(nameof(Events));
         }
+       
+        
         private async Task Add()
         {
-            if (user != 0)
+            if (UserId != 0)
             {
-                await model.AddUserEventAsync(EventId, employee, state, user, borrowing);
+                await model.AddUserEventAsync(EventId, EmployeeId, StateId, UserId, Borrowing);
             }
             else
             {
-                await model.AddDatabaseEventAsync(EventId, employee, state, Addition);
+                await model.AddDatabaseEventAsync(EventId, EmployeeId, StateId, Addition);
             }
         }
 
@@ -471,13 +483,13 @@ namespace LibraryPresentationLayer
         {
             await model.RemoveEventAsync(_event.EventId);
             await Task.Delay(200);
-            if (borrowing)
+            if (UserId != 0)
             {
-                await model.AddUserEventAsync(EventId, employee, state, user, borrowing);
+                await model.AddUserEventAsync(EventId, EmployeeId, StateId, UserId, Borrowing);
             }
             else
             {
-                await model.AddDatabaseEventAsync(EventId, employee, state, Addition);
+                await model.AddDatabaseEventAsync(EventId, EmployeeId, StateId, Addition);
             }
         }
     }
@@ -486,7 +498,6 @@ namespace LibraryPresentationLayer
         private int StateId;
         private int NrOfBooks;
         private int CatalogId;
-        private VMCatalog Catalog;
         private VMState _state;
         private IModelState _modelState;
         private IModel model;
@@ -528,10 +539,16 @@ namespace LibraryPresentationLayer
             {
                 if (_state != value)
                 {
+                    _state = value;
                     StateId = _state.StateId;
                     NrOfBooks = _state.NrOfBooks;
                     CatalogId = _state.CatalogId;
-                    _state = value;
+
+                    OnPropertyChanged(nameof(stateId));
+                    OnPropertyChanged(nameof(nrOfBooks));
+                    OnPropertyChanged(nameof(catalogId));
+
+
                     OnPropertyChanged(nameof(SelectedState));
                 }
             }
@@ -574,17 +591,16 @@ namespace LibraryPresentationLayer
                 OnPropertyChanged(nameof(nrOfBooks));
             }
         }
-        public VMCatalog catalog
+        public int catalogId
         {
-            get => Catalog;
+            get => CatalogId;
             set
             {
-                Catalog = value;
-                OnPropertyChanged(nameof(catalog));
+                CatalogId = value;
+                OnPropertyChanged(nameof(catalogId));
             }
         }
-        private VMCatalog ConvertToVMCatalog(IModelCatalog catalog) =>
-         new VMCatalog(catalog.CatalogId, catalog.Title, catalog.Author, catalog.NrOfPages);
+       
         private VMState? CatalogToPresentationLayer(IModelState state)
         {
             if (state == null)
@@ -603,13 +619,11 @@ namespace LibraryPresentationLayer
         }
         private async Task Add()
         {
-            Catalog = new VMCatalog();
-            Catalog.CatalogId = CatalogId;
-            await model.AddStateAsync(StateId, NrOfBooks, Catalog.CatalogId);
+            await model.AddStateAsync(StateId, NrOfBooks, CatalogId);
         }
         private async Task Delete()
         {
-            await model.RemoveStateAsync(StateId);
+            await model.RemoveStateAsync(_state.StateId);
         }
         private async Task Edit()
         {

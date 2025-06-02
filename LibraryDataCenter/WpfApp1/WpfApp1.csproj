@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibraryLogicLayer\LibraryLogicLayer.csproj" />
+    <InternalsVisibleTo Include="TestWpfApp1" />
   </ItemGroup>
 
 </Project>

@@ -25,14 +25,31 @@ namespace TestDataLayer
                 string testConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=C:\\Users\\damia\\Desktop\\IT SEM 4\\ProgTech\\LibraryDataCenter\\LibraryDataCenter\\Database1.mdf;Integrated Security=True;";
                 repo = ILibraryDataRepository.CreateNewRepository(testConnectionString);
 
-                // Wyczyœæ dane testowe
-                foreach (var c in repo.GetAllCatalogs().ToList())
-                    repo.RemoveCatalogById(c.CatalogId);
 
-                foreach (var e in repo.GetAllEvents()) repo.RemoveEventById(e.EventId);
-                foreach (var s in repo.GetAllStates()) repo.RemoveStateByID(s.StateId);
-                foreach (var c in repo.GetAllCatalogs()) repo.RemoveCatalogById(c.CatalogId);
-                foreach (var u in repo.GetAllUsers()) repo.RemoveUserById(u.UserId);
+
+                foreach (var e in repo.GetAllEvents())
+                {
+                    if (e != null)
+                        repo.RemoveEventById(e.EventId);
+                }
+
+                foreach (var s in repo.GetAllStates())
+                {
+                    if (s != null)
+                        repo.RemoveStateByID(s.StateId);
+                }
+
+                foreach (var c in repo.GetAllCatalogs())
+                {
+                    if (c != null)
+                        repo.RemoveCatalogById(c.CatalogId);
+                }
+
+                foreach (var u in repo.GetAllUsers())
+                {
+                    if (u != null)
+                        repo.RemoveUserById(u.UserId);
+                }
             }
 
             [TestMethod]
@@ -76,7 +93,7 @@ namespace TestDataLayer
             [TestMethod]
             public void AddUser_And_GetUserById_Works()
             {
-                repo.AddUser(1, "John", "Doe");
+                repo.AddUser(3, "John", "Doe");
                 var user = repo.GetUserById(1);
 
                 Assert.IsNotNull(user);
@@ -106,7 +123,7 @@ namespace TestDataLayer
                 Assert.AreEqual(5, state.StateId);
                 Assert.AreEqual(20, state.NrOfBooks);
                 Assert.IsNotNull(state.Catalog);
-                Assert.AreEqual(10, state.Catalog.CatalogId);
+                Assert.AreEqual(10, state.Catalog);
             }
 
             [TestMethod]
@@ -135,9 +152,9 @@ namespace TestDataLayer
                 Assert.AreEqual(50, evt.EventId);
                 Assert.IsTrue(evt.Addition);
                 Assert.IsNotNull(evt.Employee);
-                Assert.AreEqual(1, evt.Employee.UserId);
+                Assert.AreEqual(1, evt.Employee);
                 Assert.IsNotNull(evt.State);
-                Assert.AreEqual(1, evt.State.StateId);
+                Assert.AreEqual(1, evt.State);
             }
 
             [TestMethod]
@@ -155,11 +172,11 @@ namespace TestDataLayer
                 Assert.AreEqual(60, evt.EventId);
                 Assert.IsTrue(evt.Borrowing);
                 Assert.IsNotNull(evt.Employee);
-                Assert.AreEqual(1, evt.Employee.UserId);
+                Assert.AreEqual(1, evt.Employee);
                 Assert.IsNotNull(evt.User);
-                Assert.AreEqual(2, evt.User.UserId);
+                Assert.AreEqual(2, evt.User);
                 Assert.IsNotNull(evt.State);
-                Assert.AreEqual(2, evt.State.StateId);
+                Assert.AreEqual(2, evt.State);
             }
 
             [TestMethod]

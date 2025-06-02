@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Nowy folder\" />
+	<InternalsVisibleTo Include="TestDataLayer" />
   </ItemGroup>
 
   <ItemGroup>

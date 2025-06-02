@@ -22,7 +22,7 @@ namespace TestDataLayer
             public void Setup()
             {
                 // U¿yj connection stringa do bazy testowej lub in-memory
-                string testConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=C:\\Users\\damia\\Desktop\\IT SEM 4\\ProgTech\\LibraryDataCenter\\LibraryDataCenter\\Database1.mdf;Integrated Security=True;";
+                string testConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=D:\\VIsualStudioProjects\\ProgTech\\LibraryDataCenter\\LibraryDataCenter\\Database1.mdf;Integrated Security=True;";
                 repo = ILibraryDataRepository.CreateNewRepository(testConnectionString);
 
                 // Wyczyœæ dane testowe

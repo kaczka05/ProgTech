@@ -125,9 +125,9 @@
                           IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Event ID" Binding="{Binding EventId}" Width="*"/>
-                                <DataGridTextColumn Header="Employee" Binding="{Binding Employee.UserId}" Width="*"/>
-                                <DataGridTextColumn Header="State" Binding="{Binding State.StateId}" Width="*"/>
-                                <DataGridTextColumn Header="User" Binding="{Binding User.UserId}" Width="*"/>
+                                <DataGridTextColumn Header="Employee" Binding="{Binding EmployeeId}" Width="*"/>
+                                <DataGridTextColumn Header="State" Binding="{Binding StateId}" Width="*"/>
+                                <DataGridTextColumn Header="User" Binding="{Binding UserId}" Width="*"/>
                                 <DataGridCheckBoxColumn Header="Borrowing" Binding="{Binding Borrowing}" Width="*"/>
                                 <DataGridCheckBoxColumn Header="Addition" Binding="{Binding Addition}" Width="*"/>
                             </DataGrid.Columns>
@@ -185,8 +185,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="State ID" Binding="{Binding StateId}" Width="*"/>
                                 <DataGridTextColumn Header="Number of Books" Binding="{Binding NrOfBooks}" Width="*"/>
-                                <DataGridTextColumn Header="Catalog ID" Binding="{Binding Catalog.CatalogId}" Width="*"/>
-                                <DataGridTextColumn Header="Catalog Title" Binding="{Binding Catalog.Title}" Width="*"/>
+                                <DataGridTextColumn Header="Catalog ID" Binding="{Binding CatalogId}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -208,10 +207,8 @@
                         <TextBox Text="{Binding nrOfBooks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <Label Content="Catalog ID:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding catalog.CatalogId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Text="{Binding catalogId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <Label Content="Catalog Title:" Margin="0,10,0,0"/>
-                        <TextBox Text="{Binding catalog.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </GroupBox>
             </Grid>

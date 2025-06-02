@@ -161,16 +161,13 @@ namespace LibraryDataLayer
         {
             if (ev != null)
             {
-                IUser employee = GetUserById((int)ev.Employee);
-                IState state = GetStateById((int)ev.State);
-                IUser user = GetUserById((int)ev.User);
                 if (ev.EventType == "User")
                 {
-                    return new UserEvent(ev.EventId, employee, state, user, (bool)ev.Borrowing);
+                    return new UserEvent(ev.EventId, (int)ev.Employee, (int)ev.State, (int)ev.User, (bool)ev.Borrowing);
                 }
                 else if (ev.EventType == "Database")
                 {
-                    return new DatabaseEvent(ev.EventId, employee, state, (bool)ev.Addition);
+                    return new DatabaseEvent(ev.EventId, (int)ev.Employee, (int)ev.State, (bool)ev.Addition);
                 }
                 else
                 {
@@ -280,7 +277,7 @@ namespace LibraryDataLayer
             }
             else
             {
-                DatabaseEvent ev = new DatabaseEvent(eventId, GetUserById(employeeId), GetStateById(stateId), addition);
+                DatabaseEvent ev = new DatabaseEvent(eventId, employeeId, (stateId), addition);
                 _libraryDataContextOff.AddDatabaseEventAsync(ev);
             }
         }
@@ -304,7 +301,7 @@ namespace LibraryDataLayer
             }
             else
             {
-                UserEvent ev = new UserEvent(eventId, GetUserById(employeeId), GetStateById(stateId), GetUserById(userId), borrowing);
+                UserEvent ev = new UserEvent(eventId, employeeId, stateId, userId, borrowing);
                 _libraryDataContextOff.AddUserEventAsync(ev);
             }
         }
@@ -365,7 +362,7 @@ namespace LibraryDataLayer
                     }
                     else
                     {
-                        return new DatabaseEvent(c.EventId, GetUserById(c.Employee.UserId), GetStateById(c.State.StateId), c.Addition);
+                        return new DatabaseEvent(c.EventId, (c.Employee), (c.State), c.Addition); //may cause problems for user event
                     }
                 });
 
@@ -384,8 +381,7 @@ namespace LibraryDataLayer
         {
             if (state != null)
             {
-                var catalog = GetCatalogById((int)state.Catalog);
-                return new State(state.StateId, (int)state.NrOfBooks, catalog);
+                return new State(state.StateId, state.NrOfBooks, state.Catalog);
             }
             else
             {
@@ -409,7 +405,7 @@ namespace LibraryDataLayer
             }
             else
             {
-                State state = new State(stateId, nrOfBooks, GetCatalogById(catalogId));
+                State state = new State(stateId, nrOfBooks, catalogId);
                 _libraryDataContextOff.AddStateAsync(state);
             }
 
@@ -442,7 +438,7 @@ namespace LibraryDataLayer
                 {
                     return null;
                 }
-                return new State(state.StateId, state.NrOfBooks, GetCatalogById(state.Catalog.CatalogId));
+                return new State(state.StateId, state.NrOfBooks, (state.Catalog));
             }
             else
             {
@@ -458,7 +454,7 @@ namespace LibraryDataLayer
             if (!connected)
             {
                 return _libraryDataContextOff.States
-                    .Select(s => new State(s.StateId, s.NrOfBooks, GetCatalogById(s.Catalog.CatalogId)));
+                    .Select(s => new State(s.StateId, s.NrOfBooks, (s.Catalog)));
             }
             else
             {

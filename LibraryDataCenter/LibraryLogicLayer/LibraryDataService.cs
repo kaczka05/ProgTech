@@ -46,7 +46,7 @@ namespace LibraryLogicLayer
 
 
         private LogicState ConvertToLogicState(IState state) =>
-            new LogicState(state.StateId, state.NrOfBooks, (state.Catalog.CatalogId));
+            new LogicState(state.StateId, state.NrOfBooks, state.Catalog);
 
         public async Task AddStateAsync(int id, int nrOfBooks, int catalogId) =>
             await Task.Run(() =>
@@ -103,10 +103,10 @@ namespace LibraryLogicLayer
             _libraryDataRepository.GetAllUsers()
                 .Select(u => (ILogicUser)ConvertToLogicUser(u))
                 .ToList();
-        private LogicUserEvent ConvertToLogicDatabaseEvent(IEvent userEvent) =>
-            new LogicUserEvent(userEvent.EventId, (userEvent.Employee.UserId), (userEvent.State.StateId), (userEvent.User.UserId), userEvent.Borrowing);
-        private LogicDatabaseEvent ConvertToLogicUserEvent(IEvent databaseEvent) =>
-            new LogicDatabaseEvent(databaseEvent.EventId, (databaseEvent.Employee.UserId), (databaseEvent.State.StateId), databaseEvent.Addition);
+        private LogicUserEvent ConvertToLogicUserEvent(IEvent userEvent) =>
+            new LogicUserEvent(userEvent.EventId, userEvent.Employee, userEvent.State, userEvent.User, userEvent.Borrowing);
+        private LogicDatabaseEvent ConvertToLogicDatabaseEvent(IEvent databaseEvent) =>
+            new LogicDatabaseEvent(databaseEvent.EventId, databaseEvent.Employee, databaseEvent.State, databaseEvent.Addition);
 
         private LogicEvent ConvertToLogicEvent(IEvent eventObj)
         {

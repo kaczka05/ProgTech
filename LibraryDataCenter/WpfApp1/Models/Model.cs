@@ -72,17 +72,22 @@ namespace LibraryPresentationLayer
             return result;
         }
 
-        private ModelUserEvent ConvertToModelDatabaseEvent(ILogicEvent userEvent) =>
-            new ModelUserEvent(userEvent.EventId, userEvent.Employee, userEvent.State, userEvent.User, userEvent.Borrowing);
-        private ModelDatabaseEvent ConvertToModelUserEvent(ILogicEvent databaseEvent) =>
+        private ModelUserEvent ConvertToModelUserEvent(ILogicEvent userEvent)
+        {
+            ModelUserEvent modelUserEvent;
+            modelUserEvent = new ModelUserEvent(userEvent.EventId, userEvent.Employee, userEvent.State, userEvent.User, userEvent.Borrowing);
+            return modelUserEvent;
+        }
+            
+        private ModelDatabaseEvent ConvertToModelDatabaseEvent(ILogicEvent databaseEvent) =>
             new ModelDatabaseEvent(databaseEvent.EventId, databaseEvent.Employee, databaseEvent.State, databaseEvent.Addition);
 
         private ModelEvent ConvertToModelEvent(ILogicEvent eventObj)
         {
             return eventObj switch
             {
-                IModelUserEvent userEvent => ConvertToModelUserEvent(eventObj),
-                IModelDatabaseEvent databaseEvent => ConvertToModelDatabaseEvent(eventObj),
+                ILogicUserEvent userEvent => ConvertToModelUserEvent(eventObj),
+                ILogicDatabaseEvent databaseEvent => ConvertToModelDatabaseEvent(eventObj),
                 _ => throw new Exception("Unknown event type")
             };
         }

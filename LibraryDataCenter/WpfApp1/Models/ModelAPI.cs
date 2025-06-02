@@ -42,10 +42,10 @@ namespace LibraryPresentationLayer
     {
         int EventId { get; init; }
         int Employee { get; init; }
-        int State { get; init; }
-        int User { get; set; }
-        bool Borrowing { get; set; }
-        bool Addition { get; set; }
+        int State { get; init; }        
+        bool Borrowing { get; init; }
+        int User { get; init; }
+        bool Addition { get; init; }
     }
 
     public interface IModelDatabaseEvent

@@ -88,27 +88,27 @@ namespace LibraryDataLayer
     public interface IEvent
     {
         int EventId { get; init; }
-        IUser Employee { get; init; }
-        IState State { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
         bool Addition { get; init; }
-        IUser User { get; init; }
+        int User { get; init; }
         bool Borrowing { get; init; }
     }
 
     public interface IDatabaseEvent
     {
         int EventId { get; init; }
-        IUser Employee { get; init; }
-        IState State { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
         bool Addition { get; init; }
     }
 
     public interface IUserEvent
     {
         int EventId { get; init; }
-        IUser Employee { get; init; }
-        IState State { get; init; }
-        IUser User { get; init; }
+        int Employee { get; init; }
+        int State { get; init; }
+        int User { get; init; }
         bool Borrowing { get; init; }
     }
 
@@ -116,7 +116,7 @@ namespace LibraryDataLayer
     {
         int StateId { get; init; }
         int NrOfBooks { get; init; }
-        ICatalog Catalog { get; init; }
+        int Catalog { get; init; }
     }
 
     

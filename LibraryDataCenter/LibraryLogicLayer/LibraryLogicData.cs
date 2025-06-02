@@ -48,11 +48,6 @@ namespace LibraryLogicLayer
     }
     internal class LogicDatabaseEvent : LogicEvent, ILogicDatabaseEvent
     {
-
-        public int EventId { get; init; }
-        public int Employee { get; init; }
-        public int State { get; init; }
-        public bool Addition { get; init; }
         public LogicDatabaseEvent(int eventId, int employee, int state, bool addition)
         {
             EventId = eventId;
@@ -63,11 +58,6 @@ namespace LibraryLogicLayer
     }
     internal class LogicUserEvent : LogicEvent, ILogicUserEvent
     {
-        public int EventId { get; init; }
-        public int Employee { get; init; }
-        public int State { get; init; }
-        public int User { get; init; }
-        public bool Borrowing { get; init; }
         public LogicUserEvent(int eventId, int employee, int state, int  user, bool borrowing)
         {
             EventId = eventId;

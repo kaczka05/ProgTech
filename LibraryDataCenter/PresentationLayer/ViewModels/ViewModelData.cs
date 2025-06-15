@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryPresentationLayer
 {
-    internal class VMCatalog : PropertyChange
+    public class VMCatalog : PropertyChange
     {
         public int CatalogId { get; set; }
         public string Title { get; set; }
@@ -66,7 +66,7 @@ namespace LibraryPresentationLayer
         }
 
     }
-    internal class VMUser : PropertyChange
+    public class VMUser : PropertyChange
     {
         public int UserId { get; set; }
         public string FirstName { get; set; }
@@ -112,7 +112,7 @@ namespace LibraryPresentationLayer
         }
     }
 
-    internal class VMUserEvent : PropertyChange
+    public class VMUserEvent : PropertyChange
     {
 
         public int EventId { get; set; }
@@ -192,7 +192,7 @@ namespace LibraryPresentationLayer
         }
 
     }
-    internal class VMEvent : PropertyChange
+    public class VMEvent : PropertyChange
     {
 
         public int EventId { get; set; }
@@ -226,7 +226,7 @@ namespace LibraryPresentationLayer
             Addition = addition;
         }
     }
-    internal class VMDatabaseEvent : PropertyChange
+    public class VMDatabaseEvent : PropertyChange
     {
 
         public int EventId { get; set; }
@@ -285,7 +285,7 @@ namespace LibraryPresentationLayer
             }
         }
     }
-    internal class VMState : PropertyChange
+    public class VMState : PropertyChange
     {
         public int StateId { get; set; }
         public int NrOfBooks { get; set; }

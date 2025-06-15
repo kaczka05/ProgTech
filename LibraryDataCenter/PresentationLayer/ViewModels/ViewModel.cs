@@ -10,9 +10,16 @@ using LibraryPresentationLayer;
 
 namespace LibraryPresentationLayer
 {
-    internal class ViewModel : PropertyChange
+    public class ViewModel : PropertyChange
     {
+        private PropertyChange _currentView;
+
         private static Model model = new Model();
+     
+        public ICommand showCatalogs { get; }
+        public ICommand showEvents { get; }
+        public ICommand showStates { get; }
+        public ICommand showUsers { get; }
         private VMCatalogList _vmCatalogList = new VMCatalogList(model);
         private VMUserList _vmUserList = new VMUserList(model);
         private VMEventList _vmEventList = new VMEventList(model);
@@ -35,8 +42,10 @@ namespace LibraryPresentationLayer
 
         public ViewModel()
         {
-            UpdateVMCommand = new RelayCommand(ChangeView);
-
+            showCatalogs = new RelayCommand(() => ChangeView("Catalog"));
+            showEvents = new RelayCommand(() => ChangeView("Event"));
+            showStates = new RelayCommand(() => ChangeView("State"));
+            showUsers = new RelayCommand(() => ChangeView("User"));
             SelectedVM = _vmCatalogList;
         }
 

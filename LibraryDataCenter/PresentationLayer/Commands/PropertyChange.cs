@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LibraryPresentationLayer
 {
-    internal class PropertyChange : INotifyPropertyChanged
+    public class PropertyChange : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

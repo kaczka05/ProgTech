@@ -9,12 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
+    <Compile Remove="Views\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Views\**" />
+    <Page Remove="Views\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryLogicLayer\LibraryLogicLayer.csproj" />
     <InternalsVisibleTo Include="TestWpfApp1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PresentationLayer\PresentationLayer.csproj" />
   </ItemGroup>
 
 </Project>

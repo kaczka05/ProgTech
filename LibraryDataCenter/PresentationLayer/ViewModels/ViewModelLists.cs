@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
 using LibraryLogicLayer;
-using LibraryPresentationlLayer;
 using LibraryDataLayer;
 
 
 namespace LibraryPresentationLayer
 {
-    internal class VMCatalogList : PropertyChange
+    public class VMCatalogList : PropertyChange
     {
         private int CatalogId;
         private string Title;
@@ -32,19 +31,19 @@ namespace LibraryPresentationLayer
         {
             this.model = new Model();
             _catalogs = new ObservableCollection<VMCatalog>();
-            AddCatalogCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveCatalogCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateCatalogCommand = new RelayCommand(e => { GetCatalogs(); }, a => true);
-            EditCatalogCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddCatalogCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveCatalogCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateCatalogCommand = new RelayCommand(() => { GetCatalogs(); }, () => true);
+            EditCatalogCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         public VMCatalogList(IModel model)
         {
             this.model = model;
             _catalogs = new ObservableCollection<VMCatalog>();
-            AddCatalogCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveCatalogCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateCatalogCommand = new RelayCommand(e => { GetCatalogs(); }, a => true);
-            EditCatalogCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddCatalogCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveCatalogCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateCatalogCommand = new RelayCommand(() => { GetCatalogs(); }, () => true);
+            EditCatalogCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
 
         public VMCatalog SelectedCatalog
@@ -166,7 +165,7 @@ namespace LibraryPresentationLayer
 
      
     }
-    internal class VMUserList : PropertyChange
+    public class VMUserList : PropertyChange
     {
         private int UserId;
         private string FirstName;
@@ -183,19 +182,19 @@ namespace LibraryPresentationLayer
         {
             this.model = new Model();
             _users = new ObservableCollection<VMUser>();
-            AddUserCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveUserCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateUserCommand = new RelayCommand(e => { GetUsers(); }, a => true);
-            EditUserCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddUserCommand = new RelayCommand(() => { Add(); },  () => true);
+            RemoveUserCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateUserCommand = new RelayCommand(() => { GetUsers(); }, () => true);
+            EditUserCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         public VMUserList(IModel model)
         {
             this.model = model;
             _users = new ObservableCollection<VMUser>();
-            AddUserCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveUserCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateUserCommand = new RelayCommand(e => { GetUsers(); }, a => true);
-            EditUserCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddUserCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveUserCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateUserCommand = new RelayCommand(() => { GetUsers(); }, () => true);
+            EditUserCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         
         public ObservableCollection<VMUser> Users
@@ -303,7 +302,7 @@ namespace LibraryPresentationLayer
             await model.AddUserAsync(UserId, FirstName, LastName);
         }
     }
-    internal class VMEventList : PropertyChange
+    public class VMEventList : PropertyChange
     {
         private int EventId;
         private int EmployeeId;
@@ -324,19 +323,19 @@ namespace LibraryPresentationLayer
         {
             this.model = new Model();
             _events = new ObservableCollection<VMEvent>();
-            AddEventCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateEventCommand = new RelayCommand(e => { GetEvents(); }, a => true);
-            EditEventCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddEventCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveEventCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateEventCommand = new RelayCommand(() => { GetEvents(); }, () => true);
+            EditEventCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         public VMEventList(IModel model)
         {
             this.model = model;
             _events = new ObservableCollection<VMEvent>();
-            AddEventCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveEventCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateEventCommand = new RelayCommand(e => { GetEvents(); }, a => true);
-            EditEventCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddEventCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveEventCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateEventCommand = new RelayCommand(() => { GetEvents(); }, () => true);
+            EditEventCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         public VMEvent SelectedEvent
         {
@@ -493,7 +492,7 @@ namespace LibraryPresentationLayer
             }
         }
     }
-    internal class VMStateList : PropertyChange
+    public class VMStateList : PropertyChange
     {
         private int StateId;
         private int NrOfBooks;
@@ -510,19 +509,19 @@ namespace LibraryPresentationLayer
         {
             this.model = new Model();
             _states = new ObservableCollection<VMState>();
-            AddStateCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveStateCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateStateCommand = new RelayCommand(e => { GetStates(); }, a => true);
-            EditStateCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddStateCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveStateCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateStateCommand = new RelayCommand(() => { GetStates(); }, () => true);
+            EditStateCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         public VMStateList(IModel model)
         {
             this.model = model;
             _states = new ObservableCollection<VMState>();
-            AddStateCommand = new RelayCommand(e => { Add(); }, a => true);
-            RemoveStateCommand = new RelayCommand(e => { Delete(); }, a => true);
-            UpdateStateCommand = new RelayCommand(e => { GetStates(); }, a => true);
-            EditStateCommand = new RelayCommand(e => { Edit(); }, a => true);
+            AddStateCommand = new RelayCommand(() => { Add(); }, () => true);
+            RemoveStateCommand = new RelayCommand(() => { Delete(); }, () => true);
+            UpdateStateCommand = new RelayCommand(() => { GetStates(); }, () => true);
+            EditStateCommand = new RelayCommand(() => { Edit(); }, () => true);
         }
         public VMState SelectedState
         {
@@ -537,7 +536,7 @@ namespace LibraryPresentationLayer
             }
             set
             {
-                if (_state != value)
+                if (_state != value && value != null)
                 {
                     _state = value;
                     StateId = _state.StateId;
@@ -547,8 +546,6 @@ namespace LibraryPresentationLayer
                     OnPropertyChanged(nameof(stateId));
                     OnPropertyChanged(nameof(nrOfBooks));
                     OnPropertyChanged(nameof(catalogId));
-
-
                     OnPropertyChanged(nameof(SelectedState));
                 }
             }

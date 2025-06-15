@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Nowy folder\**" />
+    <EmbeddedResource Remove="Nowy folder\**" />
+    <None Remove="Nowy folder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
     <PackageReference Include="Mindbox.Data.Linq" Version="10.7.2" />
     <PackageReference Include="System.Linq" Version="4.3.0" />
@@ -14,10 +20,6 @@
 
   <ItemGroup>
     <Service Include="{3259aa49-8aa1-44d3-9025-a0b520596a8c}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Nowy folder\" />
   </ItemGroup>
 
   <ItemGroup>

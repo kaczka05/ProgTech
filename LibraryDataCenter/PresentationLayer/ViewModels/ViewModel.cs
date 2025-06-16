@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using LibraryPresentationLayer;
+using LibraryModel;
 
-namespace LibraryPresentationLayer
+namespace LibraryViewModel
 {
     public class ViewModel : PropertyChange
     {

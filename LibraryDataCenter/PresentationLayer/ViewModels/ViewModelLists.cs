@@ -16,11 +16,12 @@ using LibraryLogicLayer;
 
 using LibraryDataLayer;
 
+using LibraryModel;
 
 
 
 
-namespace LibraryPresentationLayer
+namespace LibraryViewModel
 
 {
     public class VMCatalogList : PropertyChange

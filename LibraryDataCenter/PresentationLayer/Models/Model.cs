@@ -1,12 +1,11 @@
 ﻿using LibraryDataLayer;
 using LibraryLogicLayer;
-using LibraryPresentationLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LibraryPresentationLayer
+namespace LibraryModel
 {
     internal class Model : IModel
     {

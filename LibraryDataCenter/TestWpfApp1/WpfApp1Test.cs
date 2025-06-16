@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LibraryPresentationLayer;
+using LibraryModel;
+using LibraryViewModel;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;

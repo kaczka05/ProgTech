@@ -9,5 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\LibraryLogicLayer\LibraryLogicLayer.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="TestPresentationLayer" />
+	</ItemGroup>
 
 </Project>

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="TestWpfApp1" />
+    <InternalsVisibleTo Include="TestPresentationLayer" />
   </ItemGroup>
 
   <ItemGroup>

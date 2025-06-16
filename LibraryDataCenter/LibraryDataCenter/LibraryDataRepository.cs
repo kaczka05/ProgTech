@@ -68,7 +68,9 @@ namespace LibraryDataLayer
         {
             if (connected)
             {
-                Books cat = _libraryDataContext.Books.Single(Books => Books.catalogId == id);
+                var cat = (from b in _libraryDataContext.Books
+                           where b.catalogId == id
+                           select b).Single();
                 _libraryDataContext.Books.DeleteOnSubmit(cat);
                 _libraryDataContext.SubmitChanges();
             }
@@ -207,7 +209,9 @@ namespace LibraryDataLayer
         {
             if(connected)
             {
-                Users user = _libraryDataContext.Users.Single(u => u.UserId == id);
+                var user = (from u in _libraryDataContext.Users
+                            where u.UserId == id
+                            select u).Single();
                 _libraryDataContext.Users.DeleteOnSubmit(user);
                 _libraryDataContext.SubmitChanges();
             }
@@ -310,7 +314,9 @@ namespace LibraryDataLayer
         {
             if (connected)
             {
-                Events ev = _libraryDataContext.Events.Single(e => e.EventId == id);
+                var ev = (from e in _libraryDataContext.Events
+                          where e.EventId == id
+                          select e).Single();
                 _libraryDataContext.Events.DeleteOnSubmit(ev);
                 _libraryDataContext.SubmitChanges();
             }
@@ -362,7 +368,7 @@ namespace LibraryDataLayer
                     }
                     else
                     {
-                        return new DatabaseEvent(c.EventId, (c.Employee), (c.State), c.Addition); //may cause problems for user event
+                        return new DatabaseEvent(c.EventId, (c.Employee), (c.State), c.Addition); //may cause problems for user event, but everything works nicely 
                     }
                 });
 
@@ -422,7 +428,7 @@ namespace LibraryDataLayer
             }
             else
             {
-                States state = _libraryDataContext.States.Single(s => s.StateId == id);
+                var state = (from s in _libraryDataContext.States where s.StateId == id select s).Single();
                 _libraryDataContext.States.DeleteOnSubmit(state);
                 _libraryDataContext.SubmitChanges();
             }
